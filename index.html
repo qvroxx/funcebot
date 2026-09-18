@@ -408,6 +408,7 @@
             margin-bottom: 30px;
         }
 
+        /* --- FOOTER (GÜNCELLENDİ) --- */
         footer {
             text-align: center;
             padding: 25px;
@@ -418,6 +419,20 @@
             margin-top: 40px;
         }
         footer span { color: var(--primary-purple); }
+        .footer-links {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: var(--primary-purple);
+        }
 
         @media (max-width: 850px) {
             .menu-toggle { display: block; }
@@ -489,7 +504,6 @@
                 <p>Gelişmiş moderasyon araçları, hızlı altyapı ve güçlü Pro seçenekleriyle topluluğunu eksiksiz yönet.</p>
                 
                 <div class="btn-group">
-                    <!-- GÜNCELLENEN BOT EKLEME LİNKİ -->
                     <a href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663" target="_blank" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Botu Sunucuna Ekle</a>
                     <button class="btn btn-gold-outline" onclick="switchTab('funce-pro', getNavBtn(2))"><i class="fa-solid fa-crown"></i> Funce Pro'yu İncele</button>
                 </div>
@@ -582,8 +596,13 @@
 
     </div>
 
+    <!-- GÜNCELLENEN FOOTER KISMI -->
     <footer>
         <p>&copy; 2026 <span>FunceBOT</span>. Tüm hakları saklıdır.</p>
+        <div class="footer-links">
+            <a href="terms.html">Kullanım Koşulları</a>
+            <a href="privacy.html">Gizlilik Politikası</a>
+        </div>
     </footer>
 
     <script>
