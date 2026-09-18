@@ -667,23 +667,23 @@
     </footer>
 
     <script>
-        // --- SESSIONSTORAGE İLE GÜVENLİ OTURUM YÖNETİMİ ---
+        // --- LOCALSTORAGE KALICI OTURUM KONTROLÜ ---
         const params = new URLSearchParams(window.location.search);
         let username = params.get('username');
         let avatar = params.get('avatar');
         let id = params.get('id');
 
         if (username) {
-            sessionStorage.setItem('discord_username', username);
-            sessionStorage.setItem('discord_avatar', avatar);
-            sessionStorage.setItem('discord_id', id);
+            localStorage.setItem('discord_username', username);
+            localStorage.setItem('discord_avatar', avatar);
+            localStorage.setItem('discord_id', id);
             
             // Adres çubuğunu temizle
             window.history.replaceState({}, document.title, window.location.pathname);
         } else {
-            username = sessionStorage.getItem('discord_username');
-            avatar = sessionStorage.getItem('discord_avatar');
-            id = sessionStorage.getItem('discord_id');
+            username = localStorage.getItem('discord_username');
+            avatar = localStorage.getItem('discord_avatar');
+            id = localStorage.getItem('discord_id');
         }
 
         if (username) {
@@ -704,11 +704,11 @@
             });
         }
 
-        // Çıkış yap buton dinleyicisi
+        // Çıkış Yap Butonu
         document.addEventListener('click', (e) => {
             if (e.target.closest('.logout-btn')) {
                 e.preventDefault();
-                sessionStorage.clear();
+                localStorage.clear();
                 window.location.href = '/';
             }
         });
