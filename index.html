@@ -537,7 +537,7 @@
         <div id="user-profile">
             <img id="user-avatar" src="" alt="Avatar">
             <span id="user-name">Kullanıcı</span>
-            <a href="/" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
+            <a href="#" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
         </div>
         
         <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
@@ -667,21 +667,41 @@
     </footer>
 
     <script>
-        // --- GİRİŞ YAPAN KULLANICIYI ALGILAMA SCRIPTİ ---
+        // --- URL'DEN GELEN VERİLERİ LOCALSTORAGE'A KAYDETME VE OKUMA ---
         const params = new URLSearchParams(window.location.search);
         const username = params.get('username');
         const avatar = params.get('avatar');
         const id = params.get('id');
 
         if (username) {
-            const avatarUrl = avatar 
-                ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`
+            localStorage.setItem('discord_username', username);
+            localStorage.setItem('discord_avatar', avatar);
+            localStorage.setItem('discord_id', id);
+            
+            // Adres çubuğundaki parametreleri temizle (tarayıcı değişse bile kalıcı olsun)
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        const savedUsername = localStorage.getItem('discord_username');
+        const savedAvatar = localStorage.getItem('discord_avatar');
+        const savedId = localStorage.getItem('discord_id');
+
+        if (savedUsername) {
+            const avatarUrl = savedAvatar 
+                ? `https://cdn.discordapp.com/avatars/${savedId}/${savedAvatar}.png`
                 : 'https://cdn.discordapp.com/embed/avatars/0.png';
 
             document.getElementById('user-avatar').src = avatarUrl;
-            document.getElementById('user-name').innerText = username;
+            document.getElementById('user-name').innerText = savedUsername;
             document.getElementById('user-profile').style.display = 'flex';
         }
+
+        // Çıkış Yap Butonu
+        document.querySelector('.logout-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.clear();
+            window.location.href = '/';
+        });
 
         window.addEventListener('load', () => {
             setTimeout(() => {
