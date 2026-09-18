@@ -202,6 +202,47 @@
             box-shadow: var(--accent-glow);
         }
 
+        /* --- SAĞ ÜST KULLANICI PROFİL KARTI STİLİ --- */
+        #user-profile {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: rgba(30, 41, 59, 0.9);
+            padding: 5px 12px 5px 6px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--accent-glow);
+        }
+
+        #user-profile img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-purple);
+        }
+
+        #user-profile span {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .logout-btn {
+            color: #ef4444;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 6px;
+            padding: 3px 6px;
+            border-radius: 4px;
+            background: rgba(239, 68, 68, 0.1);
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
         .container {
             max-width: 1100px;
             width: 100%;
@@ -292,6 +333,18 @@
 
         .btn-primary:hover {
             box-shadow: var(--accent-glow-strong);
+            transform: translateY(-2px);
+        }
+
+        /* Discord Giriş Butonu */
+        .btn-discord {
+            background-color: #5865F2;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
+        }
+        .btn-discord:hover {
+            background-color: #4752C4;
+            box-shadow: 0 0 30px rgba(88, 101, 242, 0.7);
             transform: translateY(-2px);
         }
 
@@ -408,7 +461,7 @@
             margin-bottom: 30px;
         }
 
-        /* --- FOOTER (GÜNCELLENDİ) --- */
+        /* --- FOOTER --- */
         footer {
             text-align: center;
             padding: 25px;
@@ -479,6 +532,13 @@
         <a class="logo" onclick="switchTab('ana-sayfa', getNavBtn(0))">
             Funce<span>BOT</span>
         </a>
+
+        <!-- Sağ Üst Profil Göstergesi -->
+        <div id="user-profile">
+            <img id="user-avatar" src="" alt="Avatar">
+            <span id="user-name">Kullanıcı</span>
+            <a href="/" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
+        </div>
         
         <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
             <i class="fa-solid fa-bars"></i>
@@ -505,6 +565,7 @@
                 
                 <div class="btn-group">
                     <a href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663" target="_blank" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Botu Sunucuna Ekle</a>
+                    <a href="https://funce-linked-roles.onrender.com/api/auth/discord" class="btn btn-discord"><i class="fa-brands fa-discord"></i> Discord ile Giriş Yap</a>
                     <button class="btn btn-gold-outline" onclick="switchTab('funce-pro', getNavBtn(2))"><i class="fa-solid fa-crown"></i> Funce Pro'yu İncele</button>
                 </div>
             </div>
@@ -596,7 +657,7 @@
 
     </div>
 
-    <!-- GÜNCELLENEN FOOTER KISMI -->
+    <!-- FOOTER -->
     <footer>
         <p>&copy; 2026 <span>FunceBOT</span>. Tüm hakları saklıdır.</p>
         <div class="footer-links">
@@ -606,6 +667,22 @@
     </footer>
 
     <script>
+        // --- GİRİŞ YAPAN KULLANICIYI ALGILAMA SCRIPTİ ---
+        const params = new URLSearchParams(window.location.search);
+        const username = params.get('username');
+        const avatar = params.get('avatar');
+        const id = params.get('id');
+
+        if (username) {
+            const avatarUrl = avatar 
+                ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`
+                : 'https://cdn.discordapp.com/embed/avatars/0.png';
+
+            document.getElementById('user-avatar').src = avatarUrl;
+            document.getElementById('user-name').innerText = username;
+            document.getElementById('user-profile').style.display = 'flex';
+        }
+
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const intro = document.getElementById('intro-screen');
