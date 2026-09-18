@@ -144,7 +144,6 @@
             text-shadow: var(--accent-glow);
         }
 
-        /* 3 Çizgi Hamburger Menü Butonu */
         .menu-toggle {
             display: none;
             font-size: 22px;
@@ -184,7 +183,6 @@
             box-shadow: var(--accent-glow);
         }
 
-        /* Funce Pro Sekme Butonu Özel Tasarımı */
         .nav-pro-btn {
             border: 1px solid var(--gold-border) !important;
             color: var(--gold-color) !important;
@@ -204,7 +202,6 @@
             box-shadow: var(--accent-glow);
         }
 
-        /* Container & Sections */
         .container {
             max-width: 1100px;
             width: 100%;
@@ -227,7 +224,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Hero Box */
         .hero {
             text-align: center;
             padding: 50px 20px;
@@ -299,7 +295,6 @@
             transform: translateY(-2px);
         }
 
-        /* Gold Button Styling for Funce Pro In-Page Link */
         .btn-gold-outline {
             background: rgba(255, 215, 0, 0.05);
             color: var(--gold-color);
@@ -314,7 +309,6 @@
             transform: translateY(-2px);
         }
 
-        /* Stats Section */
         .stats-bar {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -341,7 +335,6 @@
             color: var(--text-muted);
         }
 
-        /* Grids & Cards */
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -381,7 +374,6 @@
             line-height: 1.5;
         }
 
-        /* Funce Pro Card Special Gold Border Styling */
         .card-gold {
             border: 2px solid var(--gold-border) !important;
             box-shadow: var(--gold-glow) !important;
@@ -427,7 +419,6 @@
         }
         footer span { color: var(--primary-purple); }
 
-        /* MOBİL DÜZENLEME */
         @media (max-width: 850px) {
             .menu-toggle { display: block; }
 
@@ -474,7 +465,6 @@
             Funce<span>BOT</span>
         </a>
         
-        <!-- Mobil Menü Butonu -->
         <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
             <i class="fa-solid fa-bars"></i>
         </div>
@@ -499,7 +489,8 @@
                 <p>Gelişmiş moderasyon araçları, hızlı altyapı ve güçlü Pro seçenekleriyle topluluğunu eksiksiz yönet.</p>
                 
                 <div class="btn-group">
-                    <a href="#" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Botu Sunucuna Ekle</a>
+                    <!-- GÜNCELLENEN BOT EKLEME LİNKİ -->
+                    <a href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663" target="_blank" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Botu Sunucuna Ekle</a>
                     <button class="btn btn-gold-outline" onclick="switchTab('funce-pro', getNavBtn(2))"><i class="fa-solid fa-crown"></i> Funce Pro'yu İncele</button>
                 </div>
             </div>
@@ -562,7 +553,7 @@
             </div>
         </section>
 
-        <!-- 3. FUNCE PRO (ALTIN SARISI ÇERÇEVEYLE SEÇKİN GÖRÜNÜM) -->
+        <!-- 3. FUNCE PRO -->
         <section id="funce-pro" class="page-section">
             <h2 class="section-title" style="color: var(--gold-color); text-shadow: var(--gold-glow);">Funce Pro</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Topluluğunuz için özel tasarlanmış ayrıcalıklı VIP özellikler.</p>
@@ -591,14 +582,11 @@
 
     </div>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2026 <span>FunceBOT</span>. Tüm hakları saklıdır.</p>
     </footer>
 
-    <!-- Scripts -->
     <script>
-        /* 1. INTRO LOADING KONTROLÜ */
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const intro = document.getElementById('intro-screen');
@@ -607,7 +595,6 @@
             }, 1800);
         });
 
-        /* 2. MOBİL MENÜ AÇMA / KAPAMA */
         function toggleMenu() {
             const navMenu = document.getElementById('navMenu');
             const menuToggle = document.getElementById('menuToggle');
@@ -620,7 +607,6 @@
             }
         }
 
-        /* 3. TAB SWITCHING (SEKME DEĞİŞTİRME) */
         function switchTab(tabId, element) {
             const sections = document.querySelectorAll('.page-section');
             sections.forEach(sec => sec.classList.remove('active'));
@@ -646,7 +632,6 @@
             return document.querySelectorAll('.nav-btn')[index];
         }
 
-        /* 4. CANLI PARÇACIKLI ARKA PLAN CANVAS */
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
