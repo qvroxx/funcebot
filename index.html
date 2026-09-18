@@ -3,95 +3,439 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FunceBOT & Funce Pro - Discord Bot</title>
-    <link rel="stylesheet" href="style.css">
+    <title>FunceBOT & Funce Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0a0810;
+            --bg-card: rgba(22, 17, 36, 0.6);
+            --bg-card-hover: rgba(32, 24, 54, 0.8);
+            --border-color: rgba(147, 51, 234, 0.15);
+            --border-hover: rgba(168, 85, 247, 0.4);
+            --accent-purple: #8b5cf6;
+            --accent-bright: #a855f7;
+            --accent-gradient: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10%;
+            backdrop-filter: blur(12px);
+            background: rgba(10, 8, 16, 0.7);
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            width: 80%;
+            left: 10%;
+            z-index: 1000;
+            margin-top: 15px;
+            border-radius: 16px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-box {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-gradient);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .logo span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .btn-nav {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-nav:hover {
+            background: var(--accent-bright);
+            border-color: var(--accent-bright);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 140px 20px 60px;
+        }
+
+        .badge {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--border-color);
+            color: var(--accent-bright);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.15;
+            max-width: 800px;
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .hero h1 span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 580px;
+            margin-bottom: 35px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            transition: 0.3s;
+            box-shadow: 0 4px 25px rgba(168, 85, 247, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(168, 85, 247, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+        }
+
+        /* Container & Cards */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 18px;
+            backdrop-filter: blur(10px);
+            transition: 0.3s ease;
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(168, 85, 247, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-bright);
+            font-size: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Pricing Cards */
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .price-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 40px 30px;
+            border-radius: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .price-card.pro-card {
+            border-color: var(--accent-bright);
+            background: linear-gradient(180deg, rgba(32, 24, 54, 0.9) 0%, rgba(15, 11, 26, 0.9) 100%);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.15);
+        }
+
+        .price-header h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .price-val {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 15px 0 25px;
+            letter-spacing: -1px;
+        }
+
+        .price-val span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .price-features li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-features li i {
+            color: var(--accent-bright);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            nav { width: 90%; left: 5%; padding: 15px 20px; }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2.4rem; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Navigasyon -->
-    <nav class="navbar">
-        <div class="logo">Funce<span>BOT</span></div>
+    <nav>
+        <div class="logo">
+            <div class="logo-box">F</div>
+            Funce<span>BOT</span>
+        </div>
         <ul class="nav-links">
             <li><a href="#hero">Ana Sayfa</a></li>
             <li><a href="#features">Özellikler</a></li>
             <li><a href="#pricing">Funce Pro</a></li>
         </ul>
-        <a href="DISCORD_SUNUCU_LINKI" target="_blank" class="btn-discord"><i class="fa-brands fa-discord"></i> Destek Sunucusu</a>
+        <a href="DISCORD_LINKI" target="_blank" class="btn-nav"><i class="fa-brands fa-discord"></i> Destek</a>
     </nav>
 
-    <!-- Hero Bölümü -->
     <section id="hero" class="hero">
-        <div class="hero-content">
-            <h1>Sunucunu <span>FunceBOT</span> İle Üst Seviyeye Taşı</h1>
-            <p>Gelişmiş moderasyon, eğlence komutları ve kesintisiz altyapısı ile Discord sunucunun tek ihtiyacı!</p>
-            <div class="hero-btns">
-                <a href="BOT_EKLEME_LINKI" target="_blank" class="btn-primary"><i class="fa-solid fa-plus"></i> Botu Ekle</a>
-                <a href="#pricing" class="btn-secondary"><i class="fa-solid fa-crown"></i> Funce Pro'yu İncele</a>
-            </div>
+        <div class="badge"><i class="fa-solid fa-sparkles"></i> Yeni Nesil Discord Botu</div>
+        <h1>Sunucunu <span>FunceBOT</span> İle Güçlendir</h1>
+        <p>Gelişmiş moderasyon, yüksek performanslı altyapı ve sunucuna özel Pro araçları ile eksiksiz yönetim deneyimi.</p>
+        <div class="hero-btns">
+            <a href="BOT_INVITE_LINKI" target="_blank" class="btn-primary">Botu Sunucuna Ekle</a>
+            <a href="#pricing" class="btn-secondary">Funce Pro'yu İncele</a>
         </div>
     </section>
 
-    <!-- Özellikler -->
-    <section id="features" class="features">
-        <h2>Neden <span>FunceBOT</span>?</h2>
+    <div id="features" class="container">
+        <div class="section-title">
+            <h2>Neden FunceBOT?</h2>
+        </div>
         <div class="grid">
             <div class="card">
-                <i class="fa-solid fa-shield-halved icon"></i>
+                <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
                 <h3>Gelişmiş Moderasyon</h3>
-                <p>Oto-rol, küfür/reklam engelleme ve gelişmiş ban/kick komutları ile sunucun güvende.</p>
+                <p>Oto-rol, gelişmiş küfür/reklam koruması ve güvenlik modülleri ile sunucun her an koruma altında.</p>
             </div>
             <div class="card">
-                <i class="fa-solid fa-bolt icon"></i>
-                <h3>7/24 Kesintisiz</h3>
-                <p>Yüksek performanslı sunucularımız sayesinde komutlar sıfır gecikme ile çalışır.</p>
+                <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
+                <h3>Kesintisiz Altyapı</h3>
+                <p>Yüksek performanslı sunucularımız sayesinde komutlar milisaniyeler içinde yanıt verir.</p>
             </div>
             <div class="card">
-                <i class="fa-solid fa-gamepad icon"></i>
+                <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
                 <h3>Eğlence & Ekonomi</h3>
-                <p>Üyelerinin sunucuda aktif kalmasını sağlayacak mini oyunlar ve ekonomi sistemi.</p>
+                <p>Üyelerin aktifliğini artıracak özel mini oyunlar ve gelişmiş sunucu içi ekonomi sistemi.</p>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Funce Pro (Fiyatlandırma) -->
-    <section id="pricing" class="pricing">
-        <h2><span>Funce Pro</span> Karşılaştırması</h2>
-        <div class="grid">
+    <div id="pricing" class="container">
+        <div class="section-title">
+            <h2>Sürüm Karşılaştırması</h2>
+        </div>
+        <div class="price-grid">
             <div class="price-card">
-                <h3>FunceBOT (Ücretsiz)</h3>
-                <div class="price">₺0 <span>/sınırsız</span></div>
-                <ul>
-                    <li><i class="fa-solid fa-check"></i> Temel Moderasyon</li>
-                    <li><i class="fa-solid fa-check"></i> Eğlence Komutları</li>
-                    <li><i class="fa-solid fa-check"></i> %99 Uptime</li>
-                    <li class="disabled"><i class="fa-solid fa-xmark"></i> Özel Bot İsmi/Avatarı</li>
-                    <li class="disabled"><i class="fa-solid fa-xmark"></i> Öncelikli Destek</li>
-                </ul>
-                <a href="BOT_EKLEME_LINKI" target="_blank" class="btn-card">Sunucuna Ekle</a>
+                <div>
+                    <div class="price-header">
+                        <h3>FunceBOT</h3>
+                    </div>
+                    <div class="price-val">₺0 <span>/ Süresiz</span></div>
+                    <ul class="price-features">
+                        <li><i class="fa-solid fa-check"></i> Temel Moderasyon Modülleri</li>
+                        <li><i class="fa-solid fa-check"></i> Eğlence & Ekonomi Komutları</li>
+                        <li><i class="fa-solid fa-check"></i> %99.9 Uptime Süresi</li>
+                    </ul>
+                </div>
+                <a href="BOT_INVITE_LINKI" target="_blank" class="btn-secondary" style="text-align: center;">Ekle</a>
             </div>
 
-            <div class="price-card pro">
-                <div class="badge">POPÜLER</div>
-                <h3>Funce Pro</h3>
-                <div class="price">PRO <span>/Özel</span></div>
-                <ul>
-                    <li><i class="fa-solid fa-check"></i> Tüm Ücretsiz Özellikler</li>
-                    <li><i class="fa-solid fa-check"></i> Gelişmiş Koruma Modülleri</li>
-                    <li><i class="fa-solid fa-check"></i> Özel Karşılama Mesajları</li>
-                    <li><i class="fa-solid fa-check"></i> 7/24 Öncelikli Destek</li>
-                    <li><i class="fa-solid fa-check"></i> Pro'ya Özel Komutlar</li>
-                </ul>
-                <a href="DISCORD_SUNUCU_LINKI" target="_blank" class="btn-card pro-btn">Pro Satın Al</a>
+            <div class="price-card pro-card">
+                <div>
+                    <div class="price-header">
+                        <h3>Funce Pro</h3>
+                    </div>
+                    <div class="price-val">PRO <span>/ Özel Sürüm</span></div>
+                    <ul class="price-features">
+                        <li><i class="fa-solid fa-check"></i> Tüm Ücretsiz Özellikler</li>
+                        <li><i class="fa-solid fa-check"></i> Üst Düzey Koruma Sistemleri</li>
+                        <li><i class="fa-solid fa-check"></i> Pro'ya Özel Karşılama Tasarımları</li>
+                        <li><i class="fa-solid fa-check"></i> 7/24 Öncelikli Teknik Destek</li>
+                    </ul>
+                </div>
+                <a href="DISCORD_LINKI" target="_blank" class="btn-primary" style="text-align: center;">Pro Satın Al</a>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2026 FunceBOT. Tüm hakları saklıdır.</p>
     </footer>
 
-    <script src="script.js"></script>
 </body>
 </html>
