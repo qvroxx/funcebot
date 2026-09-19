@@ -666,16 +666,13 @@
                 </div>
             </div>
 
-            <!-- ANA SAYFA SADECE DISCORD İLE GİRİŞ YAPAN AKTİF KULLANICILAR BÖLÜMÜ -->
             <div class="card" style="margin-bottom: 40px; border-color: rgba(168, 85, 247, 0.4);">
                 <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
                     <i class="fa-solid fa-users" style="color: var(--primary-purple);"></i> Discord İle Giriş Yapan Aktif Kullanıcılar
                 </h3>
                 <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Siteye aktif oturum açmış kullanıcılar burada listelenir:</p>
 
-                <div id="active-users-list">
-                    <!-- Sadece oturum açan kullanıcılar burada gösterilir -->
-                </div>
+                <div id="active-users-list"></div>
             </div>
 
             <h2 class="section-title">Neden FunceBOT?</h2>
@@ -800,24 +797,15 @@
                 <h2 class="section-title" style="color: #3b82f6;"><i class="fa-solid fa-sliders"></i> FunceBOT Kontrol Paneli</h2>
                 <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Bot komutlarını yönetebilir ve yönetici/sahip olduğun tüm Discord sunucularını yapılandırabilirsin.</p>
                 
-                <div class="card" style="border-color: rgba(59, 130, 246, 0.4); margin-bottom: 30px;">
-                    <h3 style="color: #3b82f6; margin-bottom: 15px;"><i class="fa-solid fa-terminal"></i> Bot Komut & Modül Kontrolleri</h3>
-                    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">Aşağıdaki modülleri anlık olarak açıp kapatabilir veya komutPrefix ayarını değiştirebilirsin.</p>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
-                        <div style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
-                            <h4 style="color: #fff; font-size: 15px; margin-bottom: 5px;">🛡️ Oto-Mod Koruma</h4>
-                            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Küfür ve link korumasını aktif tutar.</p>
-                            <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="alert('Modül durumu güncellendi!')">Durumu Değiştir</button>
-                        </div>
-                        <div style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
-                            <h4 style="color: #fff; font-size: 15px; margin-bottom: 5px;">🎫 Ticket Sistemi</h4>
-                            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Destek talebi panelini yönetir.</p>
-                            <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="alert('Modül durumu güncellendi!')">Durumu Değiştir</button>
-                        </div>
-                    </div>
+                <!-- YAKINDA... BÖLÜMÜ (MODÜLLER YERİNE) -->
+                <div class="card" style="border-color: rgba(168, 85, 247, 0.4); margin-bottom: 30px; text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 40px; color: var(--primary-purple); margin-bottom: 15px;"><i class="fa-solid fa-lock"></i></div>
+                    <h3 style="color: #fff; font-size: 22px; margin-bottom: 10px;">Bot Komut & Modül Kontrolleri</h3>
+                    <p style="color: var(--primary-purple); font-weight: 700; font-size: 18px; letter-spacing: 1px;">Yakında...</p>
+                    <p style="color: var(--text-muted); font-size: 13px; margin-top: 8px;">Gelişmiş komut ve modül ayarları şu an geliştirilme aşamasındadır.</p>
                 </div>
 
+                <!-- SUNUCULAR BÖLÜMÜ -->
                 <div class="card" style="border-color: rgba(59, 130, 246, 0.4);">
                     <h3 style="color: #3b82f6; margin-bottom: 15px;"><i class="fa-solid fa-server"></i> Yönetici / Sahibi Olduğun Sunucular</h3>
                     <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">Sahip olduğun veya yönetici yetkine sahip olduğun tüm Discord sunucuları:</p>
@@ -829,6 +817,7 @@
             </div>
         </section>
 
+        <!-- ADMIN PANEL -->
         <section id="admin-panel" class="page-section">
             <h2 class="section-title" style="color: #ef4444;"><i class="fa-solid fa-shield-halved"></i> Yönetim & Rozet Paneli</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Sistem yöneticileri ve kurucu için özel kontrol alanı.</p>
@@ -1004,7 +993,7 @@
             switchTab('profilim', profileBtn);
         }
 
-        // --- SUNUCU YÖNETİMİ VE BOT DURUMU DÜZELTMESİ ---
+        // --- SUNUCU YÖNETİMİ VE FİLTRELEME MANTIĞI ---
         function renderUserGuilds() {
             const guildsContainer = document.getElementById('user-guilds-list');
             if (!guildsContainer) return;
@@ -1014,8 +1003,15 @@
                     const guilds = JSON.parse(decodeURIComponent(currentGuilds));
                     if (guilds && guilds.length > 0) {
                         
-                        // Kullanıcının Yönetici (0x8 / 8) olduğu veya Sahibi olduğu TÜM sunucuları filtrele
-                        const filteredGuilds = guilds.filter(g => g.owner || (g.permissions && (parseInt(g.permissions) & 0x8) === 0x8));
+                        // Kullanıcının Yönetici (Bitwise ADMINISTRATOR: 0x8) veya Sunucu Sahibi olduğu sunucular
+                        const filteredGuilds = guilds.filter(g => {
+                            if (g.owner) return true;
+                            if (g.permissions) {
+                                const permInt = BigInt(g.permissions);
+                                return (permInt & 0x8n) === 0x8n;
+                            }
+                            return false;
+                        });
 
                         if (filteredGuilds.length === 0) {
                             guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Yönetici veya sahibi olduğunuz bir sunucu bulunamadı.</p>';
@@ -1027,7 +1023,6 @@
                                 ? `<img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png" alt="${guild.name}">`
                                 : `<div class="guild-icon-placeholder">${guild.name.charAt(0)}</div>`;
 
-                            // Kesin Bot Durum Kontrolü (Açıkça true değilse varsayılan false kabul edilir)
                             const isBotInGuild = guild.botInGuild === true;
 
                             return `
