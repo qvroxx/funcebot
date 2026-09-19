@@ -787,7 +787,7 @@
             </div>
         </section>
 
-        <!-- KONTROL PANELİ (TÜM SUNUCULARIN GÖRÜNMESİ DÜZELTİLDİ) -->
+        <!-- KONTROL PANELİ -->
         <section id="kontrol-paneli" class="page-section">
             <div id="control-panel-locked" style="text-align: center; padding: 60px 20px;">
                 <div style="font-size: 50px; color: #ef4444; margin-bottom: 20px;"><i class="fa-solid fa-lock"></i></div>
@@ -890,7 +890,6 @@
         let badge = params.get('badge');
         let rawGuilds = params.get('guilds');
 
-        // URL'den Gelen Parametreleri Kaydetme
         if (username && id) {
             localStorage.setItem('discord_username', username);
             localStorage.setItem('discord_avatar', avatar || '');
@@ -916,7 +915,6 @@
             renderUserGuilds();
             renderActiveUsers();
 
-            // Admin Panel Görünürlük Kontrolü
             if (currentId === '1080897669431574609' || currentRole === 'Founder' || currentRole === 'Admin' || currentBadge?.includes('Founder')) {
                 const adminNavLink = document.getElementById('adminNavLink');
                 if (adminNavLink) {
@@ -943,7 +941,6 @@
                 }
                 if (loginBtn) loginBtn.style.display = 'none';
 
-                // Profil Sayfası Verileri
                 document.getElementById('page-user-avatar').src = document.getElementById('user-avatar').src;
                 document.getElementById('page-user-name').innerText = currentUsername;
                 document.getElementById('page-user-badge').innerText = currentBadge || 'Üye';
@@ -965,12 +962,10 @@
             }
         }
 
-        // SADECE DISCORD İLE GİRİŞ YAPANLARI LİSTELEME
         function renderActiveUsers() {
             const listContainer = document.getElementById('active-users-list');
             if (!listContainer) return;
 
-            // Giriş yapmış kullanıcı yoksa uyarı ver
             if (!currentId || !currentUsername) {
                 listContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Şu an aktif Discord oturumu açmış kullanıcı bulunmuyor.</p>';
                 return;
@@ -980,7 +975,6 @@
                 ? (currentAvatar.startsWith('http') ? currentAvatar : `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`)
                 : `https://cdn.discordapp.com/embed/avatars/0.png`;
 
-            // Sadece Discord ile aktif giriş yapmış olanlar çekilir
             const loggedInUsers = [
                 {
                     id: currentId,
@@ -1010,7 +1004,7 @@
             switchTab('profilim', profileBtn);
         }
 
-        // TÜM SUNUCULARI RENDER ETME (Yönelme/Sahip filtresine göre)
+        // --- SUNUCU YÖNETİMİ VE BOT DURUMU DÜZELTMESİ ---
         function renderUserGuilds() {
             const guildsContainer = document.getElementById('user-guilds-list');
             if (!guildsContainer) return;
@@ -1019,12 +1013,22 @@
                 try {
                     const guilds = JSON.parse(decodeURIComponent(currentGuilds));
                     if (guilds && guilds.length > 0) {
-                        guildsContainer.innerHTML = guilds.map(guild => {
+                        
+                        // Kullanıcının Yönetici (0x8 / 8) olduğu veya Sahibi olduğu TÜM sunucuları filtrele
+                        const filteredGuilds = guilds.filter(g => g.owner || (g.permissions && (parseInt(g.permissions) & 0x8) === 0x8));
+
+                        if (filteredGuilds.length === 0) {
+                            guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Yönetici veya sahibi olduğunuz bir sunucu bulunamadı.</p>';
+                            return;
+                        }
+
+                        guildsContainer.innerHTML = filteredGuilds.map(guild => {
                             const iconHtml = guild.icon 
                                 ? `<img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png" alt="${guild.name}">`
                                 : `<div class="guild-icon-placeholder">${guild.name.charAt(0)}</div>`;
 
-                            const isBotInGuild = guild.botInGuild !== false; // Varsayılan sunucu yönetimi
+                            // Kesin Bot Durum Kontrolü (Açıkça true değilse varsayılan false kabul edilir)
+                            const isBotInGuild = guild.botInGuild === true;
 
                             return `
                                 <div class="guild-card">
@@ -1032,7 +1036,7 @@
                                         ${iconHtml}
                                         <div>
                                             <h4 style="color: #fff; font-size: 15px;">${guild.name} ${guild.owner ? '<span style="font-size: 10px; color: var(--gold-color); border: 1px solid var(--gold-border); padding: 2px 6px; border-radius: 8px; margin-left: 5px;">SAHİBİ</span>' : ''}</h4>
-                                            <p style="color: var(--text-muted); font-size: 12px;">Bot Durumu: ${isBotInGuild ? '<span style="color: #22c55e;">Ekli & Aktif</span>' : '<span style="color: #ef4444;">Bot Yok</span>'}</p>
+                                            <p style="color: var(--text-muted); font-size: 12px;">Bot Durumu: ${isBotInGuild ? '<span style="color: #22c55e;">Ekli & Aktif</span>' : '<span style="color: #ef4444;">Bot Yok / Ekli Değil</span>'}</p>
                                         </div>
                                     </div>
                                     ${isBotInGuild 
@@ -1047,7 +1051,7 @@
                     }
                 } catch (e) {
                     console.error('Sunucu verisi işlenemedi:', e);
-                    guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Sunucu bilgileri okunurken hata oluştu.</p>';
+                    guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Sunucu bilgileri okunurken hata oluştu. Lütfen tekrar giriş yapın.</p>';
                 }
             } else {
                 guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Tüm sunucularınızı çekebilmemiz için lütfen Discord ile tekrar giriş yapın.</p>';
