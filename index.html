@@ -108,12 +108,13 @@
             100% { width: 100%; }
         }
 
+        /* HEADER DÜZENİ */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 12px 5%;
+            padding: 12px 3%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -133,17 +134,12 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            white-space: nowrap;
         }
 
         .logo span {
             color: var(--primary-purple);
             text-shadow: var(--accent-glow);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .menu-toggle {
@@ -159,10 +155,15 @@
             transition: all 0.3s ease;
         }
 
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
         nav ul {
             display: flex;
             list-style: none;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
         }
 
@@ -171,11 +172,12 @@
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
-            padding: 6px 12px;
+            padding: 6px 10px;
             border-radius: 8px;
             display: block;
+            white-space: nowrap;
         }
 
         nav ul li a:hover, nav ul li a.active {
@@ -229,6 +231,7 @@
             box-shadow: var(--accent-glow);
         }
 
+        /* EN SAĞDAKİ PROFİL KART TISARIMI */
         #user-profile {
             display: none;
             align-items: center;
@@ -240,6 +243,7 @@
             box-shadow: var(--accent-glow);
             cursor: pointer;
             transition: 0.3s;
+            margin-left: 6px;
         }
 
         #user-profile:hover {
@@ -248,8 +252,8 @@
         }
 
         #user-profile img {
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             border: 1.5px solid var(--primary-purple);
             object-fit: cover;
@@ -279,7 +283,7 @@
             font-size: 11px;
             font-weight: bold;
             margin-left: 4px;
-            padding: 2px 5px;
+            padding: 2px 6px;
             border-radius: 4px;
             background: rgba(239, 68, 68, 0.1);
             transition: 0.2s;
@@ -579,13 +583,10 @@
             color: var(--primary-purple);
         }
 
-        /* MOBİL DÜZENLEMELERİ (GİDERİLEN SIKIŞIKLIKLAR) */
-        @media (max-width: 850px) {
+        /* MOBİL UYUMLULUK */
+        @media (max-width: 950px) {
             header {
                 padding: 10px 15px;
-            }
-            .logo {
-                font-size: 18px;
             }
             .menu-toggle { 
                 display: block; 
@@ -618,9 +619,11 @@
                 padding: 10px;
                 font-size: 14px;
             }
-            
-            .user-info-box {
-                display: none; /* Mobilde yazıları gizleyip sadece avatar ve çıkış butonunu göstererek navbar'ı rahatlatır */
+            #user-profile {
+                width: 100%;
+                justify-content: center;
+                margin-left: 0;
+                margin-top: 5px;
             }
 
             .container {
@@ -673,32 +676,31 @@
             Funce<span>BOT</span>
         </a>
 
-        <div class="header-right">
-            <!-- Profil Bilgisi Sağ Taraf Modülünde -->
-            <div id="user-profile" onclick="openProfileTab()" title="Profiline Git">
-                <img id="user-avatar" src="" alt="Avatar">
-                <div class="user-info-box">
-                    <span id="user-name">Kullanıcı</span>
-                    <span id="user-badge-text">Üye</span>
-                </div>
-                <a href="#" class="logout-btn" onclick="event.stopPropagation(); logout()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
-            </div>
-            
-            <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
-                <i class="fa-solid fa-bars"></i>
-            </div>
+        <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+            <i class="fa-solid fa-bars"></i>
         </div>
 
         <nav>
             <ul id="navMenu">
                 <li><a class="nav-btn active" onclick="switchTab('ana-sayfa', this)">Ana Sayfa</a></li>
                 <li><a class="nav-btn" onclick="switchTab('ozellikler', this)">Özellikler</a></li>
-                <!-- Profilim Özelliklerin hemen altına taşındı -->
                 <li><a class="nav-btn" id="profileNavLink" onclick="switchTab('profilim', this)"><i class="fa-solid fa-user"></i> Profilim</a></li>
                 <li><a class="nav-btn nav-pro-btn" onclick="switchTab('funce-pro', this)"><i class="fa-solid fa-crown"></i> Funce Pro</a></li>
                 <li><a class="nav-btn nav-control-btn" onclick="switchTab('kontrol-paneli', this)"><i class="fa-solid fa-sliders"></i> Kontrol Paneli</a></li>
                 <li><a class="nav-btn nav-admin-btn" id="adminNavLink" onclick="switchTab('admin-panel', this)"><i class="fa-solid fa-shield-halved"></i> Admin Panel</a></li>
                 <li><a href="https://discord.gg/jSm2n5Jp2k" target="_blank" class="nav-btn btn-destek"><i class="fa-brands fa-discord"></i> Destek Sunucusu</a></li>
+                
+                <!-- Profil Kartı En Sağ Köşeye (Destek Sunucusu Butonunun Yanına) Taşındı -->
+                <li id="user-profile-li">
+                    <div id="user-profile" onclick="openProfileTab()" title="Profiline Git">
+                        <img id="user-avatar" src="" alt="Avatar">
+                        <div class="user-info-box">
+                            <span id="user-name">Kullanıcı</span>
+                            <span id="user-badge-text">Üye</span>
+                        </div>
+                        <a href="#" class="logout-btn" onclick="event.stopPropagation(); logout()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
+                    </div>
+                </li>
             </ul>
         </nav>
     </header>
@@ -977,9 +979,9 @@
             // Aktiflik döngüleri
             if (currentId) {
                 sendHeartbeat();
-                setInterval(sendHeartbeat, 30000); // 30 sn'de bir ping at
+                setInterval(sendHeartbeat, 30000);
             }
-            setInterval(renderActiveUsers, 10000); // 10 sn'de bir aktif listeyi yenile
+            setInterval(renderActiveUsers, 10000);
 
             if (currentId === '1080897669431574609' || currentRole === 'Founder' || currentRole === 'Admin' || currentBadge?.includes('Founder')) {
                 const adminNavLink = document.getElementById('adminNavLink');
@@ -1056,7 +1058,6 @@
                 const activeUsers = await res.json();
 
                 if (!activeUsers || activeUsers.length === 0) {
-                    // API boş dönerse localoturumdakini göster, yoksa bilgilendir
                     if (currentId && currentUsername) {
                         renderLocalActiveUserFallback(listContainer);
                     } else {
@@ -1082,7 +1083,7 @@
                 }).join('');
 
             } catch (error) {
-                console.warn('Aktif kullanıcılar canlı çekilemedi, yerel oturum gösteriliyor:', error);
+                console.warn('Aktif kullanıcılar canlı çekilemedi:', error);
                 if (currentId && currentUsername) {
                     renderLocalActiveUserFallback(listContainer);
                 } else {
