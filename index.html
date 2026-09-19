@@ -531,12 +531,18 @@
             align-items: center;
             gap: 15px;
         }
-        .guild-info img {
+        .guild-info img, .guild-icon-placeholder {
             width: 48px;
             height: 48px;
             border-radius: 50%;
             border: 2px solid var(--primary-purple);
             object-fit: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e293b;
+            font-weight: bold;
+            color: #fff;
         }
 
         footer {
@@ -603,7 +609,7 @@
             Funce<span>BOT</span>
         </a>
 
-        <!-- PROFİLE TIKLAMA SİSTEMİ EKLENDİ (Ana sayfadaki düzenleme paneline odaklanır) -->
+        <!-- PROFİLE TIKLAMA SİSTEMİ (Ana sayfadaki düzenleme paneline odaklanır) -->
         <div id="user-profile" onclick="focusProfileEditor()" title="Profilini Düzenle">
             <img id="user-avatar" src="" alt="Avatar">
             <div class="user-info-box">
@@ -749,7 +755,7 @@
             </div>
         </section>
 
-        <!-- KONTROL PANELİ (DISCORD EŞLEŞTIRMESİ ZORUNLU) -->
+        <!-- KONTROL PANELİ (DISCORD EŞLEŞTİRMESİ ZORUNLU) -->
         <section id="kontrol-paneli" class="page-section">
             <div id="control-panel-locked" style="text-align: center; padding: 60px 20px;">
                 <div style="font-size: 50px; color: #ef4444; margin-bottom: 20px;"><i class="fa-solid fa-lock"></i></div>
@@ -783,17 +789,10 @@
                 <div class="card" style="border-color: rgba(59, 130, 246, 0.4);">
                     <h3 style="color: #3b82f6; margin-bottom: 15px;"><i class="fa-solid fa-server"></i> Yetkili Olduğun Discord Sunucuları</h3>
                     <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">FunceBOT'un ekli olduğu ve yönetici yetkinin bulunduğu sunucular:</p>
+                    
+                    <!-- DİNAMİK SUNUCU LİSTESİ ALANI -->
                     <div id="user-guilds-list">
-                        <div class="guild-card">
-                            <div class="guild-info">
-                                <img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Guild">
-                                <div>
-                                    <h4 style="color: #fff; font-size: 15px;">Bursa Roleplay / Community</h4>
-                                    <p style="color: var(--text-muted); font-size: 12px;">Bot Durumu: <span style="color: #22c55e;">Aktif (Bağlı)</span></p>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;" onclick="alert('Sunucu paneline bağlanılıyor...')">Yönet</button>
-                        </div>
+                        <p style="color: var(--text-muted); font-size: 13px;">Sunucu verileri yükleniyor...</p>
                     </div>
                 </div>
             </div>
@@ -858,13 +857,18 @@
         let id = params.get('id');
         let role = params.get('role');
         let badge = params.get('badge');
+        let rawGuilds = params.get('guilds');
 
+        // URL'den Gelen Parametreleri Kaydetme
         if (username && id) {
             localStorage.setItem('discord_username', username);
             localStorage.setItem('discord_avatar', avatar || '');
             localStorage.setItem('discord_id', id);
             localStorage.setItem('discord_role', role || 'Üye');
             localStorage.setItem('discord_badge', id === '1080897669431574609' ? '👑 Founder' : (badge || '👤 Standart Üye'));
+            if (rawGuilds) {
+                localStorage.setItem('discord_guilds', rawGuilds);
+            }
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 
@@ -873,10 +877,12 @@
         let currentId = localStorage.getItem('discord_id');
         let currentRole = localStorage.getItem('discord_role');
         let currentBadge = localStorage.getItem('discord_badge');
+        let currentGuilds = localStorage.getItem('discord_guilds');
 
         window.addEventListener('DOMContentLoaded', () => {
             renderHeader();
             checkControlPanelAccess();
+            renderUserGuilds();
 
             // Admin Panel Görünürlük Kontrolü
             if (currentId === '1080897669431574609' || currentRole === 'Founder' || currentRole === 'Admin' || currentBadge?.includes('Founder')) {
@@ -894,7 +900,11 @@
             
             if (currentId && currentUsername) {
                 if (profileEl) {
-                    document.getElementById('user-avatar').src = currentAvatar || `https://cdn.discordapp.com/embed/avatars/0.png`;
+                    const avatarUrl = (currentAvatar && currentAvatar !== 'null' && currentAvatar !== 'undefined')
+                        ? (currentAvatar.startsWith('http') ? currentAvatar : `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`)
+                        : `https://cdn.discordapp.com/embed/avatars/0.png`;
+                    
+                    document.getElementById('user-avatar').src = avatarUrl;
                     document.getElementById('user-name').innerText = currentUsername;
                     document.getElementById('user-badge-text').innerText = currentBadge || 'Üye';
                     profileEl.style.display = 'flex';
@@ -912,7 +922,46 @@
             }
         }
 
-        // Profili düzenleme kartına odaklanma fonksiyonu (Header'daki profile tıklanınca tetiklenir)
+        // DİNAMİK SUNUCULARI RENDER ETME
+        function renderUserGuilds() {
+            const guildsContainer = document.getElementById('user-guilds-list');
+            if (!guildsContainer) return;
+
+            if (currentGuilds) {
+                try {
+                    const guilds = JSON.parse(decodeURIComponent(currentGuilds));
+                    if (guilds && guilds.length > 0) {
+                        guildsContainer.innerHTML = guilds.map(guild => {
+                            const iconHtml = guild.icon 
+                                ? `<img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png" alt="${guild.name}">`
+                                : `<div class="guild-icon-placeholder">${guild.name.charAt(0)}</div>`;
+
+                            return `
+                                <div class="guild-card">
+                                    <div class="guild-info">
+                                        ${iconHtml}
+                                        <div>
+                                            <h4 style="color: #fff; font-size: 15px;">${guild.name}</h4>
+                                            <p style="color: var(--text-muted); font-size: 12px;">Bot Durumu: <span style="color: #22c55e;">Aktif (Bağlı)</span></p>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;" onclick="alert('${guild.name} paneline bağlanılıyor...')">Yönet</button>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Yönetici yetkinizin olduğu bir sunucu bulunamadı.</p>';
+                    }
+                } catch (e) {
+                    console.error('Sunucu verisi işlenemedi:', e);
+                    guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Sunucu bilgileri okunamadı.</p>';
+                }
+            } else {
+                guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">Sunucuları görmek için lütfen Discord ile tekrar giriş yapın.</p>';
+            }
+        }
+
+        // Profili düzenleme kartına odaklanma fonksiyonu
         function focusProfileEditor() {
             switchTab('ana-sayfa', getNavBtn(0));
             setTimeout(() => {
@@ -979,6 +1028,7 @@
             localStorage.removeItem('discord_id');
             localStorage.removeItem('discord_role');
             localStorage.removeItem('discord_badge');
+            localStorage.removeItem('discord_guilds');
             window.location.href = '/';
         }
 
@@ -986,7 +1036,7 @@
             const targetId = document.getElementById('admin-target-id').value;
             const newBadge = document.getElementById('admin-badge-select').value;
             if (!targetId) return alert('Lütfen geçerli bir Discord ID girin!');
-            alert(`Başarılı! ${targetId} ID'li kullanıcıye "${newBadge}" rozeti tanımlandı.`);
+            alert(`Başarılı! ${targetId} ID'li kullanıcıya "${newBadge}" rozeti tanımlandı.`);
             document.getElementById('admin-target-id').value = '';
         }
 
