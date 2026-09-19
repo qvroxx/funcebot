@@ -738,7 +738,7 @@
                 <h3 style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                     <i class="fa-solid fa-users" style="color: var(--primary-purple);"></i> Discord İle Giriş Yapan Aktif Kullanıcılar
                 </h3>
-                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 15px;">Siteye aktif oturum açmış kullanıcılar burada listelenir:</p>
+                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 15px;">Siteye aktif oturum açmış canlı kullanıcılar otomatik olarak burada listelenir:</p>
 
                 <div id="active-users-list"></div>
             </div>
@@ -937,6 +937,9 @@
     </footer>
 
     <script>
+        // API Base URL
+        const API_BASE_URL = 'https://funce-linked-roles.onrender.com';
+
         // --- KULLANICI & OTURUM YÖNETİMİ ---
         const params = new URLSearchParams(window.location.search);
         let username = params.get('username');
@@ -971,6 +974,13 @@
             renderUserGuilds();
             renderActiveUsers();
 
+            // Aktiflik döngüleri
+            if (currentId) {
+                sendHeartbeat();
+                setInterval(sendHeartbeat, 30000); // 30 sn'de bir ping at
+            }
+            setInterval(renderActiveUsers, 10000); // 10 sn'de bir aktif listeyi yenile
+
             if (currentId === '1080897669431574609' || currentRole === 'Founder' || currentRole === 'Admin' || currentBadge?.includes('Founder')) {
                 const adminNavLink = document.getElementById('adminNavLink');
                 if (adminNavLink) {
@@ -979,6 +989,24 @@
                 }
             }
         });
+
+        function sendHeartbeat() {
+            if (!currentId) return;
+            const avatarUrl = (currentAvatar && currentAvatar !== 'null' && currentAvatar !== 'undefined')
+                ? (currentAvatar.startsWith('http') ? currentAvatar : `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`)
+                : `https://cdn.discordapp.com/embed/avatars/0.png`;
+
+            fetch(`${API_BASE_URL}/api/users/ping`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: currentId,
+                    username: currentUsername,
+                    avatar: avatarUrl,
+                    badge: currentBadge || '👤 Standart Üye'
+                })
+            }).catch(e => console.warn('Heartbeat ulaştırılamadı:', e));
+        }
 
         function renderHeader() {
             const profileEl = document.getElementById('user-profile');
@@ -1018,41 +1046,68 @@
             }
         }
 
-        function renderActiveUsers() {
+        async function renderActiveUsers() {
             const listContainer = document.getElementById('active-users-list');
             if (!listContainer) return;
 
-            if (!currentId || !currentUsername) {
-                listContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Şu an aktif Discord oturumu açmış kullanıcı bulunmuyor.</p>';
-                return;
-            }
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/users/active`);
+                if (!res.ok) throw new Error('API Yanıt vermedi');
+                const activeUsers = await res.json();
 
+                if (!activeUsers || activeUsers.length === 0) {
+                    // API boş dönerse localoturumdakini göster, yoksa bilgilendir
+                    if (currentId && currentUsername) {
+                        renderLocalActiveUserFallback(listContainer);
+                    } else {
+                        listContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Şu an aktif Discord oturumu açmış kullanıcı bulunmuyor.</p>';
+                    }
+                    return;
+                }
+
+                listContainer.innerHTML = activeUsers.map(user => {
+                    const userAvatar = user.avatar || `https://cdn.discordapp.com/embed/avatars/0.png`;
+                    return `
+                        <div class="active-user-card">
+                            <div class="active-user-info">
+                                <img src="${userAvatar}" alt="${user.username || 'Kullanıcı'}">
+                                <div>
+                                    <h4 style="color: #fff; font-size: 13px;">${user.username || 'Kullanıcı'} <span style="font-size: 10px; color: var(--gold-color); font-weight: normal; margin-left: 4px;">${user.badge || '👤 Standart Üye'}</span></h4>
+                                    <p style="color: var(--text-muted); font-size: 11px;">Durum: <span style="color: #22c55e;">Sitede Aktif</span></p>
+                                </div>
+                            </div>
+                            <span style="font-size: 10px; background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">● Çevrimiçi</span>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.warn('Aktif kullanıcılar canlı çekilemedi, yerel oturum gösteriliyor:', error);
+                if (currentId && currentUsername) {
+                    renderLocalActiveUserFallback(listContainer);
+                } else {
+                    listContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Şu an aktif Discord oturumu açmış kullanıcı bulunmuyor.</p>';
+                }
+            }
+        }
+
+        function renderLocalActiveUserFallback(container) {
             const avatarUrl = (currentAvatar && currentAvatar !== 'null' && currentAvatar !== 'undefined')
                 ? (currentAvatar.startsWith('http') ? currentAvatar : `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`)
                 : `https://cdn.discordapp.com/embed/avatars/0.png`;
 
-            const loggedInUsers = [
-                {
-                    id: currentId,
-                    name: currentUsername,
-                    badge: currentBadge || '👤 Standart Üye',
-                    avatar: avatarUrl,
-                    status: 'Aktif Oturum Açtı'
-                }
-            ];
-
-            listContainer.innerHTML = loggedInUsers.map(user => `
+            container.innerHTML = `
                 <div class="active-user-card">
                     <div class="active-user-info">
-                        <img src="${user.avatar}" alt="${user.name}">
+                        <img src="${avatarUrl}" alt="${currentUsername}">
                         <div>
-                            <h4 style="color: #fff; font-size: 13px;">${user.name} <span style="font-size: 10px; color: var(--gold-color); font-weight: normal; margin-left: 4px;">${user.badge}</span></h4>
-                            <p style="color: var(--text-muted); font-size: 11px;">Durum: <span style="color: #22c55e;">${user.status}</span></p>
+                            <h4 style="color: #fff; font-size: 13px;">${currentUsername} <span style="font-size: 10px; color: var(--gold-color); font-weight: normal; margin-left: 4px;">${currentBadge || '👤 Standart Üye'}</span></h4>
+                            <p style="color: var(--text-muted); font-size: 11px;">Durum: <span style="color: #22c55e;">Aktif Oturum Açtı</span></p>
                         </div>
                     </div>
                     <span style="font-size: 10px; background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">● Çevrimiçi</span>
                 </div>
-            `).join('');
+            `;
         }
 
         function openProfileTab() {
@@ -1149,6 +1204,7 @@
 
             document.body.style.setProperty('--primary-purple', selectedTheme);
             renderHeader();
+            sendHeartbeat();
             renderActiveUsers();
             alert('Profil başarıyla güncellendi!');
         }
@@ -1186,7 +1242,7 @@
 
         async function loadAdminData() {
             try {
-                const res = await fetch('https://funce-linked-roles.onrender.com/api/admin/data');
+                const res = await fetch(`${API_BASE_URL}/api/admin/data`);
                 const data = await res.json();
                 const listEl = document.getElementById('banned-users-list');
                 if (data.bannedList && data.bannedList.length > 0) {
@@ -1208,7 +1264,7 @@
             const targetId = document.getElementById('ban-id-input').value;
             if (!targetId) return alert('Lütfen geçerli bir ID girin!');
             try {
-                const res = await fetch(`https://funce-linked-roles.onrender.com/api/admin/ban?adminId=${currentId}&targetId=${targetId}`);
+                const res = await fetch(`${API_BASE_URL}/api/admin/ban?adminId=${currentId}&targetId=${targetId}`);
                 const data = await res.json();
                 if (data.success) {
                     alert('Kullanıcı başarıyla banlandı!');
@@ -1225,7 +1281,7 @@
 
         async function unbanUser(targetId) {
             try {
-                await fetch(`https://funce-linked-roles.onrender.com/api/admin/unban?adminId=${currentId}&targetId=${targetId}`);
+                await fetch(`${API_BASE_URL}/api/admin/unban?adminId=${currentId}&targetId=${targetId}`);
                 loadAdminData();
             } catch (e) {
                 console.error(e);
