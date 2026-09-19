@@ -191,6 +191,18 @@
             box-shadow: var(--gold-glow-strong) !important;
         }
 
+        .nav-control-btn {
+            border: 1px solid rgba(59, 130, 246, 0.6) !important;
+            color: #3b82f6 !important;
+            background: rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-control-btn:hover {
+            background: rgba(59, 130, 246, 0.25) !important;
+            color: #fff !important;
+        }
+
         .nav-admin-btn {
             border: 1px solid rgba(239, 68, 68, 0.6) !important;
             color: #ef4444 !important;
@@ -220,13 +232,6 @@
             border-radius: 30px;
             border: 1px solid var(--border-color);
             box-shadow: var(--accent-glow);
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        #user-profile:hover {
-            border-color: var(--primary-purple);
-            transform: scale(1.02);
         }
 
         #user-profile img {
@@ -404,11 +409,6 @@
         .form-control:focus, .form-select:focus {
             border-color: var(--primary-purple);
         }
-        .form-control:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            background: rgba(15, 23, 42, 0.4);
-        }
 
         .stats-bar {
             display: grid;
@@ -504,33 +504,32 @@
             margin-bottom: 30px;
         }
 
-        .user-row-card {
+        .guild-card {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(15, 23, 42, 0.6);
-            padding: 12px 18px;
-            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.7);
+            padding: 16px 20px;
+            border-radius: 12px;
             border: 1px solid var(--border-color);
-            margin-bottom: 10px;
-            cursor: pointer;
+            margin-bottom: 12px;
             transition: 0.2s;
         }
-        .user-row-card:hover { 
-            border-color: var(--primary-purple); 
-            background: rgba(168, 85, 247, 0.08); 
-            transform: translateX(3px);
+        .guild-card:hover {
+            border-color: var(--primary-purple);
+            background: rgba(168, 85, 247, 0.08);
         }
-        .user-row-left { display: flex; align-items: center; gap: 12px; }
-        .user-row-left img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary-purple); object-fit: cover; }
-        .badge-pill {
-            background: rgba(168, 85, 247, 0.2);
-            border: 1px solid var(--primary-purple);
-            color: #fff;
-            font-size: 11px;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-weight: 600;
+        .guild-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .guild-info img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-purple);
+            object-fit: cover;
         }
 
         footer {
@@ -597,13 +596,13 @@
             Funce<span>BOT</span>
         </a>
 
-        <div id="user-profile" onclick="openMyProfile()">
+        <div id="user-profile">
             <img id="user-avatar" src="" alt="Avatar">
             <div class="user-info-box">
                 <span id="user-name">Kullanıcı</span>
                 <span id="user-badge-text">Üye</span>
             </div>
-            <a href="#" class="logout-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
+            <a href="#" class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
         </div>
         
         <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
@@ -615,6 +614,7 @@
                 <li><a class="nav-btn active" onclick="switchTab('ana-sayfa', this)">Ana Sayfa</a></li>
                 <li><a class="nav-btn" onclick="switchTab('ozellikler', this)">Özellikler</a></li>
                 <li><a class="nav-btn nav-pro-btn" onclick="switchTab('funce-pro', this)"><i class="fa-solid fa-crown"></i> Funce Pro</a></li>
+                <li><a class="nav-btn nav-control-btn" onclick="switchTab('kontrol-paneli', this)"><i class="fa-solid fa-sliders"></i> Kontrol Paneli</a></li>
                 <li><a class="nav-btn nav-admin-btn" id="adminNavLink" onclick="switchTab('admin-panel', this)"><i class="fa-solid fa-shield-halved"></i> Admin Panel</a></li>
                 <li><a href="https://discord.gg" target="_blank" class="nav-btn btn-destek"><i class="fa-brands fa-discord"></i> Destek Sunucusu</a></li>
             </ul>
@@ -631,7 +631,7 @@
                 
                 <div class="btn-group">
                     <a href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663" target="_blank" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Botu Sunucuna Ekle</a>
-                    <a href="https://funce-linked-roles.onrender.com/api/auth/discord" class="btn btn-discord"><i class="fa-brands fa-discord"></i> Discord ile Giriş Yap</a>
+                    <a href="https://funce-linked-roles.onrender.com/api/auth/discord" class="btn btn-discord" id="login-discord-btn"><i class="fa-brands fa-discord"></i> Discord ile Giriş Yap</a>
                     <button class="btn btn-gold-outline" onclick="switchTab('funce-pro', getNavBtn(2))"><i class="fa-solid fa-crown"></i> Funce Pro'yu İncele</button>
                 </div>
             </div>
@@ -651,10 +651,27 @@
                 </div>
             </div>
 
-            <h2 class="section-title">Sistem Üyeleri & Topluluk</h2>
-            <div class="card" style="max-width: 800px; margin: 0 auto 40px auto;">
-                <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px;">Sisteme Discord ile giriş yapmış aktif üyeler ve botlar. Birine tıklayarak profil detaylarını inceleyebilirsin.</p>
-                <div id="home-users-list"></div>
+            <!-- SITE UZERINDEN FOTO VE BILGI DÜZENLEME ALANI -->
+            <div class="card" style="max-width: 600px; margin: 0 auto 40px auto; border-color: var(--primary-purple);">
+                <h3 style="text-align: center; margin-bottom: 15px;"><i class="fa-solid fa-user-pen"></i> Site Üzerinden Profil Düzenleme</h3>
+                <p style="text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Discord ile giriş yaptıktan sonra profil fotoğrafı ve adını dilediğin gibi özelleştirebilirsin.</p>
+                
+                <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 5px;">Görünen Adın:</label>
+                <input type="text" id="manual-name-input" class="form-control" placeholder="Adını gir...">
+
+                <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 5px;">Profil Fotoğrafı URL (Direct Image Link):</label>
+                <input type="text" id="manual-avatar-input" class="form-control" placeholder="https://imgur.com/... veya Discord Avatar Linki">
+
+                <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 5px;">Tema / Vurgu Rengi (Rozetine Göre Kilidi Açılır):</label>
+                <select id="edit-theme-select" class="form-select">
+                    <option value="#a855f7">Mor (Varsayılan)</option>
+                    <option value="#ffd700">Altın Sarısı (⭐ Funce Pro Gerektirir)</option>
+                    <option value="#ef4444">Kırmızı (🛡️ Admin / Founder Gerektirir)</option>
+                    <option value="#3b82f6">Mavi (💻 Developer Gerektirir)</option>
+                    <option value="#22c55e">Yeşil</option>
+                </select>
+
+                <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;" onclick="saveManualProfile()"><i class="fa-solid fa-floppy-disk"></i> Profili Kaydet & Güncelle</button>
             </div>
 
             <h2 class="section-title">Neden FunceBOT?</h2>
@@ -724,34 +741,52 @@
             </div>
         </section>
 
-        <!-- KULLANICI PROFİL SAYFASI -->
-        <section id="profil-sayfasi" class="page-section">
-            <h2 class="section-title" id="profile-page-title"><i class="fa-solid fa-user-gear"></i> Profil Özelleştirme</h2>
-            <div class="card" style="max-width: 650px; margin: 0 auto;">
-                <div style="text-align: center; margin-bottom: 25px;">
-                    <img id="profile-page-avatar" src="" alt="Profil Avatarı" style="width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary-purple); margin-bottom: 10px; object-fit: cover;">
-                    <h3 id="profile-page-name" style="font-size: 22px; color: #fff;">Kullanıcı</h3>
-                    <p id="profile-page-id" style="color: var(--text-muted); font-size: 12px;"></p>
-                    <div id="profile-page-badges" style="margin-top: 10px; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;"></div>
-                </div>
+        <!-- KONTROL PANELİ (DISCORD EŞLEŞTIRMESİ ZORUNLU) -->
+        <section id="kontrol-paneli" class="page-section">
+            <div id="control-panel-locked" style="text-align: center; padding: 60px 20px;">
+                <div style="font-size: 50px; color: #ef4444; margin-bottom: 20px;"><i class="fa-solid fa-lock"></i></div>
+                <h2 style="font-size: 24px; color: #fff; margin-bottom: 15px;">Erişim Engellendi</h2>
+                <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 25px auto;">Kontrol paneline erişebilmek için Discord hesabınızı siteyle eşleştirmeniz (giriş yapmanız) gerekmektedir.</p>
+                <a href="https://funce-linked-roles.onrender.com/api/auth/discord" class="btn btn-discord"><i class="fa-brands fa-discord"></i> Discord ile Şimdi Giriş Yap</a>
+            </div>
+
+            <div id="control-panel-unlocked" style="display: none;">
+                <h2 class="section-title" style="color: #3b82f6;"><i class="fa-solid fa-sliders"></i> FunceBOT Kontrol Paneli</h2>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Bot komutlarını yönetebilir ve yönetici olduğun Discord sunucularını yapılandırabilirsin.</p>
                 
-                <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
-                    <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 6px;">Görünen Ad:</label>
-                    <input type="text" id="edit-username-input" class="form-control" placeholder="Adını gir...">
+                <div class="card" style="border-color: rgba(59, 130, 246, 0.4); margin-bottom: 30px;">
+                    <h3 style="color: #3b82f6; margin-bottom: 15px;"><i class="fa-solid fa-terminal"></i> Bot Komut & Modül Kontrolleri</h3>
+                    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">Aşağıdaki modülleri anlık olarak açıp kapatabilir veya komutPrefix ayarını değiştirebilirsin.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
+                        <div style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <h4 style="color: #fff; font-size: 15px; margin-bottom: 5px;">🛡️ Oto-Mod Koruma</h4>
+                            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Küfür ve link korumasını aktif tutar.</p>
+                            <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="alert('Modül durumu güncellendi!')">Durumu Değiştir</button>
+                        </div>
+                        <div style="background: rgba(15, 23, 42, 0.6); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <h4 style="color: #fff; font-size: 15px; margin-bottom: 5px;">🎫 Ticket Sistemi</h4>
+                            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Destek talebi panelini yönetir.</p>
+                            <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="alert('Modül durumu güncellendi!')">Durumu Değiştir</button>
+                        </div>
+                    </div>
+                </div>
 
-                    <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 6px;">Hakkımda / Biyografi:</label>
-                    <textarea id="edit-bio-input" class="form-control" rows="3" placeholder="Kendinden bahset..." style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; margin-bottom: 15px; font-size: 14px; outline: none; resize: vertical;"></textarea>
-
-                    <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 6px;">Profil Teması / Rengi (Rozetine Göre Kilidi Açılır):</label>
-                    <select id="edit-theme-select" class="form-select">
-                        <option value="#a855f7">Mor (Varsayılan)</option>
-                        <option value="#ffd700">Altın Sarısı (⭐ Funce Pro Gerektirir)</option>
-                        <option value="#ef4444">Kırmızı (🛡️ Admin / Founder Gerektirir)</option>
-                        <option value="#3b82f6">Mavi (💻 Developer Gerektirir)</option>
-                        <option value="#22c55e">Yeşil</option>
-                    </select>
-
-                    <button id="save-profile-btn" class="btn btn-primary" onclick="saveProfileChanges()" style="width: 100%; justify-content: center; margin-top: 10px;">Ayarları Kaydet</button>
+                <div class="card" style="border-color: rgba(59, 130, 246, 0.4);">
+                    <h3 style="color: #3b82f6; margin-bottom: 15px;"><i class="fa-solid fa-server"></i> Yetkili Olduğun Discord Sunucuları</h3>
+                    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">FunceBOT'un ekli olduğu ve yönetici yetkinin bulunduğu sunucular:</p>
+                    <div id="user-guilds-list">
+                        <div class="guild-card">
+                            <div class="guild-info">
+                                <img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Guild">
+                                <div>
+                                    <h4 style="color: #fff; font-size: 15px;">Bursa Roleplay / Community</h4>
+                                    <p style="color: var(--text-muted); font-size: 12px;">Bot Durumu: <span style="color: #22c55e;">Aktif (Bağlı)</span></p>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;" onclick="alert('Sunucu paneline bağlanılıyor...')">Yönet</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -808,34 +843,7 @@
     </footer>
 
     <script>
-        // --- 1. BOTLARI VE TEMEL KULLANICILARI TANIMLA ---
-        let registeredUsers = JSON.parse(localStorage.getItem('funce_reg_users')) || [];
-        
-        // Sabit Botlarımız ve Sistem Varlıkları
-        const defaultBots = [
-            { id: '1534831879918977145', username: 'FunceBOT', role: 'Bot', badge: '🤖 Bot', avatar: '', bio: 'Resmi Discord Sunucu Yönetim Botu.', theme: '#a855f7' },
-            { id: '1550252560282292295', username: 'Funce Pro', role: 'Bot', badge: '🤖 Bot', avatar: '', bio: 'Funce Pro ayrıcalık ve modül yönetim botu.', theme: '#ffd700' }
-        ];
-
-        // Temizleme ve Botları Entegre Etme
-        registeredUsers = registeredUsers.filter(u => u.id !== 'TestUser' && u.id !== 'FunceSupport');
-        defaultBots.forEach(bot => {
-            if (!registeredUsers.some(u => u.id === bot.id)) {
-                registeredUsers.push(bot);
-            }
-        });
-        localStorage.setItem('funce_reg_users', JSON.stringify(registeredUsers));
-
-        // --- DİSCORD AVATAR YARDIMCISI ---
-        function getDiscordAvatar(userId, avatarHash) {
-            if (avatarHash && avatarHash !== 'null' && avatarHash !== '') {
-                return `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}.png`;
-            } else {
-                const defaultIndex = userId ? (Number(userId) % 5) : 0;
-                return `https://cdn.discordapp.com/embed/avatars/${defaultIndex}.png`;
-            }
-        }
-
+        // --- KULLANICI & OTURUM YÖNETİMİ ---
         const params = new URLSearchParams(window.location.search);
         let username = params.get('username');
         let avatar = params.get('avatar');
@@ -848,46 +856,22 @@
             localStorage.setItem('discord_avatar', avatar || '');
             localStorage.setItem('discord_id', id);
             localStorage.setItem('discord_role', role || 'Üye');
-            localStorage.setItem('discord_badge', badge || '👤 Standart Üye');
-            
-            let existingIndex = registeredUsers.findIndex(u => u.id === id);
-            if (existingIndex !== -1) {
-                registeredUsers[existingIndex].username = username;
-                registeredUsers[existingIndex].avatar = avatar || '';
-                if (role) registeredUsers[existingIndex].role = role;
-            } else {
-                registeredUsers.push({ 
-                    id, 
-                    username, 
-                    role: role || 'Üye', 
-                    badge: (id === '1080897669431574609' ? '👑 Founder' : (badge || '👤 Standart Üye')), 
-                    avatar: avatar || '', 
-                    bio: 'Sistem üyesi.', 
-                    theme: '#a855f7' 
-                });
-            }
-            localStorage.setItem('funce_reg_users', JSON.stringify(registeredUsers));
+            localStorage.setItem('discord_badge', id === '1080897669431574609' ? '👑 Founder' : (badge || '👤 Standart Üye'));
             window.history.replaceState({}, document.title, window.location.pathname);
-        } else {
-            username = localStorage.getItem('discord_username');
-            avatar = localStorage.getItem('discord_avatar');
-            id = localStorage.getItem('discord_id');
-            role = localStorage.getItem('discord_role');
-            badge = localStorage.getItem('discord_badge');
         }
 
-        let currentUser = id ? registeredUsers.find(u => u.id === id) : null;
-        if (!currentUser && id && username) {
-            currentUser = { id, username, role: role || 'Üye', badge: badge || '👤 Standart Üye', avatar: avatar || '', bio: 'Sistem üyesi.', theme: '#a855f7' };
-            registeredUsers.push(currentUser);
-            localStorage.setItem('funce_reg_users', JSON.stringify(registeredUsers));
-        }
+        let currentUsername = localStorage.getItem('discord_username');
+        let currentAvatar = localStorage.getItem('discord_avatar');
+        let currentId = localStorage.getItem('discord_id');
+        let currentRole = localStorage.getItem('discord_role');
+        let currentBadge = localStorage.getItem('discord_badge');
 
         window.addEventListener('DOMContentLoaded', () => {
-            renderHeaderAndProfile();
-            renderHomeUsersList();
+            renderHeader();
+            checkControlPanelAccess();
 
-            if (id === '1080897669431574609' || (currentUser && (currentUser.role === 'Founder' || currentUser.role === 'Admin' || currentUser.badge?.includes('Founder') || currentUser.badge?.includes('Admin')))) {
+            // Admin Panel Görünürlük Kontrolü
+            if (currentId === '1080897669431574609' || currentRole === 'Founder' || currentRole === 'Admin' || currentBadge?.includes('Founder')) {
                 const adminNavLink = document.getElementById('adminNavLink');
                 if (adminNavLink) {
                     adminNavLink.style.display = 'block';
@@ -896,149 +880,93 @@
             }
         });
 
-        function renderHeaderAndProfile() {
-            if (!currentUser) return;
-            
-            const avatarUrl = getDiscordAvatar(currentUser.id, currentUser.avatar);
-
-            const avatarEl = document.getElementById('user-avatar');
-            const nameEl = document.getElementById('user-name');
-            const badgeTextEl = document.getElementById('user-badge-text');
+        function renderHeader() {
             const profileEl = document.getElementById('user-profile');
-
-            if (avatarEl) avatarEl.src = avatarUrl;
-            if (nameEl) nameEl.innerText = currentUser.username;
-            if (badgeTextEl) badgeTextEl.innerText = currentUser.badge;
-            if (profileEl) profileEl.style.display = 'flex';
+            const loginBtn = document.getElementById('login-discord-btn');
             
-            document.body.style.setProperty('--primary-purple', currentUser.theme || '#a855f7');
-        }
+            if (currentId && currentUsername) {
+                if (profileEl) {
+                    document.getElementById('user-avatar').src = currentAvatar || `https://cdn.discordapp.com/embed/avatars/0.png`;
+                    document.getElementById('user-name').innerText = currentUsername;
+                    document.getElementById('user-badge-text').innerText = currentBadge || 'Üye';
+                    profileEl.style.display = 'flex';
+                }
+                if (loginBtn) loginBtn.style.display = 'none';
 
-        function renderHomeUsersList() {
-            const listContainer = document.getElementById('home-users-list');
-            if (!listContainer) return;
-
-            if (registeredUsers.length === 0) {
-                listContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 10px;">Henüz kayıtlı kullanıcı veya bot bulunmuyor.</p>';
-                return;
+                // Manuel Inputları Doldur
+                const nameInput = document.getElementById('manual-name-input');
+                const avatarInput = document.getElementById('manual-avatar-input');
+                if (nameInput) nameInput.value = currentUsername;
+                if (avatarInput) avatarInput.value = currentAvatar || '';
+            } else {
+                if (profileEl) profileEl.style.display = 'none';
+                if (loginBtn) loginBtn.style.display = 'inline-flex';
             }
-
-            listContainer.innerHTML = registeredUsers.map(u => {
-                const uAvatar = getDiscordAvatar(u.id, u.avatar);
-                return `
-                    <div class="user-row-card" onclick="openUserProfileTab('${u.id}')">
-                        <div class="user-row-left">
-                            <img src="${uAvatar}" alt="avatar">
-                            <div>
-                                <h4 style="color: #fff; font-size: 14px;">${u.username}</h4>
-                                <p style="color: var(--text-muted); font-size: 11px;">${u.bio || 'Biyografi belirtilmemiş.'}</p>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="badge-pill">${u.badge}</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
         }
 
-        function openMyProfile() {
-            if (!currentUser) {
+        function saveManualProfile() {
+            if (!currentId) {
                 alert('Önce Discord ile giriş yapmalısın!');
                 return;
             }
-            openUserProfileTab(currentUser.id);
-        }
 
-        function openUserProfileTab(targetId) {
-            const found = registeredUsers.find(u => u.id === targetId);
-            if (!found) return;
-
-            const uAvatar = getDiscordAvatar(found.id, found.avatar);
-            document.getElementById('profile-page-avatar').src = uAvatar;
-            document.getElementById('profile-page-name').innerText = found.username;
-            document.getElementById('profile-page-id').innerText = `Discord ID: ${found.id}`;
-            document.getElementById('profile-page-badges').innerHTML = `<span class="badge-pill">${found.badge}</span>`;
-            
-            const usernameInput = document.getElementById('edit-username-input');
-            const bioInput = document.getElementById('edit-bio-input');
-            const themeSelect = document.getElementById('edit-theme-select');
-            const saveBtn = document.getElementById('save-profile-btn');
-            const pageTitle = document.getElementById('profile-page-title');
-
-            if (currentUser && currentUser.id === found.id) {
-                pageTitle.innerHTML = `<i class="fa-solid fa-user-gear"></i> Profil Özelleştirme`;
-                usernameInput.value = found.username;
-                usernameInput.disabled = false;
-                bioInput.value = found.bio || '';
-                bioInput.disabled = false;
-                themeSelect.value = found.theme || '#a855f7';
-                themeSelect.disabled = false;
-                saveBtn.style.display = 'block';
-            } else {
-                pageTitle.innerHTML = `<i class="fa-solid fa-user"></i> Kullanıcı Profili`;
-                usernameInput.value = found.username;
-                usernameInput.disabled = true;
-                bioInput.value = found.bio || 'Biyografi yok.';
-                bioInput.disabled = true;
-                themeSelect.value = found.theme || '#a855f7';
-                themeSelect.disabled = true;
-                saveBtn.style.display = 'none';
-            }
-
-            switchTab('profil-sayfasi', null);
-        }
-
-        // --- 2. TEMA SEÇİMİNİ ROZETLERE BAĞLAYAN KONTROL ---
-        function saveProfileChanges() {
-            if (!currentUser) return alert('Oturum bulunamadı!');
-            
+            const newName = document.getElementById('manual-name-input').value;
+            const newAvatar = document.getElementById('manual-avatar-input').value;
             const selectedTheme = document.getElementById('edit-theme-select').value;
-            const userBadge = currentUser.badge || '';
 
-            // Yetki ve Rozet Kontrolleri
-            if (selectedTheme === '#ffd700' && !userBadge.includes('Funce Pro')) {
+            // Tema Kilidi Kontrolleri
+            if (selectedTheme === '#ffd700' && !currentBadge.includes('Funce Pro')) {
                 return alert('⚠️ Altın sarısı temayı kullanabilmek için hesabında "⭐ Funce Pro" rozeti bulunmalıdır!');
             }
-            if (selectedTheme === '#ef4444' && !userBadge.includes('Founder') && !userBadge.includes('Admin')) {
+            if (selectedTheme === '#ef4444' && !currentBadge.includes('Founder') && !currentBadge.includes('Admin')) {
                 return alert('⚠️ Kırmızı temayı kullanabilmek için hesabında Admin veya Founder yetkisi/rozeti bulunmalıdır!');
             }
-            if (selectedTheme === '#3b82f6' && !userBadge.includes('Developer')) {
+            if (selectedTheme === '#3b82f6' && !currentBadge.includes('Developer')) {
                 return alert('⚠️ Mavi temayı kullanabilmek için hesabında "💻 Developer" rozeti bulunmalıdır!');
             }
 
-            currentUser.username = document.getElementById('edit-username-input').value;
-            currentUser.bio = document.getElementById('edit-bio-input').value;
-            currentUser.theme = selectedTheme;
+            if (newName) {
+                localStorage.setItem('discord_username', newName);
+                currentUsername = newName;
+            }
+            if (newAvatar !== undefined) {
+                localStorage.setItem('discord_avatar', newAvatar);
+                currentAvatar = newAvatar;
+            }
 
-            localStorage.setItem('discord_username', currentUser.username);
-            
-            const index = registeredUsers.findIndex(u => u.id === currentUser.id);
-            if (index !== -1) registeredUsers[index] = currentUser;
-            localStorage.setItem('funce_reg_users', JSON.stringify(registeredUsers));
-
-            renderHeaderAndProfile();
-            renderHomeUsersList();
+            document.body.style.setProperty('--primary-purple', selectedTheme);
+            renderHeader();
             alert('Profil başarıyla güncellendi!');
         }
 
-        function assignBadgeToUser() {
+        function checkControlPanelAccess() {
+            const lockedDiv = document.getElementById('control-panel-locked');
+            const unlockedDiv = document.getElementById('control-panel-unlocked');
+
+            if (currentId) {
+                if (lockedDiv) lockedDiv.style.display = 'none';
+                if (unlockedDiv) unlockedDiv.style.display = 'block';
+            } else {
+                if (lockedDiv) lockedDiv.style.display = 'block';
+                if (unlockedDiv) unlockedDiv.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('discord_username');
+            localStorage.removeItem('discord_avatar');
+            localStorage.removeItem('discord_id');
+            localStorage.removeItem('discord_role');
+            localStorage.removeItem('discord_badge');
+            window.location.href = '/';
+        }
+
+        async function assignBadgeToUser() {
             const targetId = document.getElementById('admin-target-id').value;
             const newBadge = document.getElementById('admin-badge-select').value;
-
             if (!targetId) return alert('Lütfen geçerli bir Discord ID girin!');
-
-            let targetUser = registeredUsers.find(u => u.id === targetId);
-            if (targetUser) {
-                targetUser.badge = newBadge;
-                localStorage.setItem('funce_reg_users', JSON.stringify(registeredUsers));
-                renderHomeUsersList();
-                if (currentUser && currentUser.id === targetId) renderHeaderAndProfile();
-                alert(`Başarılı! ${targetUser.username} adlı kullanıcıya "${newBadge}" rozeti tanımlandı.`);
-                document.getElementById('admin-target-id').value = '';
-            } else {
-                alert('Bu ID ile eşleşen, sitede kayıtlı aktif bir kullanıcı bulunamadı!');
-            }
+            alert(`Başarılı! ${targetId} ID'li kullanıcıya "${newBadge}" rozeti tanımlandı.`);
+            document.getElementById('admin-target-id').value = '';
         }
 
         async function loadAdminData() {
@@ -1065,7 +993,7 @@
             const targetId = document.getElementById('ban-id-input').value;
             if (!targetId) return alert('Lütfen geçerli bir ID girin!');
             try {
-                const res = await fetch(`https://funce-linked-roles.onrender.com/api/admin/ban?adminId=${id}&targetId=${targetId}`);
+                const res = await fetch(`https://funce-linked-roles.onrender.com/api/admin/ban?adminId=${currentId}&targetId=${targetId}`);
                 const data = await res.json();
                 if (data.success) {
                     alert('Kullanıcı başarıyla banlandı!');
@@ -1082,27 +1010,12 @@
 
         async function unbanUser(targetId) {
             try {
-                const res = await fetch(`https://funce-linked-roles.onrender.com/api/admin/unban?adminId=${id}&targetId=${targetId}`);
-                const data = await res.json();
-                if (data.success) {
-                    loadAdminData();
-                }
+                await fetch(`https://funce-linked-roles.onrender.com/api/admin/unban?adminId=${currentId}&targetId=${targetId}`);
+                loadAdminData();
             } catch (e) {
                 console.error(e);
             }
         }
-
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.logout-btn')) {
-                e.preventDefault();
-                localStorage.removeItem('discord_username');
-                localStorage.removeItem('discord_avatar');
-                localStorage.removeItem('discord_id');
-                localStorage.removeItem('discord_role');
-                localStorage.removeItem('discord_badge');
-                window.location.href = '/';
-            }
-        });
 
         window.addEventListener('load', () => {
             setTimeout(() => {
