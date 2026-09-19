@@ -239,6 +239,7 @@
             height: 32px;
             border-radius: 50%;
             border: 2px solid var(--primary-purple);
+            object-fit: cover;
         }
 
         .user-info-box {
@@ -509,7 +510,7 @@
             margin-bottom: 30px;
         }
 
-        /* --- ANA SAYFA KULLANICI LİSTESİ BİLEŞENİ --- */
+        /* --- SİSTEM KULLANICILARI LİSTESİ BİLEŞENİ --- */
         .user-row-card {
             display: flex;
             justify-content: space-between;
@@ -668,12 +669,12 @@
                 </div>
             </div>
 
-            <!-- SİTE KULLANICILARI LİSTESİ (ANASAYFA ÖZELLİĞİ) -->
+            <!-- SİTE KULLANICILARI LİSTESİ (SADECE GERÇEK GİRİŞ YAPANLAR) -->
             <h2 class="section-title">Sistem Üyeleri & Topluluk</h2>
             <div class="card" style="max-width: 800px; margin: 0 auto 40px auto;">
-                <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px;">Sisteme kayıtlı kullanıcıları inceleyebilir, profillerine tıklayarak detaylı rozetlerini görebilirsin.</p>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px;">Sisteme Discord ile giriş yapmış aktif üyeleri inceleyebilir, birine tıklayarak doğrudan profil sayfasına geçiş yapabilirsin.</p>
                 <div id="home-users-list">
-                    <!-- Dinamik Kullanıcılar Listelenecek -->
+                    <!-- Dinamik Sadece Gerçek Kayıtlı Kullanıcılar Listelenecek -->
                 </div>
             </div>
 
@@ -837,12 +838,8 @@
     </footer>
 
     <script>
-        // --- SİSTEM HAFIZA VERİLERİ (SİMÜLASYON VERİTABANI & KULLANICI LİSTESİ) ---
-        let registeredUsers = JSON.parse(localStorage.getItem('funce_reg_users')) || [
-            { id: '1080897669431574609', username: 'Qvrox', role: 'Founder', badge: '👑 Founder', avatar: '', bio: 'Pro Kurucusu ve Geliştiricisi.', theme: '#ffd700' },
-            { id: '987654321098765432', username: 'FunceSupport', role: 'Admin', badge: '🛡️ Bot Admin', avatar: '', bio: 'Destek ekibi sorumlusu.', theme: '#a855f7' },
-            { id: '123456789012345678', username: 'TestUser', role: 'Üye', badge: '👤 Standart Üye', avatar: '', bio: 'Yeni üyelerden biri.', theme: '#3b82f6' }
-        ];
+        // --- SİSTEM HAFIZA VERİLERİ (SADECE GERÇEK GİRİŞ YAPANLAR) ---
+        let registeredUsers = JSON.parse(localStorage.getItem('funce_reg_users')) || [];
 
         // --- LOCALSTORAGE KALICI OTURUM & BİLGİ KONTROLÜ ---
         const params = new URLSearchParams(window.location.search);
@@ -852,32 +849,46 @@
         let role = params.get('role');
         let badge = params.get('badge');
 
-        if (username) {
+        if (username && id) {
             localStorage.setItem('discord_username', username);
-            localStorage.setItem('discord_avatar', avatar);
+            localStorage.setItem('discord_avatar', avatar || '');
             localStorage.setItem('discord_id', id);
             localStorage.setItem('discord_role', role || 'Üye');
             localStorage.setItem('discord_badge', badge || '👤 Standart Üye');
             
-            // Kullanıcı listede yoksa sisteme otomatik ekle
-            if (!registeredUsers.some(u => u.id === id)) {
-                registeredUsers.push({ id, username, role: role || 'Üye', badge: badge || '👤 Standart Üye', avatar, bio: 'Açıklama girilmedi.', theme: '#a855f7' });
-                localStorage.setItem('funce_reg_users', JSON.stringify(registeredUsers));
+            // Eğer gerçek giren kullanıcı listede yoksa ekle, varsa bilgilerini güncelle
+            let existingIndex = registeredUsers.findIndex(u => u.id === id);
+            if (existingIndex !== -1) {
+                registeredUsers[existingIndex].username = username;
+                registeredUsers[existingIndex].avatar = avatar || '';
+                if (role) registeredUsers[existingIndex].role = role;
+            } else {
+                registeredUsers.push({ 
+                    id, 
+                    username, 
+                    role: role || 'Üye', 
+                    badge: (id === '1080897669431574609' ? '👑 Founder' : (badge || '👤 Standart Üye')), 
+                    avatar: avatar || '', 
+                    bio: 'Sistem üyesi.', 
+                    theme: '#a855f7' 
+                });
             }
+            localStorage.setItem('funce_reg_users', JSON.stringify(registeredUsers));
+            
             // Adres çubuğunu temizle
             window.history.replaceState({}, document.title, window.location.pathname);
         } else {
-            username = localStorage.getItem('discord_username') || 'Qvrox';
-            avatar = localStorage.getItem('discord_avatar') || '';
-            id = localStorage.getItem('discord_id') || '1080897669431574609';
-            role = localStorage.getItem('discord_role') || 'Founder';
-            badge = localStorage.getItem('discord_badge') || '👑 Founder';
+            username = localStorage.getItem('discord_username');
+            avatar = localStorage.getItem('discord_avatar');
+            id = localStorage.getItem('discord_id');
+            role = localStorage.getItem('discord_role');
+            badge = localStorage.getItem('discord_badge');
         }
 
-        // Aktif Kullanıcıyı Bul veya Tanımla
-        let currentUser = registeredUsers.find(u => u.id === id);
-        if (!currentUser) {
-            currentUser = { id, username, role, badge, avatar, bio: 'Sistem kullanıcısı.', theme: '#a855f7' };
+        // Eğer oturum açmış kullanıcı varsa mevcut nesnesini seç
+        let currentUser = id ? registeredUsers.find(u => u.id === id) : null;
+        if (!currentUser && id && username) {
+            currentUser = { id, username, role: role || 'Üye', badge: badge || '👤 Standart Üye', avatar: avatar || '', bio: 'Sistem üyesi.', theme: '#a855f7' };
             registeredUsers.push(currentUser);
             localStorage.setItem('funce_reg_users', JSON.stringify(registeredUsers));
         }
@@ -887,7 +898,7 @@
             renderHomeUsersList();
 
             // Admin Yetki Kontrolü
-            if (id === '1080897669431574609' || currentUser.role === 'Founder' || currentUser.role === 'Admin') {
+            if (id === '1080897669431574609' || (currentUser && (currentUser.role === 'Founder' || currentUser.role === 'Admin'))) {
                 const adminNavLink = document.getElementById('adminNavLink');
                 if (adminNavLink) {
                     adminNavLink.style.display = 'block';
@@ -897,38 +908,63 @@
         });
 
         function renderHeaderAndProfile() {
+            if (!currentUser) return;
+            
             const avatarUrl = currentUser.avatar 
                 ? `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`
                 : 'https://cdn.discordapp.com/embed/avatars/0.png';
 
-            document.getElementById('user-avatar').src = avatarUrl;
-            document.getElementById('user-name').innerText = currentUser.username;
-            document.getElementById('user-badge-text').innerText = currentUser.badge;
-            document.getElementById('user-profile').style.display = 'flex';
+            const avatarEl = document.getElementById('user-avatar');
+            const nameEl = document.getElementById('user-name');
+            const badgeTextEl = document.getElementById('user-badge-text');
+            const profileEl = document.getElementById('user-profile');
 
-            document.getElementById('profile-page-avatar').src = avatarUrl;
-            document.getElementById('profile-page-name').innerText = currentUser.username;
-            document.getElementById('profile-page-id').innerText = `Discord ID: ${currentUser.id}`;
-            document.getElementById('edit-username-input').value = currentUser.username;
-            document.getElementById('edit-bio-input').value = currentUser.bio || '';
-            document.getElementById('edit-theme-select').value = currentUser.theme || '#a855f7';
+            if (avatarEl) avatarEl.src = avatarUrl;
+            if (nameEl) nameEl.innerText = currentUser.username;
+            if (badgeTextEl) badgeTextEl.innerText = currentUser.badge;
+            if (profileEl) profileEl.style.display = 'flex';
 
-            document.getElementById('profile-page-badges').innerHTML = `<span class="badge-pill">${currentUser.badge}</span>`;
+            const pAvatar = document.getElementById('profile-page-avatar');
+            const pName = document.getElementById('profile-page-name');
+            const pId = document.getElementById('profile-page-id');
+            const editUserInput = document.getElementById('edit-username-input');
+            const editBioInput = document.getElementById('edit-bio-input');
+            const editThemeSelect = document.getElementById('edit-theme-select');
+
+            if (pAvatar) pAvatar.src = avatarUrl;
+            if (pName) pName.innerText = currentUser.username;
+            if (pId) pId.innerText = `Discord ID: ${currentUser.id}`;
+            if (editUserInput) editUserInput.value = currentUser.username;
+            if (editBioInput) editBioInput.value = currentUser.bio || '';
+            if (editThemeSelect) editThemeSelect.value = currentUser.theme || '#a855f7';
+
+            const pBadges = document.getElementById('profile-page-badges');
+            if (pBadges) pBadges.innerHTML = `<span class="badge-pill">${currentUser.badge}</span>`;
+            
             document.body.style.setProperty('--primary-purple', currentUser.theme || '#a855f7');
         }
 
-        // Ana Sayfadaki Kullanıcı Listesini Çiz
+        // Ana Sayfadaki Sadece Gerçek Kayıtlı Kullanıcılar Listesini Çiz
         function renderHomeUsersList() {
             const listContainer = document.getElementById('home-users-list');
+            if (!listContainer) return;
+
+            if (registeredUsers.length === 0) {
+                listContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 10px;">Henüz sisteme Discord ile giriş yapmış kayıtlı kullanıcı bulunmuyor.</p>';
+                return;
+            }
+
             listContainer.innerHTML = registeredUsers.map(u => {
-                const uAvatar = u.avatar ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png` : 'https://cdn.discordapp.com/embed/avatars/0.png';
+                const uAvatar = u.avatar 
+                    ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png` 
+                    : 'https://cdn.discordapp.com/embed/avatars/0.png';
                 return `
-                    <div class="user-row-card" onclick="viewUserProfile('${u.id}')">
+                    <div class="user-row-card" onclick="openUserProfileTab('${u.id}')">
                         <div class="user-row-left">
-                            <img src="${uAvatar}" alt="avatar">
+                            <img src="${uAvatar}" alt="avatar" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
                             <div>
                                 <h4 style="color: #fff; font-size: 14px;">${u.username}</h4>
-                                <p style="color: var(--text-muted); font-size: 11px;">${u.bio || 'Biyografi yok.'}</p>
+                                <p style="color: var(--text-muted); font-size: 11px;">${u.bio || 'Biyografi belirtilmemiş.'}</p>
                             </div>
                         </div>
                         <div>
@@ -939,23 +975,42 @@
             }).join('');
         }
 
-        // Başka Bir Kullanıcının Profiline Tıklayınca Görüntüle
-        function viewUserProfile(targetId) {
+        // Listeden Birine Tıklayınca Doğrudan Sitedeki Profil Sekmesine Atar
+        function openUserProfileTab(targetId) {
             const found = registeredUsers.find(u => u.id === targetId);
             if (found) {
-                alert(`Kullanıcı Profili:\n\nAd: ${found.username}\nID: ${found.id}\nRozet: ${found.badge}\nBiyografi: ${found.bio || 'Yok'}`);
+                // Seçilen kullanıcının profil detaylarını profil sayfasına yükle
+                const uAvatar = found.avatar ? `https://cdn.discordapp.com/avatars/${found.id}/${found.avatar}.png` : 'https://cdn.discordapp.com/embed/avatars/0.png';
+                document.getElementById('profile-page-avatar').src = uAvatar;
+                document.getElementById('profile-page-name').innerText = found.username;
+                document.getElementById('profile-page-id').innerText = `Discord ID: ${found.id}`;
+                document.getElementById('profile-page-badges').innerHTML = `<span class="badge-pill">${found.badge}</span>`;
+                
+                // Eğer kendi profiliyse inputları düzenlenebilir yap, başkasınınkini göster
+                if (currentUser && currentUser.id === found.id) {
+                    document.getElementById('edit-username-input').value = found.username;
+                    document.getElementById('edit-bio-input').value = found.bio || '';
+                    document.getElementById('edit-theme-select').value = found.theme || '#a855f7';
+                } else {
+                    document.getElementById('edit-username-input').value = found.username + ' (Görüntüleniyor)';
+                    document.getElementById('edit-bio-input').value = found.bio || '';
+                }
+
+                // Profil sekmesini aç
+                switchTab('profil-sayfasi', null);
             }
         }
 
-        // Profil Değişikliklerini Kaydet
+        // Kendi Profil Değişikliklerini Kaydet
         function saveProfileChanges() {
-            currentUser.username = document.getElementById('edit-username-input').value;
+            if (!currentUser) return alert('Önce Discord ile giriş yapmalısın!');
+            
+            currentUser.username = document.getElementById('edit-username-input').value.replace(' (Görüntüleniyor)', '');
             currentUser.bio = document.getElementById('edit-bio-input').value;
             currentUser.theme = document.getElementById('edit-theme-select').value;
 
             localStorage.setItem('discord_username', currentUser.username);
             
-            // Kayıtlı listeyi güncelle
             const index = registeredUsers.findIndex(u => u.id === currentUser.id);
             if (index !== -1) registeredUsers[index] = currentUser;
             localStorage.setItem('funce_reg_users', JSON.stringify(registeredUsers));
@@ -977,10 +1032,11 @@
                 targetUser.badge = newBadge;
                 localStorage.setItem('funce_reg_users', JSON.stringify(registeredUsers));
                 renderHomeUsersList();
+                if (currentUser && currentUser.id === targetId) renderHeaderAndProfile();
                 alert(`Başarılı! ${targetUser.username} adlı kullanıcıya "${newBadge}" rozeti tanımlandı.`);
                 document.getElementById('admin-target-id').value = '';
             } else {
-                alert('Bu ID ile eşleşen sistemde kayıtlı bir kullanıcı bulunamadı!');
+                alert('Bu ID ile eşleşen, sitede kayıtlı aktif bir kullanıcı bulunamadı!');
             }
         }
 
@@ -1042,7 +1098,11 @@
         document.addEventListener('click', (e) => {
             if (e.target.closest('.logout-btn')) {
                 e.preventDefault();
-                localStorage.clear();
+                localStorage.removeItem('discord_username');
+                localStorage.removeItem('discord_avatar');
+                localStorage.removeItem('discord_id');
+                localStorage.removeItem('discord_role');
+                localStorage.removeItem('discord_badge');
                 window.location.href = '/';
             }
         });
