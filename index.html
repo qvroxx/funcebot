@@ -653,7 +653,7 @@
 
             <h2 class="section-title">Sistem Üyeleri & Topluluk</h2>
             <div class="card" style="max-width: 800px; margin: 0 auto 40px auto;">
-                <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px;">Sisteme Discord ile giriş yapmış aktif üyeler. Birine tıklayarak profil detaylarını inceleyebilirsin.</p>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px;">Sisteme Discord ile giriş yapmış aktif üyeler ve botlar. Birine tıklayarak profil detaylarını inceleyebilirsin.</p>
                 <div id="home-users-list"></div>
             </div>
 
@@ -742,12 +742,12 @@
                     <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 6px;">Hakkımda / Biyografi:</label>
                     <textarea id="edit-bio-input" class="form-control" rows="3" placeholder="Kendinden bahset..." style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; margin-bottom: 15px; font-size: 14px; outline: none; resize: vertical;"></textarea>
 
-                    <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 6px;">Profil Teması / Rengi:</label>
+                    <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 6px;">Profil Teması / Rengi (Rozetine Göre Kilidi Açılır):</label>
                     <select id="edit-theme-select" class="form-select">
                         <option value="#a855f7">Mor (Varsayılan)</option>
-                        <option value="#ffd700">Altın Sarısı (Pro)</option>
-                        <option value="#ef4444">Kırmızı (Admin)</option>
-                        <option value="#3b82f6">Mavi (Developer)</option>
+                        <option value="#ffd700">Altın Sarısı (⭐ Funce Pro Gerektirir)</option>
+                        <option value="#ef4444">Kırmızı (🛡️ Admin / Founder Gerektirir)</option>
+                        <option value="#3b82f6">Mavi (💻 Developer Gerektirir)</option>
                         <option value="#22c55e">Yeşil</option>
                     </select>
 
@@ -771,8 +771,7 @@
                     <option value="🛡️ Senior Moderator">🛡️ Senior Moderator</option>
                     <option value="💻 Developer">💻 Developer</option>
                     <option value="🎨 Designer">🎨 Designer</option>
-                    <option value="🤖 Bot Tester">🤖 Bot Tester</option>
-                    <option value="🎉 Event Host">🎉 Event Host</option>
+                    <option value="🤖 Bot">🤖 Bot</option>
                     <option value="⭐ Funce Pro">⭐ Funce Pro</option>
                     <option value="💎 VIP Member">💎 VIP Member</option>
                     <option value="🚀 Booster">🚀 Booster</option>
@@ -809,18 +808,29 @@
     </footer>
 
     <script>
-        // --- ESKİ MOCK (SAHTE) ÇÖP KULLANICILARI TEMİZLEME MEKANİZMASI ---
-        // Eğer localStorage'da daha önce eklenmiş sahte kullanıcılar (TestUser vb.) varsa temizle.
+        // --- 1. BOTLARI VE TEMEL KULLANICILARI TANIMLA ---
         let registeredUsers = JSON.parse(localStorage.getItem('funce_reg_users')) || [];
-        registeredUsers = registeredUsers.filter(u => u.id !== 'TestUser' && u.id !== 'FunceSupport' && u.username !== 'TestUser' && u.username !== 'FunceSupport');
+        
+        // Sabit Botlarımız ve Sistem Varlıkları
+        const defaultBots = [
+            { id: '1534831879918977145', username: 'FunceBOT', role: 'Bot', badge: '🤖 Bot', avatar: '', bio: 'Resmi Discord Sunucu Yönetim Botu.', theme: '#a855f7' },
+            { id: '1550252560282292295', username: 'Funce Pro', role: 'Bot', badge: '🤖 Bot', avatar: '', bio: 'Funce Pro ayrıcalık ve modül yönetim botu.', theme: '#ffd700' }
+        ];
+
+        // Temizleme ve Botları Entegre Etme
+        registeredUsers = registeredUsers.filter(u => u.id !== 'TestUser' && u.id !== 'FunceSupport');
+        defaultBots.forEach(bot => {
+            if (!registeredUsers.some(u => u.id === bot.id)) {
+                registeredUsers.push(bot);
+            }
+        });
         localStorage.setItem('funce_reg_users', JSON.stringify(registeredUsers));
 
-        // --- MÜKEMMEL DİSCORD AVATAR YARDIMCISI ---
+        // --- DİSCORD AVATAR YARDIMCISI ---
         function getDiscordAvatar(userId, avatarHash) {
             if (avatarHash && avatarHash !== 'null' && avatarHash !== '') {
                 return `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}.png`;
             } else {
-                // Hash yoksa ID'ye göre resmi Discord varsayılan renkli avatarını seçer (0-4 arası)
                 const defaultIndex = userId ? (Number(userId) % 5) : 0;
                 return `https://cdn.discordapp.com/embed/avatars/${defaultIndex}.png`;
             }
@@ -877,7 +887,7 @@
             renderHeaderAndProfile();
             renderHomeUsersList();
 
-            if (id === '1080897669431574609' || (currentUser && (currentUser.role === 'Founder' || currentUser.role === 'Admin'))) {
+            if (id === '1080897669431574609' || (currentUser && (currentUser.role === 'Founder' || currentUser.role === 'Admin' || currentUser.badge?.includes('Founder') || currentUser.badge?.includes('Admin')))) {
                 const adminNavLink = document.getElementById('adminNavLink');
                 if (adminNavLink) {
                     adminNavLink.style.display = 'block';
@@ -909,7 +919,7 @@
             if (!listContainer) return;
 
             if (registeredUsers.length === 0) {
-                listContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 10px;">Henüz sisteme giriş yapmış kayıtlı kullanıcı bulunmuyor.</p>';
+                listContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 10px;">Henüz kayıtlı kullanıcı veya bot bulunmuyor.</p>';
                 return;
             }
 
@@ -932,7 +942,6 @@
             }).join('');
         }
 
-        // Sağ üstteki profil kartına tıklayınca doğrudan KENDİ profiline götürür ve düzenletir
         function openMyProfile() {
             if (!currentUser) {
                 alert('Önce Discord ile giriş yapmalısın!');
@@ -941,7 +950,6 @@
             openUserProfileTab(currentUser.id);
         }
 
-        // Listeden birine tıklayınca profil detayını açar (Güvenlik Korumalı: Başkası ise düzenleme kilitlenir)
         function openUserProfileTab(targetId) {
             const found = registeredUsers.find(u => u.id === targetId);
             if (!found) return;
@@ -958,7 +966,6 @@
             const saveBtn = document.getElementById('save-profile-btn');
             const pageTitle = document.getElementById('profile-page-title');
 
-            // Eğer bakan kişi ile tıklanan kişi aynıysa düzenlemeye izin ver, değilse kilitle!
             if (currentUser && currentUser.id === found.id) {
                 pageTitle.innerHTML = `<i class="fa-solid fa-user-gear"></i> Profil Özelleştirme`;
                 usernameInput.value = found.username;
@@ -971,23 +978,38 @@
             } else {
                 pageTitle.innerHTML = `<i class="fa-solid fa-user"></i> Kullanıcı Profili`;
                 usernameInput.value = found.username;
-                usernameInput.disabled = true; // Başkası değiştiremez!
+                usernameInput.disabled = true;
                 bioInput.value = found.bio || 'Biyografi yok.';
                 bioInput.disabled = true;
                 themeSelect.value = found.theme || '#a855f7';
                 themeSelect.disabled = true;
-                saveBtn.style.display = 'none'; // Kaydet butonu gizlenir
+                saveBtn.style.display = 'none';
             }
 
             switchTab('profil-sayfasi', null);
         }
 
+        // --- 2. TEMA SEÇİMİNİ ROZETLERE BAĞLAYAN KONTROL ---
         function saveProfileChanges() {
             if (!currentUser) return alert('Oturum bulunamadı!');
             
+            const selectedTheme = document.getElementById('edit-theme-select').value;
+            const userBadge = currentUser.badge || '';
+
+            // Yetki ve Rozet Kontrolleri
+            if (selectedTheme === '#ffd700' && !userBadge.includes('Funce Pro')) {
+                return alert('⚠️ Altın sarısı temayı kullanabilmek için hesabında "⭐ Funce Pro" rozeti bulunmalıdır!');
+            }
+            if (selectedTheme === '#ef4444' && !userBadge.includes('Founder') && !userBadge.includes('Admin')) {
+                return alert('⚠️ Kırmızı temayı kullanabilmek için hesabında Admin veya Founder yetkisi/rozeti bulunmalıdır!');
+            }
+            if (selectedTheme === '#3b82f6' && !userBadge.includes('Developer')) {
+                return alert('⚠️ Mavi temayı kullanabilmek için hesabında "💻 Developer" rozeti bulunmalıdır!');
+            }
+
             currentUser.username = document.getElementById('edit-username-input').value;
             currentUser.bio = document.getElementById('edit-bio-input').value;
-            currentUser.theme = document.getElementById('edit-theme-select').value;
+            currentUser.theme = selectedTheme;
 
             localStorage.setItem('discord_username', currentUser.username);
             
