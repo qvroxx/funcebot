@@ -232,6 +232,13 @@
             border-radius: 30px;
             border: 1px solid var(--border-color);
             box-shadow: var(--accent-glow);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #user-profile:hover {
+            border-color: var(--primary-purple);
+            box-shadow: var(--accent-glow-strong);
         }
 
         #user-profile img {
@@ -596,13 +603,14 @@
             Funce<span>BOT</span>
         </a>
 
-        <div id="user-profile">
+        <!-- PROFİLE TIKLAMA SİSTEMİ EKLENDİ (Ana sayfadaki düzenleme paneline odaklanır) -->
+        <div id="user-profile" onclick="focusProfileEditor()" title="Profilini Düzenle">
             <img id="user-avatar" src="" alt="Avatar">
             <div class="user-info-box">
                 <span id="user-name">Kullanıcı</span>
                 <span id="user-badge-text">Üye</span>
             </div>
-            <a href="#" class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
+            <a href="#" class="logout-btn" onclick="event.stopPropagation(); logout()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
         </div>
         
         <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
@@ -652,7 +660,7 @@
             </div>
 
             <!-- SITE UZERINDEN FOTO VE BILGI DÜZENLEME ALANI -->
-            <div class="card" style="max-width: 600px; margin: 0 auto 40px auto; border-color: var(--primary-purple);">
+            <div id="profile-editor-card" class="card" style="max-width: 600px; margin: 0 auto 40px auto; border-color: var(--primary-purple);">
                 <h3 style="text-align: center; margin-bottom: 15px;"><i class="fa-solid fa-user-pen"></i> Site Üzerinden Profil Düzenleme</h3>
                 <p style="text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Discord ile giriş yaptıktan sonra profil fotoğrafı ve adını dilediğin gibi özelleştirebilirsin.</p>
                 
@@ -904,6 +912,19 @@
             }
         }
 
+        // Profili düzenleme kartına odaklanma fonksiyonu (Header'daki profile tıklanınca tetiklenir)
+        function focusProfileEditor() {
+            switchTab('ana-sayfa', getNavBtn(0));
+            setTimeout(() => {
+                const card = document.getElementById('profile-editor-card');
+                if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    card.style.borderColor = 'var(--gold-color)';
+                    setTimeout(() => { card.style.borderColor = 'var(--primary-purple)'; }, 1500);
+                }
+            }, 100);
+        }
+
         function saveManualProfile() {
             if (!currentId) {
                 alert('Önce Discord ile giriş yapmalısın!');
@@ -965,7 +986,7 @@
             const targetId = document.getElementById('admin-target-id').value;
             const newBadge = document.getElementById('admin-badge-select').value;
             if (!targetId) return alert('Lütfen geçerli bir Discord ID girin!');
-            alert(`Başarılı! ${targetId} ID'li kullanıcıya "${newBadge}" rozeti tanımlandı.`);
+            alert(`Başarılı! ${targetId} ID'li kullanıcıye "${newBadge}" rozeti tanımlandı.`);
             document.getElementById('admin-target-id').value = '';
         }
 
