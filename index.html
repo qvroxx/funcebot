@@ -200,7 +200,7 @@
             color: #ef4444 !important;
             background: rgba(239, 68, 68, 0.1);
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
-            display: none; /* Varsayılan gizli, adminse açılacak */
+            display: none;
         }
 
         .nav-admin-btn:hover {
@@ -225,6 +225,13 @@
             border-radius: 30px;
             border: 1px solid var(--border-color);
             box-shadow: var(--accent-glow);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        #user-profile:hover {
+            border-color: var(--primary-purple);
+            transform: scale(1.02);
         }
 
         #user-profile img {
@@ -386,6 +393,22 @@
             transform: translateY(-2px);
         }
 
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus {
+            border-color: var(--primary-purple);
+        }
+
         .stats-bar {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -425,6 +448,7 @@
             padding: 25px;
             backdrop-filter: blur(12px);
             transition: all 0.3s ease;
+            margin-bottom: 20px;
         }
 
         .card:hover {
@@ -557,14 +581,14 @@
             Funce<span>BOT</span>
         </a>
 
-        <!-- Sağ Üst Profil Göstergesi -->
-        <div id="user-profile">
+        <!-- Sağ Üst Profil Göstergesi (Tıklayınca Profil Sayfasına Gider) -->
+        <div id="user-profile" onclick="switchTab('profil-sayfasi', null)">
             <img id="user-avatar" src="" alt="Avatar">
             <div class="user-info-box">
                 <span id="user-name">Kullanıcı</span>
                 <span id="user-badge-text">Üye</span>
             </div>
-            <a href="#" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
+            <a href="#" class="logout-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
         </div>
         
         <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
@@ -683,29 +707,38 @@
             </div>
         </section>
 
-        <!-- 4. ADMIN PANEL (ÖZEL) -->
-        <section id="admin-panel" class="page-section">
-            <h2 class="section-title" style="color: #ef4444;"><i class="fa-solid fa-shield-halved"></i> Yönetim Paneli</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Sistem yöneticileri ve kurucu için özel kontrol alanı.</p>
-            
-            <div class="stats-bar" style="border-color: rgba(239, 68, 68, 0.4);">
-                <div class="stat-item">
-                    <h3 id="admin-total-users" style="color: #ef4444;">1</h3>
-                    <p>Doğrulanmış Kullanıcı</p>
-                </div>
-                <div class="stat-item">
-                    <h3 id="admin-active-status" style="color: #ef4444;">Aktif</h3>
-                    <p>Sistem Durumu</p>
-                </div>
-                <div class="stat-item">
-                    <h3 style="color: #ef4444;">Founder</h3>
-                    <p>Yetki Seviyen</p>
+        <!-- 4. KULLANICI PROFİL SAYFASI -->
+        <section id="profil-sayfasi" class="page-section">
+            <h2 class="section-title"><i class="fa-solid fa-user-gear"></i> Kullanıcı Profili</h2>
+            <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+                <img id="profile-page-avatar" src="" alt="Profil Avatarı" style="width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary-purple); margin-bottom: 15px; object-fit: cover;">
+                <h3 id="profile-page-name" style="font-size: 22px; color: #fff; margin-bottom: 5px;">Kullanıcı</h3>
+                <p id="profile-page-id" style="color: var(--text-muted); font-size: 12px; margin-bottom: 20px;">ID: Yükleniyor...</p>
+                
+                <div style="text-align: left; margin-top: 20px;">
+                    <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 6px;">Görünen Adı Düzenle:</label>
+                    <input type="text" id="edit-username-input" class="form-control" placeholder="Yeni kullanıcı adını yaz...">
+                    <button class="btn btn-primary" onclick="saveProfileChanges()" style="width: 100%; justify-content: center; margin-top: 5px;">Değişiklikleri Kaydet</button>
                 </div>
             </div>
+        </section>
 
-            <div class="card" style="border-color: rgba(239, 68, 68, 0.4);">
-                <h3><i class="fa-solid fa-terminal"></i> Kurucu Paneli Bilgilendirme</h3>
-                <p style="margin-top: 10px;">Buradan sistem üzerindeki akışı yönetebilir ve bot verilerini inceleyebilirsin. Yetki kontrolü Discord ID (`1080897669431574609`) üzerinden doğrulanmıştır.</p>
+        <!-- 5. ADMIN & BAN PANELİ -->
+        <section id="admin-panel" class="page-section">
+            <h2 class="section-title" style="color: #ef4444;"><i class="fa-solid fa-shield-halved"></i> Yönetim & Ban Paneli</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Sistem yöneticileri ve kurucu için özel kontrol alanı.</p>
+            
+            <div class="card" style="border-color: rgba(239, 68, 68, 0.4); max-width: 600px; margin: 0 auto 30px auto;">
+                <h3 style="color: #ef4444; margin-bottom: 15px;"><i class="fa-solid fa-user-slash"></i> ID ile Kullanıcı Banla</h3>
+                <input type="text" id="ban-id-input" class="form-control" placeholder="Banlanacak Discord ID (Örn: 123456789)">
+                <button class="btn" style="background: #ef4444; color: #fff; width: 100%; justify-content: center; border: none; cursor: pointer;" onclick="banUser()"><i class="fa-solid fa-ban"></i> Kullanıcıya Sistem Banı At</button>
+            </div>
+
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-list"></i> Banlı Kullanıcılar Listesi</h3>
+                <ul id="banned-users-list" style="list-style: none; color: var(--text-muted); font-size: 14px;">
+                    <li>Yükleniyor...</li>
+                </ul>
             </div>
         </section>
 
@@ -721,7 +754,7 @@
     </footer>
 
     <script>
-        // --- LOCALSTORAGE KALICI OTURUM & RÖZET KONTROLÜ ---
+        // --- LOCALSTORAGE KALICI OTURUM & BİLGİ KONTROLÜ ---
         const params = new URLSearchParams(window.location.search);
         let username = params.get('username');
         let avatar = params.get('avatar');
@@ -756,6 +789,11 @@
                 const nameEl = document.getElementById('user-name');
                 const badgeTextEl = document.getElementById('user-badge-text');
                 const profileEl = document.getElementById('user-profile');
+                
+                const profilePageAvatar = document.getElementById('profile-page-avatar');
+                const profilePageName = document.getElementById('profile-page-name');
+                const profilePageId = document.getElementById('profile-page-id');
+                const editUsernameInput = document.getElementById('edit-username-input');
                 const adminNavLink = document.getElementById('adminNavLink');
                 
                 if (avatarEl && nameEl && profileEl) {
@@ -765,13 +803,88 @@
                     profileEl.style.display = 'flex';
                 }
 
+                if (profilePageAvatar && profilePageName && profilePageId) {
+                    profilePageAvatar.src = avatarUrl;
+                    profilePageName.innerText = username;
+                    profilePageId.innerText = `Discord ID: ${id}`;
+                    editUsernameInput.value = username;
+                }
+
                 // Eğer kullanıcı Founder (ID: 1080897669431574609) ise Admin Paneli butonunu göster
                 if (id === '1080897669431574609' || role === 'Founder') {
                     if (adminNavLink) {
                         adminNavLink.style.display = 'block';
+                        loadAdminData();
                     }
                 }
             });
+        }
+
+        // Profil Değişikliklerini Kaydet
+        function saveProfileChanges() {
+            const newName = document.getElementById('edit-username-input').value;
+            if (newName) {
+                localStorage.setItem('discord_username', newName);
+                document.getElementById('user-name').innerText = newName;
+                document.getElementById('profile-page-name').innerText = newName;
+                alert('Profil başarıyla güncellendi!');
+            } else {
+                alert('Lütfen boş bırakmayın!');
+            }
+        }
+
+        // Admin Ban Verilerini Yükle
+        async function loadAdminData() {
+            try {
+                const res = await fetch('https://funce-linked-roles.onrender.com/api/admin/data');
+                const data = await res.json();
+                const listEl = document.getElementById('banned-users-list');
+                if (data.bannedList && data.bannedList.length > 0) {
+                    listEl.innerHTML = data.bannedList.map(uid => `
+                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+                            <span>ID: ${uid}</span> 
+                            <button onclick="unbanUser('${uid}')" style="background: #22c55e; color: #fff; border: none; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;">Kaldır</button>
+                        </li>
+                    `).join('');
+                } else {
+                    listEl.innerHTML = '<li style="padding: 5px 0;">Aktif banlı kullanıcı bulunmuyor.</li>';
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Kullanıcı Banla
+        async function banUser() {
+            const targetId = document.getElementById('ban-id-input').value;
+            if (!targetId) return alert('Lütfen geçerli bir ID girin!');
+            try {
+                const res = await fetch(`https://funce-linked-roles.onrender.com/api/admin/ban?adminId=${id}&targetId=${targetId}`);
+                const data = await res.json();
+                if (data.success) {
+                    alert('Kullanıcı başarıyla banlandı!');
+                    document.getElementById('ban-id-input').value = '';
+                    loadAdminData();
+                } else {
+                    alert('İşlem başarısız!');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Sunucuyla bağlantı kurulamadı!');
+            }
+        }
+
+        // Ban Kaldır (Unban)
+        async function unbanUser(targetId) {
+            try {
+                const res = await fetch(`https://funce-linked-roles.onrender.com/api/admin/unban?adminId=${id}&targetId=${targetId}`);
+                const data = await res.json();
+                if (data.success) {
+                    loadAdminData();
+                }
+            } catch (e) {
+                console.error(e);
+            }
         }
 
         // Çıkış Yap Butonu
