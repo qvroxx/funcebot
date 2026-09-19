@@ -511,7 +511,7 @@
             margin-bottom: 30px;
         }
 
-        .guild-card {
+        .guild-card, .active-user-card {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -522,18 +522,18 @@
             margin-bottom: 12px;
             transition: 0.2s;
         }
-        .guild-card:hover {
+        .guild-card:hover, .active-user-card:hover {
             border-color: var(--primary-purple);
             background: rgba(168, 85, 247, 0.08);
         }
-        .guild-info {
+        .guild-info, .active-user-info {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        .guild-info img, .guild-icon-placeholder {
-            width: 48px;
-            height: 48px;
+        .guild-info img, .guild-icon-placeholder, .active-user-info img {
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             border: 2px solid var(--primary-purple);
             object-fit: cover;
@@ -609,8 +609,8 @@
             Funce<span>BOT</span>
         </a>
 
-        <!-- PROFİLE TIKLAMA SİSTEMİ (Ana sayfadaki düzenleme paneline odaklanır) -->
-        <div id="user-profile" onclick="focusProfileEditor()" title="Profilini Düzenle">
+        <!-- PROFİLE TIKLAMA SİSTEMİ (Doğrudan 'Profilim' Sayfasına Götürür) -->
+        <div id="user-profile" onclick="openProfileTab()" title="Profiline Git">
             <img id="user-avatar" src="" alt="Avatar">
             <div class="user-info-box">
                 <span id="user-name">Kullanıcı</span>
@@ -629,6 +629,7 @@
                 <li><a class="nav-btn" onclick="switchTab('ozellikler', this)">Özellikler</a></li>
                 <li><a class="nav-btn nav-pro-btn" onclick="switchTab('funce-pro', this)"><i class="fa-solid fa-crown"></i> Funce Pro</a></li>
                 <li><a class="nav-btn nav-control-btn" onclick="switchTab('kontrol-paneli', this)"><i class="fa-solid fa-sliders"></i> Kontrol Paneli</a></li>
+                <li><a class="nav-btn" id="profileNavLink" onclick="switchTab('profilim', this)"><i class="fa-solid fa-user"></i> Profilim</a></li>
                 <li><a class="nav-btn nav-admin-btn" id="adminNavLink" onclick="switchTab('admin-panel', this)"><i class="fa-solid fa-shield-halved"></i> Admin Panel</a></li>
                 <li><a href="https://discord.gg" target="_blank" class="nav-btn btn-destek"><i class="fa-brands fa-discord"></i> Destek Sunucusu</a></li>
             </ul>
@@ -637,6 +638,7 @@
 
     <div class="container">
 
+        <!-- ANA SAYFA -->
         <section id="ana-sayfa" class="page-section active">
             <div class="hero">
                 <div class="hero-badge">Discord Sunucu Yönetimi</div>
@@ -665,27 +667,16 @@
                 </div>
             </div>
 
-            <!-- SITE UZERINDEN FOTO VE BILGI DÜZENLEME ALANI -->
-            <div id="profile-editor-card" class="card" style="max-width: 600px; margin: 0 auto 40px auto; border-color: var(--primary-purple);">
-                <h3 style="text-align: center; margin-bottom: 15px;"><i class="fa-solid fa-user-pen"></i> Site Üzerinden Profil Düzenleme</h3>
-                <p style="text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Discord ile giriş yaptıktan sonra profil fotoğrafı ve adını dilediğin gibi özelleştirebilirsin.</p>
-                
-                <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 5px;">Görünen Adın:</label>
-                <input type="text" id="manual-name-input" class="form-control" placeholder="Adını gir...">
+            <!-- ANA SAYFA AKTİF KULLANICILAR BÖLÜMÜ -->
+            <div class="card" style="margin-bottom: 40px; border-color: rgba(168, 85, 247, 0.4);">
+                <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-users" style="color: var(--primary-purple);"></i> Son Aktif Olan Kullanıcılar
+                </h3>
+                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Sisteme giriş yapan ve paneli aktif kullanan üye listesi:</p>
 
-                <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 5px;">Profil Fotoğrafı URL (Direct Image Link):</label>
-                <input type="text" id="manual-avatar-input" class="form-control" placeholder="https://imgur.com/... veya Discord Avatar Linki">
-
-                <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 5px;">Tema / Vurgu Rengi (Rozetine Göre Kilidi Açılır):</label>
-                <select id="edit-theme-select" class="form-select">
-                    <option value="#a855f7">Mor (Varsayılan)</option>
-                    <option value="#ffd700">Altın Sarısı (⭐ Funce Pro Gerektirir)</option>
-                    <option value="#ef4444">Kırmızı (🛡️ Admin / Founder Gerektirir)</option>
-                    <option value="#3b82f6">Mavi (💻 Developer Gerektirir)</option>
-                    <option value="#22c55e">Yeşil</option>
-                </select>
-
-                <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;" onclick="saveManualProfile()"><i class="fa-solid fa-floppy-disk"></i> Profili Kaydet & Güncelle</button>
+                <div id="active-users-list">
+                    <!-- Aktif kullanıcılar JavaScript ile doldurulur -->
+                </div>
             </div>
 
             <h2 class="section-title">Neden FunceBOT?</h2>
@@ -705,6 +696,48 @@
                     <h3>Kolay Özelleştirme</h3>
                     <p>İhtiyacınıza uygun tüm ayarları birkaç komutla kolayca yapın.</p>
                 </div>
+            </div>
+        </section>
+
+        <!-- YENİ: PROFİLİM SAYFASI -->
+        <section id="profilim" class="page-section">
+            <h2 class="section-title"><i class="fa-solid fa-id-card"></i> Kullanıcı Profilim</h2>
+            
+            <div id="profile-page-locked" style="text-align: center; padding: 50px 20px; display: none;">
+                <div style="font-size: 50px; color: #ef4444; margin-bottom: 20px;"><i class="fa-solid fa-lock"></i></div>
+                <h3 style="color: #fff; margin-bottom: 10px;">Profil Alanı Kilitli</h3>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Profilinizi görüntülemek ve düzenlemek için Discord ile giriş yapmalısınız.</p>
+                <a href="https://funce-linked-roles.onrender.com/api/auth/discord" class="btn btn-discord"><i class="fa-brands fa-discord"></i> Discord ile Giriş Yap</a>
+            </div>
+
+            <div id="profile-page-content" class="card" style="max-width: 650px; margin: 0 auto; border-color: var(--primary-purple);">
+                <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
+                    <img id="page-user-avatar" src="" alt="Avatar" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary-purple); object-fit: cover;">
+                    <div>
+                        <h3 id="page-user-name" style="font-size: 22px; margin-bottom: 4px;">Kullanıcı Adı</h3>
+                        <span id="page-user-badge" style="background: rgba(255, 215, 0, 0.15); color: var(--gold-color); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid var(--gold-border);">Rozet</span>
+                        <p id="page-user-id" style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">ID: -</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 15px; font-size: 16px;"><i class="fa-solid fa-pen-to-square"></i> Profil Bilgilerini Düzenle</h3>
+                
+                <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 5px;">Görünen Adın:</label>
+                <input type="text" id="manual-name-input" class="form-control" placeholder="Adını gir...">
+
+                <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 5px;">Profil Fotoğrafı URL (Doğrudan Görsel Linki):</label>
+                <input type="text" id="manual-avatar-input" class="form-control" placeholder="https://imgur.com/... veya Discord Avatar Linki">
+
+                <label style="font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 5px;">Tema / Vurgu Rengi (Rozetine Göre Kilidi Açılır):</label>
+                <select id="edit-theme-select" class="form-select">
+                    <option value="#a855f7">Mor (Varsayılan)</option>
+                    <option value="#ffd700">Altın Sarısı (⭐ Funce Pro Gerektirir)</option>
+                    <option value="#ef4444">Kırmızı (🛡️ Admin / Founder Gerektirir)</option>
+                    <option value="#3b82f6">Mavi (💻 Developer Gerektirir)</option>
+                    <option value="#22c55e">Yeşil</option>
+                </select>
+
+                <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;" onclick="saveManualProfile()"><i class="fa-solid fa-floppy-disk"></i> Değişiklikleri Kaydet</button>
             </div>
         </section>
 
@@ -755,7 +788,7 @@
             </div>
         </section>
 
-        <!-- KONTROL PANELİ (DISCORD EŞLEŞTİRMESİ ZORUNLU) -->
+        <!-- KONTROL PANELİ -->
         <section id="kontrol-paneli" class="page-section">
             <div id="control-panel-locked" style="text-align: center; padding: 60px 20px;">
                 <div style="font-size: 50px; color: #ef4444; margin-bottom: 20px;"><i class="fa-solid fa-lock"></i></div>
@@ -790,7 +823,6 @@
                     <h3 style="color: #3b82f6; margin-bottom: 15px;"><i class="fa-solid fa-server"></i> Yetkili Olduğun Discord Sunucuları</h3>
                     <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">FunceBOT'un ekli olduğu ve yönetici yetkinin bulunduğu sunucular:</p>
                     
-                    <!-- DİNAMİK SUNUCU LİSTESİ ALANI -->
                     <div id="user-guilds-list">
                         <p style="color: var(--text-muted); font-size: 13px;">Sunucu verileri yükleniyor...</p>
                     </div>
@@ -883,6 +915,7 @@
             renderHeader();
             checkControlPanelAccess();
             renderUserGuilds();
+            renderActiveUsers();
 
             // Admin Panel Görünürlük Kontrolü
             if (currentId === '1080897669431574609' || currentRole === 'Founder' || currentRole === 'Admin' || currentBadge?.includes('Founder')) {
@@ -911,15 +944,75 @@
                 }
                 if (loginBtn) loginBtn.style.display = 'none';
 
-                // Manuel Inputları Doldur
+                // Profil Sayfası Verilerini Doldur
+                document.getElementById('page-user-avatar').src = document.getElementById('user-avatar').src;
+                document.getElementById('page-user-name').innerText = currentUsername;
+                document.getElementById('page-user-badge').innerText = currentBadge || 'Üye';
+                document.getElementById('page-user-id').innerText = `ID: ${currentId}`;
+
                 const nameInput = document.getElementById('manual-name-input');
                 const avatarInput = document.getElementById('manual-avatar-input');
                 if (nameInput) nameInput.value = currentUsername;
                 if (avatarInput) avatarInput.value = currentAvatar || '';
+
+                document.getElementById('profile-page-locked').style.display = 'none';
+                document.getElementById('profile-page-content').style.display = 'block';
             } else {
                 if (profileEl) profileEl.style.display = 'none';
                 if (loginBtn) loginBtn.style.display = 'inline-flex';
+
+                document.getElementById('profile-page-locked').style.display = 'block';
+                document.getElementById('profile-page-content').style.display = 'none';
             }
+        }
+
+        // AKTİF KULLANICILAR LİSTESİNİ RENDER ETME
+        function renderActiveUsers() {
+            const listContainer = document.getElementById('active-users-list');
+            if (!listContainer) return;
+
+            // Örnek Aktif Kullanıcılar Verisi
+            let activeUsers = [
+                { id: "1080897669431574609", name: "qvrox", badge: "👑 Founder", avatar: "https://cdn.discordapp.com/embed/avatars/0.png", status: "Çevrimiçi" },
+                { id: "283719283719283712", name: "Enes", badge: "⭐ Funce Pro", avatar: "https://cdn.discordapp.com/embed/avatars/1.png", status: "Panelde İncelemede" },
+                { id: "982371923812312311", name: "Barış", badge: "🛡️ Senior Moderator", avatar: "https://cdn.discordapp.com/embed/avatars/2.png", status: "Çevrimiçi" }
+            ];
+
+            // Eğer şu anki kullanıcı giriş yapmışsa listeye ilk sıradan dinamik ekle
+            if (currentId && currentUsername) {
+                const avatarUrl = (currentAvatar && currentAvatar !== 'null' && currentAvatar !== 'undefined')
+                    ? (currentAvatar.startsWith('http') ? currentAvatar : `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`)
+                    : `https://cdn.discordapp.com/embed/avatars/0.png`;
+
+                // Tekrarı önlemek için çıkar ve başa ekle
+                activeUsers = activeUsers.filter(u => u.id !== currentId);
+                activeUsers.unshift({
+                    id: currentId,
+                    name: currentUsername,
+                    badge: currentBadge || '👤 Standart Üye',
+                    avatar: avatarUrl,
+                    status: 'Aktif Oturum'
+                });
+            }
+
+            listContainer.innerHTML = activeUsers.map(user => `
+                <div class="active-user-card">
+                    <div class="active-user-info">
+                        <img src="${user.avatar}" alt="${user.name}">
+                        <div>
+                            <h4 style="color: #fff; font-size: 14px;">${user.name} <span style="font-size: 11px; color: var(--gold-color); font-weight: normal; margin-left: 5px;">${user.badge}</span></h4>
+                            <p style="color: var(--text-muted); font-size: 12px;">Durum: <span style="color: #22c55e;">${user.status}</span></p>
+                        </div>
+                    </div>
+                    <span style="font-size: 11px; background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">● Aktif</span>
+                </div>
+            `).join('');
+        }
+
+        // PROFİLİM SEKMESİNE GEÇİŞ
+        function openProfileTab() {
+            const profileBtn = document.getElementById('profileNavLink');
+            switchTab('profilim', profileBtn);
         }
 
         // DİNAMİK SUNUCULARI RENDER ETME
@@ -961,19 +1054,6 @@
             }
         }
 
-        // Profili düzenleme kartına odaklanma fonksiyonu
-        function focusProfileEditor() {
-            switchTab('ana-sayfa', getNavBtn(0));
-            setTimeout(() => {
-                const card = document.getElementById('profile-editor-card');
-                if (card) {
-                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    card.style.borderColor = 'var(--gold-color)';
-                    setTimeout(() => { card.style.borderColor = 'var(--primary-purple)'; }, 1500);
-                }
-            }, 100);
-        }
-
         function saveManualProfile() {
             if (!currentId) {
                 alert('Önce Discord ile giriş yapmalısın!');
@@ -984,7 +1064,6 @@
             const newAvatar = document.getElementById('manual-avatar-input').value;
             const selectedTheme = document.getElementById('edit-theme-select').value;
 
-            // Tema Kilidi Kontrolleri
             if (selectedTheme === '#ffd700' && !currentBadge.includes('Funce Pro')) {
                 return alert('⚠️ Altın sarısı temayı kullanabilmek için hesabında "⭐ Funce Pro" rozeti bulunmalıdır!');
             }
@@ -1006,6 +1085,7 @@
 
             document.body.style.setProperty('--primary-purple', selectedTheme);
             renderHeader();
+            renderActiveUsers();
             alert('Profil başarıyla güncellendi!');
         }
 
