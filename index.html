@@ -108,17 +108,17 @@
             100% { width: 100%; }
         }
 
-        /* HEADER DÜZENİ */
+        /* HEADER & NAVBAR DÜZENİ */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 12px 3%;
+            padding: 10px 4%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(11, 7, 20, 0.9);
+            background: rgba(11, 7, 20, 0.92);
             backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--border-color);
             z-index: 1000;
@@ -147,12 +147,13 @@
             font-size: 18px;
             color: var(--primary-purple);
             cursor: pointer;
-            padding: 6px 10px;
+            padding: 6px 12px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
             background: rgba(168, 85, 247, 0.1);
             box-shadow: var(--accent-glow);
             transition: all 0.3s ease;
+            margin-left: auto; /* Mobilde tam sağa yaslama */
         }
 
         nav {
@@ -163,7 +164,7 @@
         nav ul {
             display: flex;
             list-style: none;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
         }
 
@@ -172,9 +173,9 @@
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
-            font-size: 12px;
+            font-size: 13px;
             cursor: pointer;
-            padding: 6px 10px;
+            padding: 6px 12px;
             border-radius: 8px;
             display: block;
             white-space: nowrap;
@@ -231,13 +232,14 @@
             box-shadow: var(--accent-glow);
         }
 
-        /* EN SAĞDAKİ PROFİL KART TISARIMI */
+        /* EN SAĞDAKİ PROFİL KART TASARIMI */
         #user-profile {
             display: none;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
+            gap: 10px;
             background: rgba(30, 41, 59, 0.9);
-            padding: 4px 10px 4px 5px;
+            padding: 5px 12px 5px 6px;
             border-radius: 20px;
             border: 1px solid var(--border-color);
             box-shadow: var(--accent-glow);
@@ -251,9 +253,15 @@
             box-shadow: var(--accent-glow-strong);
         }
 
+        .user-main-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         #user-profile img {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             border: 1.5px solid var(--primary-purple);
             object-fit: cover;
@@ -277,20 +285,27 @@
             font-weight: 500;
         }
 
+        /* ÇIKIŞ BUTONU (MOBİLDE VE MASAÜSTÜNDE DÜZGÜN BOYUT) */
         .logout-btn {
             color: #ef4444;
             text-decoration: none;
             font-size: 11px;
             font-weight: bold;
-            margin-left: 4px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: rgba(239, 68, 68, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
             transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            width: auto; /* Taşmayı engelleme */
+            white-space: nowrap;
         }
 
         .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.25);
+            background: rgba(239, 68, 68, 0.3);
+            color: #fff;
         }
 
         .container {
@@ -584,9 +599,9 @@
         }
 
         /* MOBİL UYUMLULUK */
-        @media (max-width: 950px) {
+        @media (max-width: 990px) {
             header {
-                padding: 10px 15px;
+                padding: 12px 20px;
             }
             .menu-toggle { 
                 display: block; 
@@ -619,11 +634,15 @@
                 padding: 10px;
                 font-size: 14px;
             }
+            #user-profile-li {
+                width: 100%;
+            }
             #user-profile {
                 width: 100%;
-                justify-content: center;
+                justify-content: space-between;
                 margin-left: 0;
                 margin-top: 5px;
+                padding: 8px 15px;
             }
 
             .container {
@@ -676,6 +695,7 @@
             Funce<span>BOT</span>
         </a>
 
+        <!-- 3 ÇİZGİ BUTONU EN SAĞA YASLANDI -->
         <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
             <i class="fa-solid fa-bars"></i>
         </div>
@@ -684,19 +704,20 @@
             <ul id="navMenu">
                 <li><a class="nav-btn active" onclick="switchTab('ana-sayfa', this)">Ana Sayfa</a></li>
                 <li><a class="nav-btn" onclick="switchTab('ozellikler', this)">Özellikler</a></li>
-                <li><a class="nav-btn" id="profileNavLink" onclick="switchTab('profilim', this)"><i class="fa-solid fa-user"></i> Profilim</a></li>
                 <li><a class="nav-btn nav-pro-btn" onclick="switchTab('funce-pro', this)"><i class="fa-solid fa-crown"></i> Funce Pro</a></li>
                 <li><a class="nav-btn nav-control-btn" onclick="switchTab('kontrol-paneli', this)"><i class="fa-solid fa-sliders"></i> Kontrol Paneli</a></li>
                 <li><a class="nav-btn nav-admin-btn" id="adminNavLink" onclick="switchTab('admin-panel', this)"><i class="fa-solid fa-shield-halved"></i> Admin Panel</a></li>
                 <li><a href="https://discord.gg/jSm2n5Jp2k" target="_blank" class="nav-btn btn-destek"><i class="fa-brands fa-discord"></i> Destek Sunucusu</a></li>
                 
-                <!-- Profil Kartı En Sağ Köşeye (Destek Sunucusu Butonunun Yanına) Taşındı -->
+                <!-- PROFİL KART (SAĞ KÖŞE) -->
                 <li id="user-profile-li">
                     <div id="user-profile" onclick="openProfileTab()" title="Profiline Git">
-                        <img id="user-avatar" src="" alt="Avatar">
-                        <div class="user-info-box">
-                            <span id="user-name">Kullanıcı</span>
-                            <span id="user-badge-text">Üye</span>
+                        <div class="user-main-info">
+                            <img id="user-avatar" src="" alt="Avatar">
+                            <div class="user-info-box">
+                                <span id="user-name">Kullanıcı</span>
+                                <span id="user-badge-text">Üye</span>
+                            </div>
                         </div>
                         <a href="#" class="logout-btn" onclick="event.stopPropagation(); logout()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
                     </div>
@@ -717,7 +738,7 @@
                 <div class="btn-group">
                     <a href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663" target="_blank" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Botu Sunucuna Ekle</a>
                     <a href="https://funce-linked-roles.onrender.com/api/auth/discord" class="btn btn-discord" id="login-discord-btn"><i class="fa-brands fa-discord"></i> Discord ile Giriş Yap</a>
-                    <button class="btn btn-gold-outline" onclick="switchTab('funce-pro', getNavBtn(3))"><i class="fa-solid fa-crown"></i> Funce Pro'yu İncele</button>
+                    <button class="btn btn-gold-outline" onclick="switchTab('funce-pro', getNavBtn(2))"><i class="fa-solid fa-crown"></i> Funce Pro'yu İncele</button>
                 </div>
             </div>
 
@@ -1112,8 +1133,7 @@
         }
 
         function openProfileTab() {
-            const profileBtn = document.getElementById('profileNavLink');
-            switchTab('profilim', profileBtn);
+            switchTab('profilim', null);
         }
 
         function renderUserGuilds() {
