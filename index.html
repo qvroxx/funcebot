@@ -1,1458 +1,3042 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FunceBOT - Discord Sunucu Yönetim Botu</title>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0b0714;
-            --card-bg: rgba(22, 16, 38, 0.75);
-            --border-color: rgba(168, 85, 247, 0.25);
-            --primary-purple: #a855f7;
-            --accent-glow: 0 0 20px rgba(168, 85, 247, 0.4);
-            --accent-glow-strong: 0 0 30px rgba(168, 85, 247, 0.7);
-            
-            --gold-color: #ffd700;
-            --gold-border: rgba(255, 215, 0, 0.6);
-            --gold-glow: 0 0 20px rgba(255, 215, 0, 0.4);
-            --gold-glow-strong: 0 0 30px rgba(255, 215, 0, 0.7);
-
-            --text-color: #f1f5f9;
-            --text-muted: #94a3b8;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            user-select: none;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 20% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(126, 34, 206, 0.15) 0%, transparent 50%);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        #intro-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-color);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
-
-        .intro-title {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: var(--accent-glow-strong);
-        }
-
-        .intro-title span {
-            color: var(--primary-purple);
-        }
-
-        .loader-bar {
-            width: 220px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--accent-glow);
-        }
-
-        .loader-progress {
-            width: 0%;
-            height: 100%;
-            background: var(--primary-purple);
-            box-shadow: var(--accent-glow-strong);
-            animation: load 1.8s forwards ease-in-out;
-        }
-
-        @keyframes load {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 12px 4%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(11, 7, 20, 0.92);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 20px;
-            font-weight: 800;
-            color: #fff;
-            text-decoration: none;
-            letter-spacing: 1px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        .logo span {
-            color: var(--primary-purple);
-            text-shadow: var(--accent-glow);
-        }
-
-        .menu-toggle {
-            display: none;
-            font-size: 18px;
-            color: var(--primary-purple);
-            cursor: pointer;
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: rgba(168, 85, 247, 0.1);
-            box-shadow: var(--accent-glow);
-            transition: all 0.3s ease;
-            margin-left: auto;
-        }
-
-        nav {
-            display: flex;
-            align-items: center;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 12px;
-            align-items: center;
-        }
-
-        nav ul li a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            font-size: 13px;
-            cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 6px;
-            border: none !important;
-            background: transparent !important;
-            box-shadow: none !important;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        nav ul li a:hover, nav ul li a.active {
-            color: #fff !important;
-            text-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
-        }
-
-        .nav-pro-btn {
-            color: var(--gold-color) !important;
-        }
-
-        .nav-pro-btn:hover, .nav-pro-btn.active {
-            color: #fff !important;
-            text-shadow: 0 0 12px rgba(255, 215, 0, 0.8) !important;
-        }
-
-        .nav-control-btn {
-            color: #3b82f6 !important;
-        }
-
-        .nav-control-btn:hover {
-            color: #fff !important;
-            text-shadow: 0 0 12px rgba(59, 130, 246, 0.8) !important;
-        }
-
-        .nav-admin-btn {
-            color: #ef4444 !important;
-            display: none;
-        }
-
-        .nav-admin-btn:hover {
-            color: #fff !important;
-            text-shadow: 0 0 12px rgba(239, 68, 68, 0.8) !important;
-        }
-
-        .btn-destek {
-            color: var(--primary-purple) !important;
-        }
-
-        #user-profile {
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            background: rgba(30, 41, 59, 0.9);
-            padding: 5px 12px 5px 6px;
-            border-radius: 20px;
-            border: 1px solid var(--border-color) !important;
-            box-shadow: var(--accent-glow) !important;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-left: 6px;
-        }
-
-        #user-profile:hover {
-            border-color: var(--primary-purple) !important;
-            box-shadow: var(--accent-glow-strong) !important;
-        }
-
-        .user-main-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        #user-profile img {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 1.5px solid var(--primary-purple);
-            object-fit: cover;
-        }
-
-        .user-info-box {
-            display: flex;
-            flex-direction: column;
-        }
-
-        #user-name {
-            font-size: 11px;
-            font-weight: 600;
-            color: #fff;
-            line-height: 1.1;
-        }
-
-        #user-badge-text {
-            font-size: 9px;
-            color: var(--gold-color);
-            font-weight: 500;
-        }
-
-        .logout-btn {
-            color: #ef4444 !important;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 6px;
-            background: rgba(239, 68, 68, 0.15) !important;
-            border: 1px solid rgba(239, 68, 68, 0.3) !important;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            width: auto;
-            white-space: nowrap;
-        }
-
-        .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.3) !important;
-            color: #fff !important;
-        }
-
-        .container {
-            max-width: 1100px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 110px 20px 60px;
-            flex: 1;
-        }
-
-        .page-section {
-            display: none;
-            animation: fadeIn 0.4s ease-in-out forwards;
-        }
-
-        .page-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero {
-            text-align: center;
-            padding: 30px 10px;
-            margin-bottom: 20px;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            background: rgba(168, 85, 247, 0.12);
-            border: 1px solid var(--border-color);
-            color: var(--primary-purple);
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .hero h1 {
-            font-size: 42px;
-            font-weight: 800;
-            margin-bottom: 18px;
-            color: #fff;
-            line-height: 1.2;
-        }
-
-        .hero h1 span {
-            color: var(--primary-purple);
-            text-shadow: var(--accent-glow);
-        }
-
-        .hero p {
-            font-size: 15px;
-            color: var(--text-muted);
-            max-width: 650px;
-            margin: 0 auto 25px;
-            line-height: 1.6;
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 13px;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--primary-purple);
-            color: #fff;
-            box-shadow: var(--accent-glow);
-        }
-
-        .btn-primary:hover {
-            box-shadow: var(--accent-glow-strong);
-            transform: translateY(-2px);
-        }
-
-        .btn-discord {
-            background-color: #5865F2;
-            color: #fff;
-            box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
-        }
-        .btn-discord:hover {
-            background-color: #4752C4;
-            box-shadow: 0 0 30px rgba(88, 101, 242, 0.7);
-            transform: translateY(-2px);
-        }
-
-        .btn-gold-outline {
-            background: rgba(255, 215, 0, 0.05);
-            color: var(--gold-color);
-            border: 1px solid var(--gold-border);
-            box-shadow: var(--gold-glow);
-        }
-
-        .btn-gold-outline:hover {
-            background: rgba(255, 215, 0, 0.15);
-            color: #fff;
-            box-shadow: var(--gold-glow-strong);
-            transform: translateY(-2px);
-        }
-
-        .form-control, .form-select {
-            width: 100%;
-            padding: 12px;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: #fff;
-            margin-bottom: 15px;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary-purple);
-        }
-
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 35px;
-            backdrop-filter: blur(12px);
-        }
-
-        .stat-item h3 {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--primary-purple);
-            margin-bottom: 4px;
-            text-shadow: var(--accent-glow);
-        }
-
-        .stat-item p {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
-            backdrop-filter: blur(12px);
-            transition: all 0.3s ease;
-            margin-bottom: 15px;
-        }
-
-        .card:hover {
-            border-color: var(--primary-purple);
-            box-shadow: var(--accent-glow);
-            transform: translateY(-2px);
-        }
-
-        .card-icon {
-            font-size: 22px;
-            color: var(--primary-purple);
-            margin-bottom: 12px;
-        }
-
-        .card h3 {
-            font-size: 16px;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-
-        .card p {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .card-gold {
-            border: 2px solid var(--gold-border) !important;
-            box-shadow: var(--gold-glow) !important;
-            position: relative;
-            background: linear-gradient(145deg, rgba(22, 16, 38, 0.9), rgba(40, 30, 10, 0.4));
-        }
-
-        .gold-badge {
-            position: absolute;
-            top: -12px;
-            right: 20px;
-            background: var(--gold-color);
-            color: #000;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 2px 8px;
-            border-radius: 8px;
-            text-transform: uppercase;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 22px;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 20px;
-        }
-
-        .step-card {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 18px;
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-        }
-
-        .step-number {
-            background: rgba(168, 85, 247, 0.2);
-            color: var(--primary-purple);
-            border: 1px solid var(--primary-purple);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            flex-shrink: 0;
-        }
-
-        .guild-card, .active-user-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(15, 23, 42, 0.7);
-            padding: 12px 16px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 10px;
-            transition: 0.2s;
-            gap: 10px;
-        }
-        .guild-card:hover, .active-user-card:hover {
-            border-color: var(--primary-purple);
-            background: rgba(168, 85, 247, 0.08);
-        }
-        .guild-info, .active-user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .guild-info img, .guild-icon-placeholder, .active-user-info img {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            border: 2px solid var(--primary-purple);
-            object-fit: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #1e293b;
-            font-weight: bold;
-            color: #fff;
-            flex-shrink: 0;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            border-top: 1px solid var(--border-color);
-            background: rgba(11, 7, 20, 0.95);
-            color: var(--text-muted);
-            font-size: 12px;
-            margin-top: 30px;
-        }
-        footer span { color: var(--primary-purple); }
-        .footer-links {
-            margin-top: 8px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .footer-links a:hover {
-            color: var(--primary-purple);
-        }
-
-        @media (max-width: 990px) {
-            header {
-                padding: 12px 20px;
-            }
-            .menu-toggle { 
-                display: block; 
-            }
-            nav ul {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(11, 7, 20, 0.98);
-                backdrop-filter: blur(20px);
-                border-bottom: 1px solid var(--border-color);
-                flex-direction: column;
-                padding: 15px;
-                gap: 8px;
-                display: none;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.8);
-                max-height: calc(100vh - 60px);
-                overflow-y: auto;
-            }
-            nav ul.show { 
-                display: flex; 
-            }
-            nav ul li {
-                width: 100%;
-            }
-            nav ul li a { 
-                text-align: center; 
-                width: 100%; 
-                padding: 10px;
-                font-size: 14px;
-                justify-content: center;
-            }
-            #user-profile-li {
-                width: 100%;
-            }
-            #user-profile {
-                width: 100%;
-                justify-content: space-between;
-                margin-left: 0;
-                margin-top: 5px;
-                padding: 8px 15px;
-            }
-
-            .container {
-                padding-top: 90px;
-            }
-            .hero {
-                padding: 10px 0;
-            }
-            .hero h1 { 
-                font-size: 26px; 
-            }
-            .hero p {
-                font-size: 13px;
-            }
-            .btn-group {
-                flex-direction: column;
-                width: 100%;
-            }
-            .btn-group .btn {
-                width: 100%;
-            }
-            .stats-bar { 
-                grid-template-columns: 1fr; 
-                gap: 12px; 
-            }
-            .guild-card, .active-user-card {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-            .guild-card .btn, .guild-card a {
-                width: 100%;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FunceBOT - Discord Sunucu Yönetim Botu</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg-color:#0b0714;
+    --card-bg:rgba(22,16,38,.75);
+    --border-color:rgba(168,85,247,.25);
+    --primary-purple:#a855f7;
+    --accent-glow:0 0 20px rgba(168,85,247,.4);
+    --accent-glow-strong:0 0 30px rgba(168,85,247,.7);
+    --gold-color:#ffd700;
+    --gold-border:rgba(255,215,0,.6);
+    --gold-glow:0 0 20px rgba(255,215,0,.4);
+    --text-color:#f1f5f9;
+    --text-muted:#94a3b8;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+    user-select:none;
+}
+
+body{
+    background-color:var(--bg-color);
+    background-image:
+    radial-gradient(circle at 20% 20%,rgba(168,85,247,.15),transparent 50%),
+    radial-gradient(circle at 80% 80%,rgba(126,34,206,.15),transparent 50%);
+    color:var(--text-color);
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+#particle-canvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+    pointer-events:none;
+}
+
+#intro-screen{
+    position:fixed;
+    inset:0;
+    background:var(--bg-color);
+    z-index:9999;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    transition:.6s;
+}
+
+.intro-title{
+    font-size:2.2rem;
+    font-weight:800;
+    color:#fff;
+    margin-bottom:20px;
+    letter-spacing:2px;
+}
+
+.intro-title span{
+    color:var(--primary-purple);
+}
+
+.loader-bar{
+    width:220px;
+    height:4px;
+    background:rgba(255,255,255,.1);
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.loader-progress{
+    width:0;
+    height:100%;
+    background:var(--primary-purple);
+    animation:load 1.8s forwards;
+}
+
+@keyframes load{
+    to{width:100%}
+}
+
+header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    padding:12px 4%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(11,7,20,.92);
+    backdrop-filter:blur(15px);
+    border-bottom:1px solid var(--border-color);
+    z-index:1000;
+}
+
+.logo{
+    font-size:20px;
+    font-weight:800;
+    color:#fff;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.logo span{
+    color:var(--primary-purple);
+}
+
+.menu-toggle{
+    display:none;
+    color:var(--primary-purple);
+    cursor:pointer;
+    padding:7px 12px;
+    border:1px solid var(--border-color);
+    border-radius:8px;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:10px;
+    align-items:center;
+}
+
+nav a{
+    color:var(--text-muted);
+    text-decoration:none;
+    font-size:13px;
+    padding:7px 10px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+nav a:hover,
+nav a.active{
+    color:#fff;
+}
+
+.nav-pro-btn{
+    color:var(--gold-color)!important;
+}
+
+.nav-control-btn{
+    color:#3b82f6!important;
+}
+
+.nav-admin-btn{
+    color:#ef4444!important;
+    display:none;
+}
+
+.btn-destek{
+    color:var(--primary-purple)!important;
+}
+
+#user-profile{
+    display:none;
+    align-items:center;
+    gap:10px;
+    background:rgba(30,41,59,.9);
+    padding:5px 10px 5px 6px;
+    border-radius:20px;
+    border:1px solid var(--border-color);
+    cursor:pointer;
+}
+
+.user-main-info{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+#user-avatar{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    border:1.5px solid var(--primary-purple);
+    object-fit:cover;
+}
+
+.user-info-box{
+    display:flex;
+    flex-direction:column;
+}
+
+#user-name{
+    font-size:11px;
+    font-weight:600;
+    color:#fff;
+}
+
+#user-badge-text{
+    font-size:9px;
+    color:var(--gold-color);
+}
+
+.logout-btn{
+    color:#ef4444!important;
+    font-size:11px;
+    padding:4px 8px;
+    background:rgba(239,68,68,.15);
+    border:1px solid rgba(239,68,68,.3);
+    border-radius:6px;
+}
+
+.container{
+    max-width:1100px;
+    width:100%;
+    margin:auto;
+    padding:110px 20px 60px;
+}
+
+.page-section{
+    display:none;
+    animation:fadeIn .4s ease;
+}
+
+.page-section.active{
+    display:block;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+.hero{
+    text-align:center;
+    padding:30px 10px;
+}
+
+.hero-badge{
+    display:inline-block;
+    padding:6px 16px;
+    border-radius:20px;
+    background:rgba(168,85,247,.12);
+    border:1px solid var(--border-color);
+    color:var(--primary-purple);
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:42px;
+    font-weight:800;
+    margin-bottom:18px;
+}
+
+.hero h1 span{
+    color:var(--primary-purple);
+    text-shadow:var(--accent-glow);
+}
+
+.hero p{
+    font-size:15px;
+    color:var(--text-muted);
+    max-width:650px;
+    margin:0 auto 25px;
+    line-height:1.6;
+}
+
+.btn-group{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:10px 20px;
+    border-radius:10px;
+    font-weight:600;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-size:13px;
+    cursor:pointer;
+    border:none;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-primary{
+    background:var(--primary-purple);
+    color:#fff;
+    box-shadow:var(--accent-glow);
+}
+
+.btn-discord{
+    background:#5865f2;
+    color:#fff;
+}
+
+.btn-gold-outline{
+    background:rgba(255,215,0,.05);
+    color:var(--gold-color);
+    border:1px solid var(--gold-border);
+}
+
+.form-control,
+.form-select{
+    width:100%;
+    padding:12px;
+    background:rgba(15,23,42,.8);
+    border:1px solid var(--border-color);
+    border-radius:8px;
+    color:#fff;
+    margin-bottom:15px;
+    outline:none;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:var(--primary-purple);
+}
+
+.stats-bar{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+    background:var(--card-bg);
+    border:1px solid var(--border-color);
+    border-radius:16px;
+    padding:20px;
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.stat-item h3{
+    font-size:24px;
+    color:var(--primary-purple);
+}
+
+.stat-item p{
+    font-size:12px;
+    color:var(--text-muted);
+}
+
+.grid-3{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+}
+
+.card{
+    background:var(--card-bg);
+    border:1px solid var(--border-color);
+    border-radius:16px;
+    padding:20px;
+    backdrop-filter:blur(12px);
+    margin-bottom:15px;
+    transition:.3s;
+}
+
+.card:hover{
+    border-color:var(--primary-purple);
+    box-shadow:var(--accent-glow);
+    transform:translateY(-2px);
+}
+
+.card-icon{
+    font-size:22px;
+    color:var(--primary-purple);
+    margin-bottom:12px;
+}
+
+.card h3{
+    font-size:16px;
+    color:#fff;
+    margin-bottom:8px;
+}
+
+.card p{
+    font-size:13px;
+    color:var(--text-muted);
+    line-height:1.5;
+}
+
+.card-gold{
+    border:2px solid var(--gold-border)!important;
+    box-shadow:var(--gold-glow)!important;
+}
+
+.gold-badge{
+    float:right;
+    background:var(--gold-color);
+    color:#000;
+    font-size:10px;
+    font-weight:800;
+    padding:2px 8px;
+    border-radius:8px;
+}
+
+.section-title{
+    text-align:center;
+    font-size:22px;
+    font-weight:800;
+    margin-bottom:20px;
+}
+
+/* PROFİL */
+
+.profile-main-card{
+    max-width:700px;
+    margin:auto;
+    border-color:var(--primary-purple);
+}
+
+.profile-header{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding-bottom:18px;
+    margin-bottom:20px;
+    border-bottom:1px solid var(--border-color);
+}
+
+.profile-big-avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid var(--primary-purple);
+    box-shadow:var(--accent-glow);
+}
+
+.profile-name{
+    font-size:22px;
+    font-weight:800;
+    color:#fff;
+}
+
+.profile-title{
+    color:var(--primary-purple);
+    font-size:12px;
+    margin-top:3px;
+}
+
+.profile-id{
+    color:var(--text-muted);
+    font-size:10px;
+    margin-top:4px;
+}
+
+.badges{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-top:8px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    padding:4px 9px;
+    border-radius:12px;
+    font-size:10px;
+    font-weight:600;
+    background:rgba(168,85,247,.12);
+    border:1px solid rgba(168,85,247,.35);
+    color:#d8b4fe;
+}
+
+.badge.gold{
+    color:#ffd700;
+    border-color:rgba(255,215,0,.5);
+    background:rgba(255,215,0,.1);
+}
+
+.badge.red{
+    color:#f87171;
+    border-color:rgba(239,68,68,.5);
+    background:rgba(239,68,68,.1);
+}
+
+.badge.blue{
+    color:#60a5fa;
+    border-color:rgba(59,130,246,.5);
+    background:rgba(59,130,246,.1);
+}
+
+.badge.green{
+    color:#4ade80;
+    border-color:rgba(34,197,94,.5);
+    background:rgba(34,197,94,.1);
+}
+
+.level-box{
+    background:rgba(15,23,42,.7);
+    border:1px solid var(--border-color);
+    padding:16px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+.level-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+}
+
+.level-number{
+    color:var(--primary-purple);
+    font-weight:800;
+}
+
+.xp-text{
+    color:var(--text-muted);
+    font-size:11px;
+}
+
+.xp-bar{
+    width:100%;
+    height:9px;
+    background:rgba(255,255,255,.08);
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.xp-progress{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#7e22ce,#a855f7);
+    border-radius:20px;
+    box-shadow:0 0 12px rgba(168,85,247,.6);
+    transition:width .5s;
+}
+
+.profile-stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.profile-stat{
+    background:rgba(15,23,42,.6);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:10px;
+    text-align:center;
+    padding:12px 5px;
+}
+
+.profile-stat strong{
+    display:block;
+    color:#fff;
+    font-size:18px;
+}
+
+.profile-stat span{
+    color:var(--text-muted);
+    font-size:10px;
+}
+
+.achievement-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:8px;
+    margin-bottom:20px;
+}
+
+.achievement{
+    padding:10px;
+    border-radius:10px;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.06);
+}
+
+.achievement.unlocked{
+    border-color:rgba(168,85,247,.4);
+}
+
+.achievement-icon{
+    font-size:18px;
+    margin-bottom:3px;
+}
+
+.achievement-title{
+    color:#fff;
+    font-size:11px;
+    font-weight:600;
+}
+
+.achievement-desc{
+    color:var(--text-muted);
+    font-size:9px;
+}
+
+/* SUNUCULAR */
+
+.guild-card,
+.active-user-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(15,23,42,.7);
+    padding:12px 16px;
+    border-radius:12px;
+    border:1px solid var(--border-color);
+    margin-bottom:10px;
+    gap:10px;
+}
+
+.guild-info,
+.active-user-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.guild-info img,
+.guild-icon-placeholder,
+.active-user-info img{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:2px solid var(--primary-purple);
+    object-fit:cover;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#1e293b;
+    color:#fff;
+}
+
+/* ADMIN */
+
+.admin-badge-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+    margin-bottom:15px;
+}
+
+.admin-badge-option{
+    padding:9px;
+    border:1px solid var(--border-color);
+    border-radius:8px;
+    background:rgba(15,23,42,.7);
+    color:#fff;
+    cursor:pointer;
+    font-size:11px;
+    transition:.2s;
+}
+
+.admin-badge-option.selected{
+    border-color:var(--primary-purple);
+    background:rgba(168,85,247,.15);
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    border-top:1px solid var(--border-color);
+    background:rgba(11,7,20,.95);
+    color:var(--text-muted);
+    font-size:12px;
+}
+
+footer span{
+    color:var(--primary-purple);
+}
+
+.footer-links{
+    margin-top:8px;
+    display:flex;
+    justify-content:center;
+    gap:15px;
+}
+
+.footer-links a{
+    color:var(--text-muted);
+    text-decoration:none;
+}
+
+@media(max-width:990px){
+
+    header{
+        padding:12px 20px;
+    }
+
+    .menu-toggle{
+        display:block;
+        margin-left:auto;
+    }
+
+    nav ul{
+        position:absolute;
+        top:100%;
+        left:0;
+        width:100%;
+        background:rgba(11,7,20,.98);
+        flex-direction:column;
+        padding:15px;
+        gap:8px;
+        display:none;
+    }
+
+    nav ul.show{
+        display:flex;
+    }
+
+    nav ul li{
+        width:100%;
+    }
+
+    nav ul li a{
+        display:flex;
+        justify-content:center;
+        width:100%;
+        padding:10px;
+    }
+
+    #user-profile{
+        width:100%;
+        justify-content:space-between;
+    }
+
+    .container{
+        padding-top:90px;
+    }
+
+    .hero h1{
+        font-size:26px;
+    }
+
+    .btn-group{
+        flex-direction:column;
+    }
+
+    .btn-group .btn{
+        width:100%;
+    }
+
+    .stats-bar{
+        grid-template-columns:1fr;
+    }
+
+    .guild-card,
+    .active-user-card{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .guild-card .btn,
+    .guild-card a{
+        width:100%;
+    }
+
+    .profile-header{
+        align-items:flex-start;
+    }
+
+    .profile-stats{
+        grid-template-columns:1fr 1fr 1fr;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <canvas id="particle-canvas"></canvas>
+<canvas id="particle-canvas"></canvas>
 
-    <div id="intro-screen">
-        <div class="intro-title">Funce<span>BOT</span></div>
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
-        </div>
+<div id="intro-screen">
+    <div class="intro-title">Funce<span>BOT</span></div>
+    <div class="loader-bar">
+        <div class="loader-progress"></div>
     </div>
+</div>
 
-    <header>
-        <a class="logo" onclick="switchTab('ana-sayfa')">
-            Funce<span>BOT</span>
-        </a>
-
-        <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-
-        <nav>
-            <ul id="navMenu">
-                <li><a class="nav-btn active" onclick="switchTab('ana-sayfa', this)">Ana Sayfa</a></li>
-                <li><a class="nav-btn" onclick="switchTab('ozellikler', this)">Özellikler</a></li>
-                <li><a class="nav-btn nav-pro-btn" onclick="switchTab('funce-pro', this)"><i class="fa-solid fa-crown"></i> Funce Pro</a></li>
-                <li><a class="nav-btn nav-control-btn" onclick="switchTab('kontrol-paneli', this)"><i class="fa-solid fa-sliders"></i> Kontrol Paneli</a></li>
-                <li><a class="nav-btn nav-admin-btn" id="adminNavLink" onclick="switchTab('admin-panel', this)"><i class="fa-solid fa-shield-halved"></i> Admin Panel</a></li>
-                <li><a href="https://discord.gg/jSm2n5Jp2k" target="_blank" class="nav-btn btn-destek"><i class="fa-brands fa-discord"></i> Destek Sunucusu</a></li>
-                
-                <li id="user-profile-li">
-                    <div id="user-profile" onclick="openProfileTab()" title="Profiline Git">
-                        <div class="user-main-info">
-                            <img id="user-avatar" src="https://i.imgur.com/QjSrqWd.png" alt="Avatar">
-                            <div class="user-info-box">
-                                <span id="user-name">Kullanıcı</span>
-                                <span id="user-badge-text">Üye</span>
-                            </div>
-                        </div>
-                        <a href="#" class="logout-btn" onclick="event.stopPropagation(); logout()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</a>
-                    </div>
-                </li>
-            </ul>
-        </nav>
-    </header>
-
-    <div class="container">
-
-        <!-- ANA SAYFA -->
-        <section id="ana-sayfa" class="page-section active">
-            <div class="hero">
-                <div class="hero-badge">Discord Sunucu Yönetimi</div>
-                <h1>Sunucunu <span>FunceBOT</span> ile Üst Seviyeye Taşı</h1>
-                <p>Gelişmiş moderasyon araçları, hızlı altyapı ve güçlü Pro seçenekleriyle topluluğunu eksiksiz yönet.</p>
-                
-                <div class="btn-group">
-                    <a href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663" target="_blank" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Botu Sunucuna Ekle</a>
-                    <a href="https://funce-linked-roles.onrender.com/api/auth/discord" class="btn btn-discord" id="login-discord-btn"><i class="fa-brands fa-discord"></i> Discord ile Giriş Yap</a>
-                    <button class="btn btn-gold-outline" onclick="switchTab('funce-pro')"><i class="fa-solid fa-crown"></i> Funce Pro'yu İncele</button>
-                </div>
-            </div>
-
-            <div class="stats-bar">
-                <div class="stat-item">
-                    <h3>99.9%</h3>
-                    <p>Uptime Süresi</p>
-                </div>
-                <div class="stat-item">
-                    <h3>10</h3>
-                    <p>Aktif Kullanıcı</p>
-                </div>
-                <div class="stat-item">
-                    <h3>&lt;10ms</h3>
-                    <p>Yüksek Hız & Yanıt</p>
-                </div>
-            </div>
-
-            <div class="card" style="margin-bottom: 30px; border-color: rgba(168, 85, 247, 0.4); background: linear-gradient(135deg, rgba(22, 16, 38, 0.8), rgba(15, 23, 42, 0.8));">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
-                    <h3 style="font-size: 16px; color: #fff; display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-circle-dot" style="color: #22c55e;"></i> Canlı Sistem & Bot Durumu
-                    </h3>
-                    <span style="font-size: 10px; background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">● Tüm Servisler Operasyonel</span>
-                </div>
-                
-                <div class="grid-3" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                    <div style="background: rgba(11, 7, 20, 0.5); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
-                        <p style="font-size: 11px; color: var(--text-muted);">Gecikme (Ping)</p>
-                        <h4 style="font-size: 18px; color: var(--primary-purple); font-weight: 700;">8 ms</h4>
-                    </div>
-                    <div style="background: rgba(11, 7, 20, 0.5); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
-                        <p style="font-size: 11px; color: var(--text-muted);">İşlenen Komutlar</p>
-                        <h4 style="font-size: 18px; color: #3b82f6; font-weight: 700;">140+ Slash Komutu</h4>
-                    </div>
-                    <div style="background: rgba(11, 7, 20, 0.5); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
-                        <p style="font-size: 11px; color: var(--text-muted);">Bellek Kullanımı</p>
-                        <h4 style="font-size: 18px; color: var(--gold-color); font-weight: 700;">%18 (Optime)</h4>
-                    </div>
-                </div>
-            </div>
-
-            <h2 class="section-title">Öne Çıkan Güçlü Modüller</h2>
-            <div class="grid-3" style="margin-bottom: 35px;">
-                <div class="card">
-                    <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                    <h3>Gelişmiş Koruma</h3>
-                    <p>Sunucunuzu spam, küfür ve izinsiz reklamlardan anında korur.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon"><i class="fa-solid fa-robot"></i></div>
-                    <h3>Oto Rol & Kayıt</h3>
-                    <p>Sunucunuza yeni katılan üyelere anında rol verir ve kolay kayıt imkanı sağlar.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon"><i class="fa-solid fa-headset"></i></div>
-                    <h3>Bilet (Ticket) Sistemi</h3>
-                    <p>Kullanıcılarınız için tek tıkla özel destek kanalları oluşturup yönetin.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon"><i class="fa-solid fa-music"></i></div>
-                    <h3>Müzik & Eğlence</h3>
-                    <p>Kesintisiz ve yüksek kaliteli ses modülleri ile topluluğunuzu eğlendirin.</p>
-                </div>
-            </div>
-
-            <h2 class="section-title">3 Adımda Hemen Kullanmaya Başla</h2>
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <div>
-                        <h4 style="color: #fff; font-size: 14px; margin-bottom: 2px;">Botu Sunucuna Davet Et</h4>
-                        <p style="color: var(--text-muted); font-size: 12px;">"Botu Sunucuna Ekle" butonuna basarak yetkileri onaylayın ve sunucunuzu seçin.</p>
-                    </div>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <div>
-                        <h4 style="color: #fff; font-size: 14px; margin-bottom: 2px;">Discord Hesabınla Giriş Yap</h4>
-                        <p style="color: var(--text-muted); font-size: 12px;">Web sitemiz üzerinden Discord hesabınızı tek tıkla güvenle bağlayın.</p>
-                    </div>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <div>
-                        <h4 style="color: #fff; font-size: 14px; margin-bottom: 2px;">Kontrol Panelinden Özelleştir</h4>
-                        <p style="color: var(--text-muted); font-size: 12px;">Yönetici olduğunuz sunucuları kolayca seçip istediğiniz komutları aktifleştirin.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PROFİLİM SAYFASI -->
-        <section id="profilim" class="page-section">
-            <h2 class="section-title"><i class="fa-solid fa-id-card"></i> Kullanıcı Profilim</h2>
-            
-            <div id="profile-page-locked" style="text-align: center; padding: 40px 20px; display: none;">
-                <div style="font-size: 40px; color: #ef4444; margin-bottom: 15px;"><i class="fa-solid fa-lock"></i></div>
-                <h3 style="color: #fff; margin-bottom: 10px;">Profil Alanı Kilitli</h3>
-                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 13px;">Profilinizi görüntülemek ve düzenlemek için Discord ile giriş yapmalısınız.</p>
-                <a href="https://funce-linked-roles.onrender.com/api/auth/discord" class="btn btn-discord"><i class="fa-brands fa-discord"></i> Discord ile Giriş Yap</a>
-            </div>
-
-            <div id="profile-page-content" class="card" style="max-width: 600px; margin: 0 auto; border-color: var(--primary-purple);">
-                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
-                    <img id="page-user-avatar" src="https://i.imgur.com/QjSrqWd.png" alt="Avatar" style="width: 70px; height: 70px; border-radius: 50%; border: 2.5px solid var(--primary-purple); object-fit: cover;">
-                    <div>
-                        <h3 id="page-user-name" style="font-size: 20px; margin-bottom: 4px;">Kullanıcı Adı</h3>
-                        <span id="page-user-badge" style="background: rgba(255, 215, 0, 0.15); color: var(--gold-color); padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1px solid var(--gold-border);">Rozet</span>
-                        <p id="page-user-id" style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">ID: -</p>
-                    </div>
-                </div>
-
-                <h3 style="margin-bottom: 12px; font-size: 15px;"><i class="fa-solid fa-pen-to-square"></i> Profil Bilgilerini Düzenle</h3>
-                
-                <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Görünen Adın:</label>
-                <input type="text" id="manual-name-input" class="form-control" placeholder="Adını gir...">
-
-                <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Profil Fotoğrafı URL (Doğrudan Görsel Linki):</label>
-                <input type="text" id="manual-avatar-input" class="form-control" placeholder="https://i.imgur.com/QjSrqWd.png veya Discord Avatar Linki" value="https://i.imgur.com/QjSrqWd.png">
-
-                <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Tema / Vurgu Rengi (Rozetine Göre Kilidi Açılır):</label>
-                <select id="edit-theme-select" class="form-select">
-                    <option value="#a855f7">Mor (Varsayılan)</option>
-                    <option value="#ffd700">Altın Sarısı (⭐ Funce Pro Gerektirir)</option>
-                    <option value="#ef4444">Kırmızı (🛡️ Admin / Founder Gerektirir)</option>
-                    <option value="#3b82f6">Mavi (💻 Developer Gerektirir)</option>
-                    <option value="#22c55e">Yeşil</option>
-                </select>
-
-                <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 5px;" onclick="saveManualProfile()"><i class="fa-solid fa-floppy-disk"></i> Değişiklikleri Kaydet</button>
-            </div>
-        </section>
-
-        <!-- ÖZELLİKLER SAYFASI -->
-        <section id="ozellikler" class="page-section">
-            <h2 class="section-title">Bot Özellikleri</h2>
-            <div class="grid-3">
-                <div class="card">
-                    <div class="card-icon"><i class="fa-solid fa-user-gear"></i></div>
-                    <h3>Oto Moderasyon</h3>
-                    <p>Reklam ve küfür engelleme, kelime filtreleme ve otomatik ceza sistemleri.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon"><i class="fa-solid fa-ticket"></i></div>
-                    <h3>Destek (Ticket) Sistemi</h3>
-                    <p>Kullanıcılarınız için özel destek kanalları oluşturun ve yönetin.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
-                    <h3>Gelişmiş Statlar</h3>
-                    <p>Sunucunuzdaki sesli ve yazılı aktifliği detaylı istatistiklerle takip edin.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- FUNCĒ PRO SAYFASI -->
-        <section id="funce-pro" class="page-section">
-            <h2 class="section-title" style="color: var(--gold-color); text-shadow: var(--gold-glow);">Funce Pro</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 13px;">Topluluğunuz için özel tasarlanmış ayrıcalıklı VIP özellikler.</p>
-            
-            <div class="grid-3">
-                <div class="card card-gold">
-                    <span class="gold-badge">PRO</span>
-                    <div class="card-icon" style="color: var(--gold-color);"><i class="fa-solid fa-crown"></i></div>
-                    <h3 style="color: var(--gold-color);">Özel Bot İsmi & Profil</h3>
-                    <p>Botu kendi sunucunuza özel isim, avatar ve durum mesajıyla kişiselleştirin.</p>
-                </div>
-                <div class="card card-gold">
-                    <span class="gold-badge">PRO</span>
-                    <div class="card-icon" style="color: var(--gold-color);"><i class="fa-solid fa-server"></i></div>
-                    <h3 style="color: var(--gold-color);">Yüksek Öncelikli Sunucu</h3>
-                    <p>Sadece Pro kullanıcılara özel kesintisiz ve yüksek performanslı yedekli sunucular.</p>
-                </div>
-                <div class="card card-gold">
-                    <span class="gold-badge">PRO</span>
-                    <div class="card-icon" style="color: var(--gold-color);"><i class="fa-solid fa-headset"></i></div>
-                    <h3 style="color: var(--gold-color);">7/24 Birebir Destek</h3>
-                    <p>Herhangi bir sorununuzda öncelikli teknik destek ekibimiz doğrudan yanınızda.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- KONTROL PANELİ -->
-        <section id="kontrol-paneli" class="page-section">
-            <div id="control-panel-locked" style="text-align: center; padding: 40px 20px;">
-                <div style="font-size: 40px; color: #ef4444; margin-bottom: 15px;"><i class="fa-solid fa-lock"></i></div>
-                <h2 style="font-size: 20px; color: #fff; margin-bottom: 10px;">Erişim Engellendi</h2>
-                <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 20px auto; font-size: 13px;">Kontrol paneline erişebilmek için Discord hesabınızı siteyle eşleştirmeniz (giriş yapmanız) gerekmektedir.</p>
-                <a href="https://funce-linked-roles.onrender.com/api/auth/discord" class="btn btn-discord"><i class="fa-brands fa-discord"></i> Discord ile Şimdi Giriş Yap</a>
-            </div>
-
-            <div id="control-panel-unlocked" style="display: none;">
-                <h2 class="section-title" style="color: #3b82f6;"><i class="fa-solid fa-sliders"></i> FunceBOT Kontrol Paneli</h2>
-                <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 13px;">Bot komutlarını yönetebilir ve yönetici/sahip olduğun tüm Discord sunucularını yapılandırabilirsin.</p>
-                
-                <div class="card" style="border-color: rgba(168, 85, 247, 0.4); margin-bottom: 25px; text-align: center; padding: 30px 15px;">
-                    <div style="font-size: 35px; color: var(--primary-purple); margin-bottom: 10px;"><i class="fa-solid fa-lock"></i></div>
-                    <h3 style="color: #fff; font-size: 18px; margin-bottom: 6px;">Bot Komut & Modül Kontrolleri</h3>
-                    <p style="color: var(--primary-purple); font-weight: 700; font-size: 16px; letter-spacing: 1px;">Yakında...</p>
-                    <p style="color: var(--text-muted); font-size: 12px; margin-top: 6px;">Gelişmiş komut ve modül ayarları şu an geliştirilme aşamasındadır.</p>
-                </div>
-
-                <div class="card" style="border-color: rgba(59, 130, 246, 0.4);">
-                    <h3 style="color: #3b82f6; margin-bottom: 12px;"><i class="fa-solid fa-server"></i> Yönetici / Sahibi Olduğun Sunucular</h3>
-                    <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 15px;">Sahip olduğun veya yönetici yetkine sahip olduğun tüm Discord sunucuları:</p>
-                    
-                    <div id="user-guilds-list">
-                        <p style="color: var(--text-muted); font-size: 12px;">Sunucu verileri yükleniyor...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ADMIN PANEL -->
-        <section id="admin-panel" class="page-section">
-            <h2 class="section-title" style="color: #ef4444;"><i class="fa-solid fa-shield-halved"></i> Yönetim & Rozet Paneli</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 13px;">Sistem yöneticileri ve kurucu için özel kontrol alanı.</p>
-            
-            <div class="card" style="margin-bottom: 25px; border-color: rgba(168, 85, 247, 0.4); max-width: 600px; margin-left: auto; margin-right: auto;">
-                <h3 style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-size: 15px;">
-                    <i class="fa-solid fa-users" style="color: var(--primary-purple);"></i> Sitede Oturum Açmış Aktif Kullanıcılar
-                </h3>
-                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 15px;">Canlı olarak sitede aktif olan kullanıcıların listesi:</p>
-
-                <div id="active-users-list"></div>
-            </div>
-
-            <div class="card" style="border-color: rgba(239, 68, 68, 0.4); max-width: 600px; margin: 0 auto 20px auto;">
-                <h3 style="color: #ef4444; margin-bottom: 12px;"><i class="fa-solid fa-medal"></i> Kullanıcıya Özel Rozet Ata / Değiştir</h3>
-                <label style="font-size: 12px; color: var(--text-muted);">Hedef Kullanıcı Discord ID:</label>
-                <input type="text" id="admin-target-id" class="form-control" placeholder="Örn: 1080897669431574609" style="margin-top: 5px;">
-                <label style="font-size: 12px; color: var(--text-muted);">Verilecek Rozet:</label>
-                <select id="admin-badge-select" class="form-select" style="margin-top: 5px;">
-                    <option value="👑 Founder">👑 Founder</option>
-                    <option value="🛡️ Bot Admin">🛡️ Bot Admin</option>
-                    <option value="🛡️ Senior Moderator">🛡️ Senior Moderator</option>
-                    <option value="💻 Developer">💻 Developer</option>
-                    <option value="🎨 Designer">🎨 Designer</option>
-                    <option value="🤖 Bot">🤖 Bot</option>
-                    <option value="⭐ Funce Pro">⭐ Funce Pro</option>
-                    <option value="💎 VIP Member">💎 VIP Member</option>
-                    <option value="🚀 Booster">🚀 Booster</option>
-                    <option value="🤝 Dost">🤝 Dost</option>
-                    <option value="⏳ Emektar Üye">⏳ Emektar Üye</option>
-                    <option value="💬 Chat Master">💬 Chat Master</option>
-                    <option value="👤 Standart Üye">👤 Standart Üye</option>
-                </select>
-                <button class="btn" style="background: var(--primary-purple); color: #fff; width: 100%; justify-content: center; border: none; cursor: pointer; margin-top: 5px;" onclick="assignBadgeToUser()">Kullanıcıya Rozeti Tanımla</button>
-            </div>
-
-            <div class="card" style="border-color: rgba(239, 68, 68, 0.4); max-width: 600px; margin: 0 auto 20px auto;">
-                <h3 style="color: #ef4444; margin-bottom: 12px;"><i class="fa-solid fa-user-slash"></i> ID ile Kullanıcı Banla</h3>
-                <input type="text" id="ban-id-input" class="form-control" placeholder="Banlanacak Discord ID">
-                <button class="btn" style="background: #ef4444; color: #fff; width: 100%; justify-content: center; border: none; cursor: pointer;" onclick="banUser()"><i class="fa-solid fa-ban"></i> Kullanıcıya Sistem Banı At</button>
-            </div>
-
-            <div class="card" style="max-width: 600px; margin: 0 auto;">
-                <h3 style="margin-bottom: 12px;"><i class="fa-solid fa-list"></i> Banlı Kullanıcılar Listesi</h3>
-                <ul id="banned-users-list" style="list-style: none; color: var(--text-muted); font-size: 13px;">
-                    <li>Yükleniyor...</li>
-                </ul>
-            </div>
-        </section>
-
-    </div>
-
-    <footer>
-        <p>&copy; 2026 <span>FunceBOT</span>. Tüm hakları saklıdır.</p>
-        <div class="footer-links">
-            <a href="terms.html">Kullanım Koşulları</a>
-            <a href="privacy.html">Gizlilik Politikası</a>
-        </div>
-    </footer>
-
-    <script>
-        const API_BASE_URL = 'https://funce-linked-roles.onrender.com';
-
-        const params = new URLSearchParams(window.location.search);
-        let username = params.get('username');
-        let avatar = params.get('avatar');
-        let id = params.get('id');
-        let role = params.get('role');
-        let badge = params.get('badge');
-        let rawGuilds = params.get('guilds');
-
-        if (username && id) {
-            localStorage.setItem('discord_username', username);
-            localStorage.setItem('discord_avatar', avatar || 'https://i.imgur.com/QjSrqWd.png');
-            localStorage.setItem('discord_id', id);
-            localStorage.setItem('discord_role', role || 'Üye');
-            localStorage.setItem('discord_badge', id === '1080897669431574609' ? '👑 Founder' : (badge || '👤 Standart Üye'));
-            if (rawGuilds) {
-                localStorage.setItem('discord_guilds', rawGuilds);
-            }
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-
-        let currentUsername = localStorage.getItem('discord_username');
-        let currentAvatar = localStorage.getItem('discord_avatar') || 'https://i.imgur.com/QjSrqWd.png';
-        let currentId = localStorage.getItem('discord_id');
-        let currentRole = localStorage.getItem('discord_role');
-        let currentBadge = localStorage.getItem('discord_badge');
-        let currentGuilds = localStorage.getItem('discord_guilds');
-
-        window.addEventListener('DOMContentLoaded', () => {
-            renderHeader();
-            checkControlPanelAccess();
-            renderUserGuilds();
-            renderActiveUsers();
-
-            if (currentId) {
-                sendHeartbeat();
-                setInterval(sendHeartbeat, 30000);
-            }
-            setInterval(renderActiveUsers, 10000);
-
-            if (currentId === '1080897669431574609' || currentRole === 'Founder' || currentRole === 'Admin' || currentBadge?.includes('Founder')) {
-                const adminNavLink = document.getElementById('adminNavLink');
-                if (adminNavLink) {
-                    adminNavLink.style.display = 'block';
-                    loadAdminData();
-                }
-            }
-        });
-
-        function sendHeartbeat() {
-            if (!currentId) return;
-            const avatarUrl = (currentAvatar && currentAvatar !== 'null' && currentAvatar !== 'undefined')
-                ? (currentAvatar.startsWith('http') ? currentAvatar : `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`)
-                : `https://i.imgur.com/QjSrqWd.png`;
-
-            fetch(`${API_BASE_URL}/api/users/ping`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    id: currentId,
-                    username: currentUsername,
-                    avatar: avatarUrl,
-                    badge: currentBadge || '👤 Standart Üye'
-                })
-            }).catch(e => console.warn('Heartbeat ulaştırılamadı:', e));
-        }
-
-        function renderHeader() {
-            const profileEl = document.getElementById('user-profile');
-            const loginBtn = document.getElementById('login-discord-btn');
-            
-            if (currentId && currentUsername) {
-                if (profileEl) {
-                    const avatarUrl = (currentAvatar && currentAvatar !== 'null' && currentAvatar !== 'undefined')
-                        ? (currentAvatar.startsWith('http') ? currentAvatar : `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`)
-                        : `https://i.imgur.com/QjSrqWd.png`;
-                    
-                    document.getElementById('user-avatar').src = avatarUrl;
-                    document.getElementById('user-name').innerText = currentUsername;
-                    document.getElementById('user-badge-text').innerText = currentBadge || 'Üye';
-                    profileEl.style.display = 'flex';
-                }
-                if (loginBtn) loginBtn.style.display = 'none';
-
-                document.getElementById('page-user-avatar').src = document.getElementById('user-avatar').src;
-                document.getElementById('page-user-name').innerText = currentUsername;
-                document.getElementById('page-user-badge').innerText = currentBadge || 'Üye';
-                document.getElementById('page-user-id').innerText = `ID: ${currentId}`;
-
-                const nameInput = document.getElementById('manual-name-input');
-                const avatarInput = document.getElementById('manual-avatar-input');
-                if (nameInput) nameInput.value = currentUsername;
-                if (avatarInput) avatarInput.value = currentAvatar || 'https://i.imgur.com/QjSrqWd.png';
-
-                document.getElementById('profile-page-locked').style.display = 'none';
-                document.getElementById('profile-page-content').style.display = 'block';
-            } else {
-                if (profileEl) profileEl.style.display = 'none';
-                if (loginBtn) loginBtn.style.display = 'inline-flex';
-
-                document.getElementById('profile-page-locked').style.display = 'block';
-                document.getElementById('profile-page-content').style.display = 'none';
-            }
-        }
-
-        async function renderActiveUsers() {
-            const listContainer = document.getElementById('active-users-list');
-            if (!listContainer) return;
-
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/users/active`);
-                if (!res.ok) throw new Error('API Yanıt vermedi');
-                const activeUsers = await res.json();
-
-                if (!activeUsers || activeUsers.length === 0) {
-                    if (currentId && currentUsername) {
-                        renderLocalActiveUserFallback(listContainer);
-                    } else {
-                        listContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Şu an aktif oturum açmış kullanıcı bulunmuyor.</p>';
-                    }
-                    return;
-                }
-
-                listContainer.innerHTML = activeUsers.map(user => {
-                    const userAvatar = user.avatar || `https://i.imgur.com/QjSrqWd.png`;
-                    return `
-                        <div class="active-user-card">
-                            <div class="active-user-info">
-                                <img src="${userAvatar}" alt="${user.username || 'Kullanıcı'}">
-                                <div>
-                                    <h4 style="color: #fff; font-size: 13px;">${user.username || 'Kullanıcı'} <span style="font-size: 10px; color: var(--gold-color); font-weight: normal; margin-left: 4px;">${user.badge || '👤 Standart Üye'}</span></h4>
-                                    <p style="color: var(--text-muted); font-size: 11px;">Durum: <span style="color: #22c55e;">Sitede Aktif</span></p>
-                                </div>
-                            </div>
-                            <span style="font-size: 10px; background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">● Çevrimiçi</span>
-                        </div>
-                    `;
-                }).join('');
-
-            } catch (error) {
-                console.warn('Aktif kullanıcılar canlı çekilemedi:', error);
-                if (currentId && currentUsername) {
-                    renderLocalActiveUserFallback(listContainer);
-                } else {
-                    listContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Şu an aktif oturum açmış kullanıcı bulunmuyor.</p>';
-                }
-            }
-        }
-
-        function renderLocalActiveUserFallback(container) {
-            const avatarUrl = (currentAvatar && currentAvatar !== 'null' && currentAvatar !== 'undefined')
-                ? (currentAvatar.startsWith('http') ? currentAvatar : `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`)
-                : `https://i.imgur.com/QjSrqWd.png`;
-
-            container.innerHTML = `
-                <div class="active-user-card">
-                    <div class="active-user-info">
-                        <img src="${avatarUrl}" alt="${currentUsername}">
-                        <div>
-                            <h4 style="color: #fff; font-size: 13px;">${currentUsername} <span style="font-size: 10px; color: var(--gold-color); font-weight: normal; margin-left: 4px;">${currentBadge || '👤 Standart Üye'}</span></h4>
-                            <p style="color: var(--text-muted); font-size: 11px;">Durum: <span style="color: #22c55e;">Aktif Oturum Açtı</span></p>
-                        </div>
-                    </div>
-                    <span style="font-size: 10px; background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">● Çevrimiçi</span>
-                </div>
-            `;
-        }
-
-        function openProfileTab() {
-            switchTab('profilim');
-        }
-
-        function renderUserGuilds() {
-            const guildsContainer = document.getElementById('user-guilds-list');
-            if (!guildsContainer) return;
-
-            if (currentGuilds) {
-                try {
-                    const guilds = JSON.parse(decodeURIComponent(currentGuilds));
-                    if (guilds && guilds.length > 0) {
-                        
-                        const filteredGuilds = guilds.filter(g => {
-                            if (g.owner) return true;
-                            if (g.permissions) {
-                                const permInt = BigInt(g.permissions);
-                                return (permInt & 0x8n) === 0x8n;
-                            }
-                            return false;
-                        });
-
-                        if (filteredGuilds.length === 0) {
-                            guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Yönetici veya sahibi olduğunuz bir sunucu bulunamadı.</p>';
-                            return;
-                        }
-
-                        guildsContainer.innerHTML = filteredGuilds.map(guild => {
-                            const iconHtml = guild.icon 
-                                ? `<img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png" alt="${guild.name}">`
-                                : `<div class="guild-icon-placeholder">${guild.name.charAt(0)}</div>`;
-
-                            const isBotInGuild = guild.botInGuild === true;
-
-                            return `
-                                <div class="guild-card">
-                                    <div class="guild-info">
-                                        ${iconHtml}
-                                        <div>
-                                            <h4 style="color: #fff; font-size: 14px;">${guild.name} ${guild.owner ? '<span style="font-size: 9px; color: var(--gold-color); border: 1px solid var(--gold-border); padding: 1px 5px; border-radius: 6px; margin-left: 4px;">SAHİBİ</span>' : ''}</h4>
-                                            <p style="color: var(--text-muted); font-size: 11px;">Bot Durumu: ${isBotInGuild ? '<span style="color: #22c55e;">Ekli & Aktif</span>' : '<span style="color: #ef4444;">Bot Yok / Ekli Değil</span>'}</p>
-                                        </div>
-                                    </div>
-                                    ${isBotInGuild 
-                                        ? `<button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="alert('${guild.name} yönetim paneline aktarılıyorsunuz...')">Yönet</button>`
-                                        : `<a href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663&guild_id=${guild.id}" target="_blank" class="btn btn-discord" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-plus"></i> Botu Ekle</a>`
-                                    }
-                                </div>
-                            `;
-                        }).join('');
-                    } else {
-                        guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Sahibi veya yöneticisi olduğunuz hiçbir sunucu bulunamadı.</p>';
-                    }
-                } catch (e) {
-                    console.error('Sunucu verisi işlenemedi:', e);
-                    guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Sunucu bilgileri okunurken hata oluştu. Lütfen tekrar giriş yapın.</p>';
-                }
-            } else {
-                guildsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Tüm sunucularınızı çekebilmemiz için lütfen Discord ile tekrar giriş yapın.</p>';
-            }
-        }
-
-        function saveManualProfile() {
-            if (!currentId) {
-                alert('Önce Discord ile giriş yapmalısın!');
-                return;
-            }
-
-            const newName = document.getElementById('manual-name-input').value;
-            const newAvatar = document.getElementById('manual-avatar-input').value;
-            const selectedTheme = document.getElementById('edit-theme-select').value;
-            const badgeStr = currentBadge || '';
-
-            if (selectedTheme === '#ffd700' && !badgeStr.includes('Funce Pro')) {
-                return alert('⚠️ Altın sarısı temayı kullanabilmek için hesabında "⭐ Funce Pro" rozeti bulunmalıdır!');
-            }
-            if (selectedTheme === '#ef4444' && !badgeStr.includes('Founder') && !badgeStr.includes('Admin')) {
-                return alert('⚠️ Kırmızı temayı kullanabilmek için hesabında Admin veya Founder yetkisi/rozeti bulunmalıdır!');
-            }
-            if (selectedTheme === '#3b82f6' && !badgeStr.includes('Developer')) {
-                return alert('⚠️ Mavi temayı kullanabilmek için hesabında "💻 Developer" rozeti bulunmalıdır!');
-            }
-
-            if (newName) {
-                localStorage.setItem('discord_username', newName);
-                currentUsername = newName;
-            }
-            if (newAvatar !== undefined) {
-                localStorage.setItem('discord_avatar', newAvatar);
-                currentAvatar = newAvatar;
-            }
-
-            document.body.style.setProperty('--primary-purple', selectedTheme);
-            renderHeader();
-            sendHeartbeat();
-            renderActiveUsers();
-            alert('Profil başarıyla güncellendi!');
-        }
-
-        function checkControlPanelAccess() {
-            const lockedDiv = document.getElementById('control-panel-locked');
-            const unlockedDiv = document.getElementById('control-panel-unlocked');
-
-            if (currentId) {
-                if (lockedDiv) lockedDiv.style.display = 'none';
-                if (unlockedDiv) unlockedDiv.style.display = 'block';
-            } else {
-                if (lockedDiv) lockedDiv.style.display = 'block';
-                if (unlockedDiv) unlockedDiv.style.display = 'none';
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('discord_username');
-            localStorage.removeItem('discord_avatar');
-            localStorage.removeItem('discord_id');
-            localStorage.removeItem('discord_role');
-            localStorage.removeItem('discord_badge');
-            localStorage.removeItem('discord_guilds');
-            window.location.href = '/';
-        }
-
-        async function assignBadgeToUser() {
-            const targetId = document.getElementById('admin-target-id').value;
-            const newBadge = document.getElementById('admin-badge-select').value;
-            if (!targetId) return alert('Lütfen geçerli bir Discord ID girin!');
-            alert(`Başarılı! ${targetId} ID'li kullanıcıya "${newBadge}" rozeti tanımlandı.`);
-            document.getElementById('admin-target-id').value = '';
-        }
-
-        async function loadAdminData() {
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/admin/data`);
-                const data = await res.json();
-                const listEl = document.getElementById('banned-users-list');
-                if (data.bannedList && data.bannedList.length > 0) {
-                    listEl.innerHTML = data.bannedList.map(uid => `
-                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
-                            <span>ID: ${uid}</span> 
-                            <button onclick="unbanUser('${uid}')" style="background: #22c55e; color: #fff; border: none; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600;">Kaldır</button>
-                        </li>
-                    `).join('');
-                } else {
-                    listEl.innerHTML = '<li style="padding: 5px 0;">Aktif banlı kullanıcı bulunmuyor.</li>';
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        async function banUser() {
-            const targetId = document.getElementById('ban-id-input').value;
-            if (!targetId) return alert('Lütfen geçerli bir ID girin!');
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/admin/ban?adminId=${currentId}&targetId=${targetId}`);
-                const data = await res.json();
-                if (data.success) {
-                    alert('Kullanıcı başarıyla banlandı!');
-                    document.getElementById('ban-id-input').value = '';
-                    loadAdminData();
-                } else {
-                    alert('İşlem başarısız!');
-                }
-            } catch (err) {
-                console.error(err);
-                alert('Sunucuyla bağlantı kurulamadı!');
-            }
-        }
-
-        async function unbanUser(targetId) {
-            try {
-                await fetch(`${API_BASE_URL}/api/admin/unban?adminId=${currentId}&targetId=${targetId}`);
-                loadAdminData();
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const intro = document.getElementById('intro-screen');
-                if (intro) {
-                    intro.style.opacity = '0';
-                    intro.style.visibility = 'hidden';
-                }
-            }, 1800);
-        });
-
-        function toggleMenu() {
-            const navMenu = document.getElementById('navMenu');
-            const menuToggle = document.getElementById('menuToggle');
-            if (!navMenu || !menuToggle) return;
-            navMenu.classList.toggle('show');
-            menuToggle.innerHTML = navMenu.classList.contains('show') ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
-        }
-
-        function switchTab(tabId, element = null) {
-            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-            const targetSection = document.getElementById(tabId);
-            if (targetSection) targetSection.classList.add('active');
-
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            
-            if (element && element.classList.contains('nav-btn')) {
-                element.classList.add('active');
-            } else {
-                const matchedNav = document.querySelector(`.nav-btn[onclick*="${tabId}"]`);
-                if (matchedNav) matchedNav.classList.add('active');
-            }
-
-            const navMenu = document.getElementById('navMenu');
-            if (navMenu && navMenu.classList.contains('show')) {
-                toggleMenu();
-            }
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.5 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.4;
-                this.speedY = (Math.random() - 0.5) * 0.4;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(168, 85, 247, 0.35)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < 45; i++) particles.push(new Particle());
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
-        animate();
-    </script>
+<header>
+
+<a class="logo" onclick="switchTab('ana-sayfa')">
+    Funce<span>BOT</span>
+</a>
+
+<div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+</div>
+
+<nav>
+<ul id="navMenu">
+
+<li>
+<a class="nav-btn active" onclick="switchTab('ana-sayfa',this)">
+    Ana Sayfa
+</a>
+</li>
+
+<li>
+<a class="nav-btn" onclick="switchTab('ozellikler',this)">
+    Özellikler
+</a>
+</li>
+
+<li>
+<a class="nav-btn nav-pro-btn" onclick="switchTab('funce-pro',this)">
+    <i class="fa-solid fa-crown"></i> Funce Pro
+</a>
+</li>
+
+<li>
+<a class="nav-btn nav-control-btn" onclick="switchTab('kontrol-paneli',this)">
+    <i class="fa-solid fa-sliders"></i> Kontrol Paneli
+</a>
+</li>
+
+<li>
+<a class="nav-btn nav-admin-btn" id="adminNavLink" onclick="switchTab('admin-panel',this)">
+    <i class="fa-solid fa-shield-halved"></i> Admin Panel
+</a>
+</li>
+
+<li>
+<a href="https://discord.gg/jSm2n5Jp2k" target="_blank" class="nav-btn btn-destek">
+    <i class="fa-brands fa-discord"></i> Destek Sunucusu
+</a>
+</li>
+
+<li id="user-profile-li">
+
+<div id="user-profile" onclick="openProfileTab()">
+
+<div class="user-main-info">
+<img id="user-avatar" src="https://i.imgur.com/QjSrqWd.png">
+<div class="user-info-box">
+<span id="user-name">Kullanıcı</span>
+<span id="user-badge-text">Üye</span>
+</div>
+</div>
+
+<a href="#" class="logout-btn"
+onclick="event.stopPropagation();logout()">
+<i class="fa-solid fa-right-from-bracket"></i>
+Çıkış
+</a>
+
+</div>
+
+</li>
+
+</ul>
+</nav>
+
+</header>
+
+<div class="container">
+
+<!-- ANA SAYFA -->
+
+<section id="ana-sayfa" class="page-section active">
+
+<div class="hero">
+
+<div class="hero-badge">
+Discord Sunucu Yönetimi
+</div>
+
+<h1>
+Sunucunu <span>FunceBOT</span> ile Üst Seviyeye Taşı
+</h1>
+
+<p>
+Gelişmiş moderasyon araçları, XP/Level sistemi,
+profil sistemi ve güçlü Pro seçenekleriyle topluluğunu yönet.
+</p>
+
+<div class="btn-group">
+
+<a href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663"
+target="_blank"
+class="btn btn-primary">
+
+<i class="fa-solid fa-plus"></i>
+Botu Sunucuna Ekle
+
+</a>
+
+<a href="https://funce-linked-roles.onrender.com/api/auth/discord"
+class="btn btn-discord"
+id="login-discord-btn">
+
+<i class="fa-brands fa-discord"></i>
+Discord ile Giriş Yap
+
+</a>
+
+<button class="btn btn-gold-outline"
+onclick="switchTab('funce-pro')">
+
+<i class="fa-solid fa-crown"></i>
+Funce Pro'yu İncele
+
+</button>
+
+</div>
+</div>
+
+<div class="stats-bar">
+
+<div class="stat-item">
+<h3>99.9%</h3>
+<p>Uptime Süresi</p>
+</div>
+
+<div class="stat-item">
+<h3>140+</h3>
+<p>Slash Komutu</p>
+</div>
+
+<div class="stat-item">
+<h3>&lt;10ms</h3>
+<p>Yanıt Süresi</p>
+</div>
+
+</div>
+
+<div class="card">
+
+<h3 style="margin-bottom:15px;">
+<i class="fa-solid fa-circle-dot" style="color:#22c55e"></i>
+Canlı Sistem & Bot Durumu
+</h3>
+
+<div class="grid-3">
+
+<div>
+<p>Gecikme</p>
+<h4 style="color:var(--primary-purple);font-size:18px;">
+8 ms
+</h4>
+</div>
+
+<div>
+<p>İşlenen Komutlar</p>
+<h4 style="color:#3b82f6;font-size:18px;">
+140+
+</h4>
+</div>
+
+<div>
+<p>Bellek Kullanımı</p>
+<h4 style="color:var(--gold-color);font-size:18px;">
+%18
+</h4>
+</div>
+
+</div>
+</div>
+
+<h2 class="section-title">
+Öne Çıkan Güçlü Modüller
+</h2>
+
+<div class="grid-3">
+
+<div class="card">
+<div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+<h3>Gelişmiş Koruma</h3>
+<p>Spam, küfür ve reklam koruması.</p>
+</div>
+
+<div class="card">
+<div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+<h3>XP & Level</h3>
+<p>Mesajlara göre XP kazan, level atla ve profilini geliştir.</p>
+</div>
+
+<div class="card">
+<div class="card-icon"><i class="fa-solid fa-id-card"></i></div>
+<h3>Profil Sistemi</h3>
+<p>Ünvan, rozet, isim stili ve başarımlarını göster.</p>
+</div>
+
+<div class="card">
+<div class="card-icon"><i class="fa-solid fa-ticket"></i></div>
+<h3>Ticket Sistemi</h3>
+<p>Tek tıkla destek kanalları oluştur.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PROFİL -->
+
+<section id="profilim" class="page-section">
+
+<h2 class="section-title">
+<i class="fa-solid fa-id-card"></i>
+Kullanıcı Profilim
+</h2>
+
+<div id="profile-page-locked"
+style="text-align:center;padding:40px;display:none">
+
+<div style="font-size:40px;color:#ef4444">
+<i class="fa-solid fa-lock"></i>
+</div>
+
+<h3 style="margin:10px">
+Profil Alanı Kilitli
+</h3>
+
+<p style="color:var(--text-muted);margin-bottom:20px">
+Profilini görmek için Discord ile giriş yapmalısın.
+</p>
+
+<a href="https://funce-linked-roles.onrender.com/api/auth/discord"
+class="btn btn-discord">
+
+Discord ile Giriş Yap
+
+</a>
+
+</div>
+
+
+<div id="profile-page-content"
+class="card profile-main-card">
+
+<div class="profile-header">
+
+<img id="page-user-avatar"
+class="profile-big-avatar"
+src="https://i.imgur.com/QjSrqWd.png">
+
+<div>
+
+<div id="page-user-name" class="profile-name">
+Kullanıcı
+</div>
+
+<div id="page-user-title" class="profile-title">
+Yeni Üye
+</div>
+
+<div id="page-user-badge" class="badges">
+</div>
+
+<div id="page-user-id" class="profile-id">
+ID: -
+</div>
+
+</div>
+
+</div>
+
+
+<!-- XP -->
+
+<div class="level-box">
+
+<div class="level-top">
+
+<span class="level-number">
+LEVEL <span id="profile-level">1</span>
+</span>
+
+<span class="xp-text">
+<span id="profile-xp">0</span> /
+<span id="profile-next-xp">100</span> XP
+</span>
+
+</div>
+
+<div class="xp-bar">
+
+<div id="profile-xp-progress"
+class="xp-progress">
+</div>
+
+</div>
+
+</div>
+
+
+<!-- İSTATİSTİK -->
+
+<div class="profile-stats">
+
+<div class="profile-stat">
+<strong id="profile-message-count">0</strong>
+<span>Mesaj</span>
+</div>
+
+<div class="profile-stat">
+<strong id="profile-total-xp">0</strong>
+<span>Toplam XP</span>
+</div>
+
+<div class="profile-stat">
+<strong id="profile-level-stat">1</strong>
+<span>Level</span>
+</div>
+
+</div>
+
+
+<h3 style="margin-bottom:10px">
+<i class="fa-solid fa-trophy"></i>
+Başarımlar
+</h3>
+
+<div id="achievement-list"
+class="achievement-list">
+</div>
+
+
+<h3 style="margin-bottom:10px">
+<i class="fa-solid fa-pen-to-square"></i>
+Profilini Düzenle
+</h3>
+
+<label>Görünen Adın</label>
+
+<input
+id="manual-name-input"
+class="form-control"
+placeholder="Görünen adın">
+
+
+<label>İsim Stili</label>
+
+<select id="name-style-select"
+class="form-select">
+
+<option value="normal">Normal</option>
+<option value="bold">Kalın</option>
+<option value="uppercase">BÜYÜK HARF</option>
+<option value="italic">İtalik</option>
+<option value="neon">Neon</option>
+
+</select>
+
+
+<label>Ünvan</label>
+
+<input
+id="title-input"
+class="form-control"
+placeholder="Örn: Sunucu Kralı">
+
+
+<label>Profil Fotoğrafı</label>
+
+<input
+type="text"
+id="manual-avatar-input"
+class="form-control"
+placeholder="Avatar URL">
+
+
+<label>Tema</label>
+
+<select id="edit-theme-select"
+class="form-select">
+
+<option value="#a855f7">
+Mor
+</option>
+
+<option value="#ffd700">
+Altın - Pro
+</option>
+
+<option value="#ef4444">
+Kırmızı - Admin
+</option>
+
+<option value="#3b82f6">
+Mavi - Developer
+</option>
+
+<option value="#22c55e">
+Yeşil
+</option>
+
+</select>
+
+
+<button
+class="btn btn-primary"
+style="width:100%;margin-top:5px"
+onclick="saveManualProfile()">
+
+<i class="fa-solid fa-floppy-disk"></i>
+Değişiklikleri Kaydet
+
+</button>
+
+</div>
+
+</section>
+
+
+<!-- ÖZELLİKLER -->
+
+<section id="ozellikler" class="page-section">
+
+<h2 class="section-title">
+Bot Özellikleri
+</h2>
+
+<div class="grid-3">
+
+<div class="card">
+<div class="card-icon">
+<i class="fa-solid fa-user-gear"></i>
+</div>
+<h3>Oto Moderasyon</h3>
+<p>Reklam, küfür ve kelime filtreleme.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">
+<i class="fa-solid fa-ticket"></i>
+</div>
+<h3>Ticket</h3>
+<p>Gelişmiş destek sistemi.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">
+<i class="fa-solid fa-ranking-star"></i>
+</div>
+<h3>XP & Level</h3>
+<p>Mesaj göndererek XP kazan ve level atla.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">
+<i class="fa-solid fa-trophy"></i>
+</div>
+<h3>Başarımlar</h3>
+<p>Özel görevleri tamamlayarak başarımlar kazan.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PRO -->
+
+<section id="funce-pro" class="page-section">
+
+<h2 class="section-title"
+style="color:var(--gold-color)">
+Funce Pro
+</h2>
+
+<p style="text-align:center;color:var(--text-muted);margin-bottom:25px">
+Topluluğunuz için özel VIP özellikler.
+</p>
+
+<div class="grid-3">
+
+<div class="card card-gold">
+<span class="gold-badge">PRO</span>
+<div class="card-icon" style="color:var(--gold-color)">
+<i class="fa-solid fa-crown"></i>
+</div>
+<h3>Özel Bot Profili</h3>
+<p>Bot ismi, avatar ve durum özelleştirme.</p>
+</div>
+
+<div class="card card-gold">
+<span class="gold-badge">PRO</span>
+<div class="card-icon" style="color:var(--gold-color)">
+<i class="fa-solid fa-star"></i>
+</div>
+<h3>Özel Profil</h3>
+<p>Pro kullanıcılar özel profil seçeneklerine sahip olur.</p>
+</div>
+
+<div class="card card-gold">
+<span class="gold-badge">PRO</span>
+<div class="card-icon" style="color:var(--gold-color)">
+<i class="fa-solid fa-headset"></i>
+</div>
+<h3>Öncelikli Destek</h3>
+<p>Pro kullanıcılar için öncelikli destek.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- KONTROL PANELİ -->
+
+<section id="kontrol-paneli" class="page-section">
+
+<div id="control-panel-locked"
+style="text-align:center;padding:40px">
+
+<div style="font-size:40px;color:#ef4444">
+<i class="fa-solid fa-lock"></i>
+</div>
+
+<h2>Erişim Engellendi</h2>
+
+<p style="color:var(--text-muted);margin:15px">
+Kontrol paneli için Discord ile giriş yapmalısın.
+</p>
+
+<a href="https://funce-linked-roles.onrender.com/api/auth/discord"
+class="btn btn-discord">
+
+Discord ile Giriş Yap
+
+</a>
+
+</div>
+
+
+<div id="control-panel-unlocked"
+style="display:none">
+
+<h2 class="section-title"
+style="color:#3b82f6">
+
+<i class="fa-solid fa-sliders"></i>
+FunceBOT Kontrol Paneli
+
+</h2>
+
+<div class="card">
+
+<h3>
+<i class="fa-solid fa-server"></i>
+Yönetici / Sahibi Olduğun Sunucular
+</h3>
+
+<p style="color:var(--text-muted);font-size:12px;margin:10px 0 15px">
+Yönetebildiğin Discord sunucuları:
+</p>
+
+<div id="user-guilds-list">
+Yükleniyor...
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ADMIN -->
+
+<section id="admin-panel" class="page-section">
+
+<h2 class="section-title"
+style="color:#ef4444">
+
+<i class="fa-solid fa-shield-halved"></i>
+Yönetim Paneli
+
+</h2>
+
+
+<div class="card">
+
+<h3>
+<i class="fa-solid fa-users"></i>
+Aktif Kullanıcılar
+</h3>
+
+<div id="active-users-list"></div>
+
+</div>
+
+
+<div class="card"
+style="border-color:rgba(239,68,68,.4)">
+
+<h3 style="color:#ef4444">
+<i class="fa-solid fa-medal"></i>
+Kullanıcıya Rozet Ata
+</h3>
+
+<input
+id="admin-target-id"
+class="form-control"
+placeholder="Discord ID">
+
+
+<p style="font-size:12px;color:var(--text-muted);margin-bottom:8px">
+Rozetleri seç:
+</p>
+
+<div id="admin-badge-grid"
+class="admin-badge-grid">
+
+<button class="admin-badge-option"
+data-badge="👑 Founder"
+onclick="toggleAdminBadge(this)">
+👑 Founder
+</button>
+
+<button class="admin-badge-option"
+data-badge="🛡️ Bot Admin"
+onclick="toggleAdminBadge(this)">
+🛡️ Bot Admin
+</button>
+
+<button class="admin-badge-option"
+data-badge="🛡️ Senior Moderator"
+onclick="toggleAdminBadge(this)">
+🛡️ Senior Moderator
+</button>
+
+<button class="admin-badge-option"
+data-badge="💻 Developer"
+onclick="toggleAdminBadge(this)">
+💻 Developer
+</button>
+
+<button class="admin-badge-option"
+data-badge="🎨 Designer"
+onclick="toggleAdminBadge(this)">
+🎨 Designer
+</button>
+
+<button class="admin-badge-option"
+data-badge="⭐ Funce Pro"
+onclick="toggleAdminBadge(this)">
+⭐ Funce Pro
+</button>
+
+<button class="admin-badge-option"
+data-badge="💎 VIP Member"
+onclick="toggleAdminBadge(this)">
+💎 VIP Member
+</button>
+
+<button class="admin-badge-option"
+data-badge="🚀 Booster"
+onclick="toggleAdminBadge(this)">
+🚀 Booster
+</button>
+
+<button class="admin-badge-option"
+data-badge="🤝 Dost"
+onclick="toggleAdminBadge(this)">
+🤝 Dost
+</button>
+
+<button class="admin-badge-option"
+data-badge="⏳ Emektar Üye"
+onclick="toggleAdminBadge(this)">
+⏳ Emektar Üye
+</button>
+
+<button class="admin-badge-option"
+data-badge="💬 Chat Master"
+onclick="toggleAdminBadge(this)">
+💬 Chat Master
+</button>
+
+<button class="admin-badge-option"
+data-badge="👤 Standart Üye"
+onclick="toggleAdminBadge(this)">
+👤 Standart Üye
+</button>
+
+</div>
+
+<button
+class="btn btn-primary"
+style="width:100%"
+onclick="assignBadgeToUser()">
+
+<i class="fa-solid fa-check"></i>
+Rozetleri Kaydet
+
+</button>
+
+</div>
+
+
+<div class="card"
+style="border-color:rgba(239,68,68,.4)">
+
+<h3 style="color:#ef4444">
+<i class="fa-solid fa-user-slash"></i>
+Kullanıcı Banla
+</h3>
+
+<input
+id="ban-id-input"
+class="form-control"
+placeholder="Discord ID">
+
+<button
+class="btn"
+style="width:100%;background:#ef4444;color:#fff"
+onclick="banUser()">
+
+<i class="fa-solid fa-ban"></i>
+Sistem Banı At
+
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+<i class="fa-solid fa-list"></i>
+Banlı Kullanıcılar
+</h3>
+
+<ul
+id="banned-users-list"
+style="list-style:none;color:var(--text-muted)">
+<li>Yükleniyor...</li>
+</ul>
+
+</div>
+
+</section>
+
+</div>
+
+
+<footer>
+
+<p>
+&copy; 2026 <span>FunceBOT</span>.
+Tüm hakları saklıdır.
+</p>
+
+<div class="footer-links">
+<a href="terms.html">Kullanım Koşulları</a>
+<a href="privacy.html">Gizlilik Politikası</a>
+</div>
+
+</footer>
+
+
+<script>
+
+const API_BASE_URL =
+'https://funce-linked-roles.onrender.com';
+
+const DEFAULT_AVATAR =
+'https://i.imgur.com/QjSrqWd.png';
+
+const FOUNDER_ID =
+'1080897669431574609';
+
+
+/* =========================
+   DISCORD LOGIN
+========================= */
+
+const params =
+new URLSearchParams(window.location.search);
+
+let username=params.get('username');
+let avatar=params.get('avatar');
+let id=params.get('id');
+let role=params.get('role');
+let badge=params.get('badge');
+let rawGuilds=params.get('guilds');
+
+if(username && id){
+
+localStorage.setItem('discord_username',username);
+localStorage.setItem('discord_avatar',avatar || DEFAULT_AVATAR);
+localStorage.setItem('discord_id',id);
+localStorage.setItem('discord_role',role || 'Üye');
+
+localStorage.setItem(
+'discord_badges',
+JSON.stringify(
+id===FOUNDER_ID
+?['👑 Founder']
+:(badge?[badge] : ['👤 Standart Üye'])
+)
+);
+
+if(rawGuilds){
+localStorage.setItem(
+'discord_guilds',
+rawGuilds
+);
+}
+
+window.history.replaceState(
+{},
+document.title,
+window.location.pathname
+);
+
+}
+
+
+/* =========================
+   USER DATA
+========================= */
+
+let currentUsername =
+localStorage.getItem('discord_username');
+
+let currentAvatar =
+localStorage.getItem('discord_avatar')
+|| DEFAULT_AVATAR;
+
+let currentId =
+localStorage.getItem('discord_id');
+
+let currentRole =
+localStorage.getItem('discord_role');
+
+let currentBadges =
+JSON.parse(
+localStorage.getItem('discord_badges')
+|| '[]'
+);
+
+let currentGuilds =
+localStorage.getItem('discord_guilds');
+
+
+/*
+   XP verileri
+*/
+
+let currentXP =
+parseInt(
+localStorage.getItem('profile_xp')
+|| '0'
+);
+
+let currentMessages =
+parseInt(
+localStorage.getItem('profile_messages')
+|| '0'
+);
+
+let currentLevel =
+parseInt(
+localStorage.getItem('profile_level')
+|| '1'
+);
+
+let currentTitle =
+localStorage.getItem('profile_title')
+|| 'Yeni Üye';
+
+let currentNameStyle =
+localStorage.getItem('profile_name_style')
+|| 'normal';
+
+
+/* =========================
+   XP
+========================= */
+
+function getRequiredXP(level){
+
+return 100 + ((level-1)*50);
+
+}
+
+
+function updateLevel(){
+
+let required=getRequiredXP(currentLevel);
+
+while(currentXP >= required){
+
+currentXP-=required;
+currentLevel++;
+
+required=getRequiredXP(currentLevel);
+
+}
+
+saveXP();
+
+}
+
+
+function saveXP(){
+
+localStorage.setItem(
+'profile_xp',
+currentXP
+);
+
+localStorage.setItem(
+'profile_messages',
+currentMessages
+);
+
+localStorage.setItem(
+'profile_level',
+currentLevel
+);
+
+}
+
+
+function renderXP(){
+
+updateLevel();
+
+const required=getRequiredXP(
+currentLevel
+);
+
+const percentage=Math.min(
+100,
+(currentXP/required)*100
+);
+
+document.getElementById(
+'profile-level'
+).innerText=currentLevel;
+
+document.getElementById(
+'profile-level-stat'
+).innerText=currentLevel;
+
+document.getElementById(
+'profile-xp'
+).innerText=currentXP;
+
+document.getElementById(
+'profile-next-xp'
+).innerText=required;
+
+document.getElementById(
+'profile-total-xp'
+).innerText=
+getTotalXP();
+
+document.getElementById(
+'profile-message-count'
+).innerText=
+currentMessages;
+
+document.getElementById(
+'profile-xp-progress'
+).style.width=
+percentage+'%';
+
+}
+
+
+function getTotalXP(){
+
+let total=0;
+
+for(let i=1;i<currentLevel;i++){
+total+=getRequiredXP(i);
+}
+
+return total+currentXP;
+
+}
+
+
+/* =========================
+   ACHIEVEMENTS
+========================= */
+
+function renderAchievements(){
+
+const container=
+document.getElementById(
+'achievement-list'
+);
+
+if(!container)return;
+
+const achievements=[
+
+{
+icon:'💬',
+title:'İlk Mesaj',
+desc:'İlk mesajını gönder.',
+unlocked:currentMessages>=1
+},
+
+{
+icon:'⭐',
+title:'10 Mesaj',
+desc:'10 mesaj gönder.',
+unlocked:currentMessages>=10
+},
+
+{
+icon:'🔥',
+title:'100 Mesaj',
+desc:'100 mesaj gönder.',
+unlocked:currentMessages>=100
+},
+
+{
+icon:'🏆',
+title:'Level 5',
+desc:'5. levele ulaş.',
+unlocked:currentLevel>=5
+},
+
+{
+icon:'💎',
+title:'Level 10',
+desc:'10. levele ulaş.',
+unlocked:currentLevel>=10
+},
+
+{
+icon:'👑',
+title:'Kurucu',
+desc:'Founder rozeti.',
+unlocked:currentBadges.includes('👑 Founder')
+}
+
+];
+
+container.innerHTML=
+achievements.map(a=>`
+
+<div class="achievement ${a.unlocked?'unlocked':''}">
+
+<div class="achievement-icon">
+${a.icon}
+</div>
+
+<div class="achievement-title">
+${a.title}
+</div>
+
+<div class="achievement-desc">
+${a.unlocked?'Başarım açıldı!':a.desc}
+</div>
+
+</div>
+
+`).join('');
+
+}
+
+
+/* =========================
+   PROFİL
+========================= */
+
+function renderBadges(){
+
+const el=
+document.getElementById(
+'page-user-badge'
+);
+
+if(!el)return;
+
+el.innerHTML=
+currentBadges.map(b=>{
+
+let cls='';
+
+if(b.includes('Founder') ||
+b.includes('Pro') ||
+b.includes('VIP'))
+cls='gold';
+
+if(b.includes('Admin') ||
+b.includes('Moderator'))
+cls='red';
+
+if(b.includes('Developer'))
+cls='blue';
+
+if(b.includes('Dost') ||
+b.includes('Booster'))
+cls='green';
+
+return `
+<span class="badge ${cls}">
+${b}
+</span>
+`;
+
+}).join('');
+
+}
+
+
+function applyNameStyle(){
+
+const nameEl=
+document.getElementById(
+'page-user-name'
+);
+
+if(!nameEl)return;
+
+nameEl.style.fontWeight=
+currentNameStyle==='bold'
+?'800'
+:'600';
+
+nameEl.style.fontStyle=
+currentNameStyle==='italic'
+?'italic'
+:'normal';
+
+nameEl.style.textTransform=
+currentNameStyle==='uppercase'
+?'uppercase'
+:'none';
+
+nameEl.style.textShadow=
+currentNameStyle==='neon'
+?'0 0 10px var(--primary-purple),0 0 20px var(--primary-purple)'
+:'none';
+
+}
+
+
+function renderHeader(){
+
+const profile=
+document.getElementById(
+'user-profile'
+);
+
+const loginBtn=
+document.getElementById(
+'login-discord-btn'
+);
+
+if(currentId && currentUsername){
+
+const avatarUrl=
+currentAvatar &&
+currentAvatar.startsWith('http')
+?currentAvatar
+:DEFAULT_AVATAR;
+
+document.getElementById(
+'user-avatar'
+).src=avatarUrl;
+
+document.getElementById(
+'user-name'
+).innerText=currentUsername;
+
+document.getElementById(
+'user-badge-text'
+).innerText=
+currentBadges[0] || 'Üye';
+
+profile.style.display='flex';
+
+if(loginBtn)
+loginBtn.style.display='none';
+
+
+document.getElementById(
+'page-user-avatar'
+).src=avatarUrl;
+
+document.getElementById(
+'page-user-name'
+).innerText=currentUsername;
+
+document.getElementById(
+'page-user-title'
+).innerText=currentTitle;
+
+document.getElementById(
+'page-user-id'
+).innerText=
+'ID: '+currentId;
+
+
+document.getElementById(
+'manual-name-input'
+).value=currentUsername;
+
+document.getElementById(
+'manual-avatar-input'
+).value=currentAvatar;
+
+document.getElementById(
+'title-input'
+).value=currentTitle;
+
+document.getElementById(
+'name-style-select'
+).value=currentNameStyle;
+
+document.getElementById(
+'profile-page-locked'
+).style.display='none';
+
+document.getElementById(
+'profile-page-content'
+).style.display='block';
+
+renderBadges();
+renderXP();
+renderAchievements();
+applyNameStyle();
+
+}else{
+
+profile.style.display='none';
+
+if(loginBtn)
+loginBtn.style.display='inline-flex';
+
+document.getElementById(
+'profile-page-locked'
+).style.display='block';
+
+document.getElementById(
+'profile-page-content'
+).style.display='none';
+
+}
+
+}
+
+
+/* =========================
+   PROFİL KAYDET
+========================= */
+
+function saveManualProfile(){
+
+if(!currentId){
+
+alert('Önce Discord ile giriş yapmalısın!');
+return;
+
+}
+
+const newName=
+document.getElementById(
+'manual-name-input'
+).value.trim();
+
+const newAvatar=
+document.getElementById(
+'manual-avatar-input'
+).value.trim();
+
+const newTitle=
+document.getElementById(
+'title-input'
+).value.trim();
+
+const newStyle=
+document.getElementById(
+'name-style-select'
+).value;
+
+const selectedTheme=
+document.getElementById(
+'edit-theme-select'
+).value;
+
+
+/* Tema kontrolleri */
+
+if(
+selectedTheme==='#ffd700' &&
+!currentBadges.some(b=>b.includes('Funce Pro'))
+){
+
+alert(
+'⭐ Altın tema için Funce Pro rozeti gerekiyor!'
+);
+
+return;
+
+}
+
+if(
+selectedTheme==='#ef4444' &&
+!currentBadges.some(
+b=>b.includes('Founder') ||
+b.includes('Admin')
+)
+){
+
+alert(
+'🛡️ Kırmızı tema için Admin veya Founder gerekiyor!'
+);
+
+return;
+
+}
+
+if(
+selectedTheme==='#3b82f6' &&
+!currentBadges.some(
+b=>b.includes('Developer')
+)
+){
+
+alert(
+'💻 Mavi tema için Developer rozeti gerekiyor!'
+);
+
+return;
+
+}
+
+
+if(newName){
+
+currentUsername=newName;
+
+localStorage.setItem(
+'discord_username',
+newName
+);
+
+}
+
+if(newAvatar){
+
+currentAvatar=newAvatar;
+
+localStorage.setItem(
+'discord_avatar',
+newAvatar
+);
+
+}
+
+if(newTitle){
+
+currentTitle=newTitle;
+
+localStorage.setItem(
+'profile_title',
+newTitle
+);
+
+}
+
+currentNameStyle=newStyle;
+
+localStorage.setItem(
+'profile_name_style',
+newStyle
+);
+
+document.body.style.setProperty(
+'--primary-purple',
+selectedTheme
+);
+
+renderHeader();
+
+sendHeartbeat();
+
+alert(
+'Profil başarıyla güncellendi!'
+);
+
+}
+
+
+/* =========================
+   HEARTBEAT
+========================= */
+
+function sendHeartbeat(){
+
+if(!currentId)return;
+
+fetch(
+`${API_BASE_URL}/api/users/ping`,
+{
+method:'POST',
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify({
+
+id:currentId,
+username:currentUsername,
+avatar:currentAvatar,
+badge:currentBadges.join(' ')
+
+})
+}
+).catch(()=>{});
+
+}
+
+
+/* =========================
+   ACTIVE USERS
+========================= */
+
+async function renderActiveUsers(){
+
+const container=
+document.getElementById(
+'active-users-list'
+);
+
+if(!container)return;
+
+try{
+
+const res=
+await fetch(
+`${API_BASE_URL}/api/users/active`
+);
+
+if(!res.ok)
+throw new Error();
+
+const users=
+await res.json();
+
+if(!users.length){
+
+container.innerHTML=
+'<p style="color:var(--text-muted);font-size:12px">Aktif kullanıcı yok.</p>';
+
+return;
+
+}
+
+container.innerHTML=
+users.map(user=>`
+
+<div class="active-user-card">
+
+<div class="active-user-info">
+
+<img src="${user.avatar || DEFAULT_AVATAR}">
+
+<div>
+
+<h4 style="color:#fff;font-size:13px">
+${user.username || 'Kullanıcı'}
+</h4>
+
+<p style="color:var(--text-muted);font-size:10px">
+${user.badge || '👤 Standart Üye'}
+</p>
+
+</div>
+
+</div>
+
+<span style="color:#22c55e;font-size:10px">
+● Çevrimiçi
+</span>
+
+</div>
+
+`).join('');
+
+}catch{
+
+if(currentId){
+
+container.innerHTML=`
+
+<div class="active-user-card">
+
+<div class="active-user-info">
+
+<img src="${currentAvatar}">
+
+<div>
+
+<h4 style="color:#fff">
+${currentUsername}
+</h4>
+
+<p style="color:var(--text-muted);font-size:10px">
+${currentBadges.join(' ')}
+</p>
+
+</div>
+
+</div>
+
+<span style="color:#22c55e;font-size:10px">
+● Çevrimiçi
+</span>
+
+</div>
+
+`;
+
+}
+
+}
+
+}
+
+
+/* =========================
+   GUILDS
+========================= */
+
+function renderUserGuilds(){
+
+const container=
+document.getElementById(
+'user-guilds-list'
+);
+
+if(!container)return;
+
+if(!currentGuilds){
+
+container.innerHTML=
+'<p style="color:var(--text-muted)">Sunucuları görmek için tekrar giriş yap.</p>';
+
+return;
+
+}
+
+try{
+
+const guilds=
+JSON.parse(
+decodeURIComponent(currentGuilds)
+);
+
+const filtered=
+guilds.filter(g=>{
+
+if(g.owner)return true;
+
+if(g.permissions){
+
+try{
+
+const p=BigInt(g.permissions);
+
+return (p & 0x8n)===0x8n;
+
+}catch{
+
+return false;
+
+}
+
+}
+
+return false;
+
+});
+
+if(!filtered.length){
+
+container.innerHTML=
+'<p style="color:var(--text-muted)">Yönetici olduğun sunucu bulunamadı.</p>';
+
+return;
+
+}
+
+container.innerHTML=
+filtered.map(guild=>{
+
+const icon=
+guild.icon
+?`<img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png">`
+:`<div class="guild-icon-placeholder">${guild.name.charAt(0)}</div>`;
+
+const botInGuild=
+guild.botInGuild===true;
+
+return `
+
+<div class="guild-card">
+
+<div class="guild-info">
+
+${icon}
+
+<div>
+
+<h4 style="color:#fff">
+${guild.name}
+</h4>
+
+<p style="color:var(--text-muted);font-size:10px">
+
+Bot Durumu:
+${botInGuild
+?'<span style="color:#22c55e">Ekli</span>'
+:'<span style="color:#ef4444">Ekli Değil</span>'}
+
+</p>
+
+</div>
+
+</div>
+
+${
+botInGuild
+?`
+<button
+class="btn btn-primary"
+onclick="alert('Yönetim paneli yakında!')">
+Yönet
+</button>
+`
+:
+`
+<a
+class="btn btn-discord"
+target="_blank"
+href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663&guild_id=${guild.id}">
+Botu Ekle
+</a>
+`
+}
+
+</div>
+
+`;
+
+}).join('');
+
+}catch(e){
+
+container.innerHTML=
+'<p style="color:#ef4444">Sunucu verileri okunamadı.</p>';
+
+}
+
+}
+
+
+/* =========================
+   ADMIN BADGES
+========================= */
+
+let selectedAdminBadges=[];
+
+
+function toggleAdminBadge(button){
+
+const badge=
+button.dataset.badge;
+
+if(selectedAdminBadges.includes(badge)){
+
+selectedAdminBadges=
+selectedAdminBadges.filter(
+b=>b!==badge
+);
+
+button.classList.remove('selected');
+
+}else{
+
+selectedAdminBadges.push(badge);
+
+button.classList.add('selected');
+
+}
+
+}
+
+
+function assignBadgeToUser(){
+
+const targetId=
+document.getElementById(
+'admin-target-id'
+).value.trim();
+
+if(!targetId){
+
+alert('Discord ID gir!');
+return;
+
+}
+
+if(!selectedAdminBadges.length){
+
+alert('En az bir rozet seç!');
+return;
+
+}
+
+
+/*
+   Admin tarafında kullanıcı rozetlerini
+   LocalStorage'a kaydediyoruz.
+*/
+
+localStorage.setItem(
+'badges_'+targetId,
+JSON.stringify(
+selectedAdminBadges
+)
+);
+
+alert(
+`${targetId} kullanıcısına ${selectedAdminBadges.join(' ')} tanımlandı.`
+);
+
+document.getElementById(
+'admin-target-id'
+).value='';
+
+selectedAdminBadges=[];
+
+document.querySelectorAll(
+'.admin-badge-option'
+).forEach(btn=>{
+btn.classList.remove('selected');
+});
+
+}
+
+
+/* =========================
+   CONTROL PANEL
+========================= */
+
+function checkControlPanelAccess(){
+
+const locked=
+document.getElementById(
+'control-panel-locked'
+);
+
+const unlocked=
+document.getElementById(
+'control-panel-unlocked'
+);
+
+if(currentId){
+
+locked.style.display='none';
+unlocked.style.display='block';
+
+}else{
+
+locked.style.display='block';
+unlocked.style.display='none';
+
+}
+
+}
+
+
+/* =========================
+   ADMIN DATA
+========================= */
+
+async function loadAdminData(){
+
+try{
+
+const res=
+await fetch(
+`${API_BASE_URL}/api/admin/data`
+);
+
+const data=
+await res.json();
+
+const list=
+document.getElementById(
+'banned-users-list'
+);
+
+if(data.bannedList &&
+data.bannedList.length){
+
+list.innerHTML=
+data.bannedList.map(uid=>`
+
+<li style="
+padding:8px 0;
+border-bottom:1px solid rgba(255,255,255,.05);
+display:flex;
+justify-content:space-between">
+
+<span>ID: ${uid}</span>
+
+<button
+onclick="unbanUser('${uid}')"
+style="
+background:#22c55e;
+color:#fff;
+border:0;
+padding:4px 10px;
+border-radius:6px">
+
+Kaldır
+
+</button>
+
+</li>
+
+`).join('');
+
+}else{
+
+list.innerHTML=
+'<li>Aktif banlı kullanıcı yok.</li>';
+
+}
+
+}catch(e){
+
+console.error(e);
+
+}
+
+}
+
+
+/* =========================
+   BAN
+========================= */
+
+async function banUser(){
+
+const targetId=
+document.getElementById(
+'ban-id-input'
+).value.trim();
+
+if(!targetId){
+
+alert('ID gir!');
+return;
+
+}
+
+try{
+
+const res=
+await fetch(
+`${API_BASE_URL}/api/admin/ban?adminId=${currentId}&targetId=${targetId}`
+);
+
+const data=
+await res.json();
+
+if(data.success){
+
+alert('Kullanıcı banlandı!');
+
+document.getElementById(
+'ban-id-input'
+).value='';
+
+loadAdminData();
+
+}else{
+
+alert('Ban işlemi başarısız.');
+
+}
+
+}catch{
+
+alert('Sunucuya bağlanılamadı.');
+
+}
+
+}
+
+
+async function unbanUser(targetId){
+
+try{
+
+await fetch(
+`${API_BASE_URL}/api/admin/unban?adminId=${currentId}&targetId=${targetId}`
+);
+
+loadAdminData();
+
+}catch(e){
+
+console.error(e);
+
+}
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout(){
+
+[
+'discord_username',
+'discord_avatar',
+'discord_id',
+'discord_role',
+'discord_badges',
+'discord_guilds'
+].forEach(key=>
+localStorage.removeItem(key)
+);
+
+window.location.href='/';
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function openProfileTab(){
+
+switchTab('profilim');
+
+}
+
+
+function toggleMenu(){
+
+const menu=
+document.getElementById(
+'navMenu'
+);
+
+const toggle=
+document.getElementById(
+'menuToggle'
+);
+
+menu.classList.toggle('show');
+
+toggle.innerHTML=
+menu.classList.contains('show')
+?'<i class="fa-solid fa-xmark"></i>'
+:'<i class="fa-solid fa-bars"></i>';
+
+}
+
+
+function switchTab(tabId,element=null){
+
+document.querySelectorAll(
+'.page-section'
+).forEach(sec=>
+sec.classList.remove('active')
+);
+
+const target=
+document.getElementById(tabId);
+
+if(target)
+target.classList.add('active');
+
+document.querySelectorAll(
+'.nav-btn'
+).forEach(btn=>
+btn.classList.remove('active')
+);
+
+if(element)
+element.classList.add('active');
+
+const menu=
+document.getElementById(
+'navMenu'
+);
+
+if(menu.classList.contains('show'))
+toggleMenu();
+
+window.scrollTo({
+top:0,
+behavior:'smooth'
+});
+
+}
+
+
+/* =========================
+   INIT
+========================= */
+
+window.addEventListener(
+'DOMContentLoaded',
+()=>{
+
+renderHeader();
+
+renderXP();
+
+renderAchievements();
+
+renderUserGuilds();
+
+checkControlPanelAccess();
+
+renderActiveUsers();
+
+if(currentId){
+
+sendHeartbeat();
+
+setInterval(
+sendHeartbeat,
+30000
+);
+
+}
+
+setInterval(
+renderActiveUsers,
+10000
+);
+
+
+/* ADMIN */
+
+if(
+currentId===FOUNDER_ID ||
+currentRole==='Founder' ||
+currentRole==='Admin' ||
+currentBadges.some(
+b=>b.includes('Founder') ||
+b.includes('Admin')
+)
+){
+
+const adminNav=
+document.getElementById(
+'adminNavLink'
+);
+
+if(adminNav)
+adminNav.style.display='block';
+
+loadAdminData();
+
+}
+
+});
+
+
+/* =========================
+   INTRO
+========================= */
+
+window.addEventListener(
+'load',
+()=>{
+
+setTimeout(()=>{
+
+const intro=
+document.getElementById(
+'intro-screen'
+);
+
+if(intro){
+
+intro.style.opacity='0';
+intro.style.visibility='hidden';
+
+}
+
+},1800);
+
+});
+
+
+/* =========================
+   PARTICLES
+========================= */
+
+const canvas=
+document.getElementById(
+'particle-canvas'
+);
+
+const ctx=
+canvas.getContext('2d');
+
+let particles=[];
+
+
+function resizeCanvas(){
+
+canvas.width=
+window.innerWidth;
+
+canvas.height=
+window.innerHeight;
+
+}
+
+resizeCanvas();
+
+window.addEventListener(
+'resize',
+resizeCanvas
+);
+
+
+class Particle{
+
+constructor(){
+
+this.x=
+Math.random()*canvas.width;
+
+this.y=
+Math.random()*canvas.height;
+
+this.size=
+Math.random()*1.5+.5;
+
+this.speedX=
+(Math.random()-.5)*.4;
+
+this.speedY=
+(Math.random()-.5)*.4;
+
+}
+
+update(){
+
+this.x+=this.speedX;
+this.y+=this.speedY;
+
+if(
+this.x<0 ||
+this.x>canvas.width
+)
+this.speedX*=-1;
+
+if(
+this.y<0 ||
+this.y>canvas.height
+)
+this.speedY*=-1;
+
+}
+
+draw(){
+
+ctx.fillStyle=
+'rgba(168,85,247,.35)';
+
+ctx.beginPath();
+
+ctx.arc(
+this.x,
+this.y,
+this.size,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+}
+
+}
+
+
+for(let i=0;i<45;i++)
+particles.push(
+new Particle()
+);
+
+
+function animate(){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+particles.forEach(p=>{
+
+p.update();
+p.draw();
+
+});
+
+requestAnimationFrame(
+animate
+);
+
+}
+
+animate();
+
+</script>
+
 </body>
 </html>
