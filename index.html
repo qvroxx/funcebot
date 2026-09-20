@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolyo</title>
+    <title>FunceBOT - Gelişmiş Discord Botu</title>
     <!-- FontAwesome İkonları -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --bg-color: #0d0f12;
-            --card-bg: #16191e;
-            --card-hover: #1f232b;
-            --text-color: #f3f4f6;
+            --bg-color: #0b0e14;
+            --card-bg: #131722;
+            --card-hover: #1a1f2e;
+            --accent-color: #5865F2; /* Discord Moru */
+            --accent-hover: #4752C4;
+            --text-main: #f3f4f6;
             --text-muted: #9ca3af;
-            --accent-color: #3b82f6;
-            --border-color: #262a33;
+            --border-color: #1e2433;
         }
 
         * {
@@ -26,122 +27,171 @@
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
         .container {
             width: 100%;
-            max-width: 680px;
+            max-width: 800px;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 40px;
         }
 
-        /* Profil Kartı */
-        .profile-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 32px;
+        /* Hero / Üst Başlık Bölümü */
+        .hero {
+            text-align: center;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
+            padding: 20px 0;
         }
 
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
+        .bot-avatar {
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.3);
             object-fit: cover;
-            border: 2px solid var(--border-color);
         }
 
-        .profile-info h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 6px;
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
         }
 
-        .profile-info p {
+        .hero p {
             color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.4;
+            font-size: 1.1rem;
+            max-width: 550px;
+            line-height: 1.6;
         }
 
-        /* Bölüm Başlığı */
-        .section-title {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            padding-left: 4px;
-        }
-
-        /* Bağlantılar Grid Yapısı */
-        .links-grid {
+        /* Butonlar Grubu */
+        .cta-buttons {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
         }
 
-        .link-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px 20px;
-            display: flex;
+        .btn {
+            display: inline-flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
             text-decoration: none;
-            color: var(--text-color);
             transition: all 0.2s ease;
         }
 
-        .link-card:hover {
-            background-color: var(--card-hover);
-            border-color: #374151;
-            transform: translateY(-2px);
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: #fff;
         }
 
-        .link-content {
-            display: flex;
-            align-items: center;
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--card-hover);
+            transform: translateY(-2px);
+            border-color: #2e364a;
+        }
+
+        /* İstatistik Kartları */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
         }
 
-        .link-icon {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            width: 24px;
+        .stat-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
         }
 
-        .link-text .title {
-            font-weight: 600;
-            font-size: 1rem;
+        .stat-card .number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-color);
         }
 
-        .link-text .subtitle {
+        .stat-card .label {
+            color: var(--text-muted);
             font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 2px;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .arrow-icon {
-            color: var(--text-muted);
-            font-size: 0.9rem;
+        /* Özellikler Bölümü */
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
             transition: transform 0.2s ease;
         }
 
-        .link-card:hover .arrow-icon {
-            transform: translateX(4px);
-            color: var(--text-color);
+        .feature-card:hover {
+            transform: translateY(-3px);
+            border-color: #2e364a;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 12px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            line-height: 1.4;
         }
 
         /* Footer */
@@ -149,7 +199,9 @@
             text-align: center;
             color: var(--text-muted);
             font-size: 0.85rem;
-            margin-top: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
         }
     </style>
 </head>
@@ -157,59 +209,69 @@
 
     <div class="container">
         
-        <!-- Üst Profil Alanı -->
-        <div class="profile-card">
-            <img src="https://via.placeholder.com/150" alt="Profil Fotoğrafı" class="profile-avatar">
-            <div class="profile-info">
-                <h1>Kullanıcı Adı</h1>
-                <p>Geliştirici & Tasarımcı. Web projeleri ve topluluk sistemleri üzerine çalışıyorum.</p>
+        <!-- Bot Tanıtım / Header -->
+        <div class="hero">
+            <img src="https://via.placeholder.com/150" alt="FunceBOT Logo" class="bot-avatar">
+            <h1>FunceBOT</h1>
+            <p>Sunucunuz için geliştirilmiş modern, hızlı ve çok işlevli Discord botu. Moderasyon, eğlence ve topluluk yönetimi tek bir botta!</p>
+            
+            <div class="cta-buttons">
+                <a href="https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID&scope=bot&permissions=8" target="_blank" class="btn btn-primary">
+                    <i class="fa-solid fa-plus"></i> Sunucuna Ekle
+                </a>
+                <a href="https://discord.gg/YOUR_DISCORD_INVITE" target="_blank" class="btn btn-secondary">
+                    <i class="fa-brands fa-discord"></i> Destek Sunucusu
+                </a>
             </div>
         </div>
 
-        <!-- Bağlantılar Bölümü -->
+        <!-- İstatistikler -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="number">100+</div>
+                <div class="label">Aktif Sunucu</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">50,000+</div>
+                <div class="label">Kullanıcı</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">%99.9</div>
+                <div class="label">Uptime</div>
+            </div>
+        </div>
+
+        <!-- Bot Özellikleri -->
         <div>
-            <div class="section-title">Bağlantılar & Projeler</div>
-            <div class="links-grid">
+            <div class="section-title">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Öne Çıkan Özellikler
+            </div>
+            <div class="features-grid">
                 
-                <a href="https://github.com" target="_blank" class="link-card">
-                    <div class="link-content">
-                        <i class="fa-brands fa-github link-icon"></i>
-                        <div class="link-text">
-                            <div class="title">GitHub</div>
-                            <div class="subtitle">Açık kaynak projelerim ve repolarım</div>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-arrow-right arrow-icon"></i>
-                </a>
+                <div class="feature-card">
+                    <i class="fa-solid fa-shield-halved feature-icon"></i>
+                    <h3>Gelişmiş Moderasyon</h3>
+                    <p>Sunucunuzu zararlı içeriklerden koruyun, otomatik koruma ve ceza sistemleri ile güvenliği sağlayın.</p>
+                </div>
 
-                <a href="https://discord.com" target="_blank" class="link-card">
-                    <div class="link-content">
-                        <i class="fa-brands fa-discord link-icon"></i>
-                        <div class="link-text">
-                            <div class="title">Discord</div>
-                            <div class="subtitle">Topluluk sunucuma katılın</div>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-arrow-right arrow-icon"></i>
-                </a>
+                <div class="feature-card">
+                    <i class="fa-solid fa-gamepad feature-icon"></i>
+                    <h3>Eğlence & Oyunlar</h3>
+                    <p>Kullanıcıların sunucuda aktif kalmasını sağlayan mini oyunlar ve eğlenceli komutlar.</p>
+                </div>
 
-                <a href="#" target="_blank" class="link-card">
-                    <div class="link-content">
-                        <i class="fa-solid fa-globe link-icon"></i>
-                        <div class="link-text">
-                            <div class="title">Örnek Proje</div>
-                            <div class="subtitle">Canlı yayınlanan web projem</div>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-arrow-right arrow-icon"></i>
-                </a>
+                <div class="feature-card">
+                    <i class="fa-solid fa-sliders feature-icon"></i>
+                    <h3>Kolay Özelleştirme</h3>
+                    <p>Sunucunuza özel karşılama mesajları, otorol ve ayarları saniyeler içinde yapılandırın.</p>
+                </div>
 
             </div>
         </div>
 
         <!-- Alt Bilgi -->
         <footer>
-            <p>&copy; 2026 Tum haklari saklidir.</p>
+            <p>&copy; 2026 FunceBOT. Tüm Hakları Saklıdır.</p>
         </footer>
 
     </div>
