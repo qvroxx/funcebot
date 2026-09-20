@@ -3,1024 +3,2406 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>FunceBOT - Discord Sunucu Yönetim Botu</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
 
 <style>
+
 :root {
+
     --bg-color:#0b0714;
-    --card-bg:rgba(22,16,38,.75);
+    --card-bg:rgba(22,16,38,.78);
+
     --border-color:rgba(168,85,247,.25);
+
     --primary-purple:#a855f7;
-    --accent-glow:0 0 20px rgba(168,85,247,.4);
-    --accent-glow-strong:0 0 30px rgba(168,85,247,.7);
+
+    --accent-glow:
+        0 0 20px rgba(168,85,247,.4);
+
+    --accent-glow-strong:
+        0 0 30px rgba(168,85,247,.7);
 
     --gold-color:#ffd700;
-    --gold-border:rgba(255,215,0,.6);
-    --gold-glow:0 0 20px rgba(255,215,0,.4);
+
+    --gold-border:
+        rgba(255,215,0,.6);
+
+    --gold-glow:
+        0 0 20px rgba(255,215,0,.4);
 
     --text-color:#f1f5f9;
+
     --text-muted:#94a3b8;
+
 }
+
+
+/* =========================
+   RESET
+========================= */
 
 * {
+
     margin:0;
     padding:0;
+
     box-sizing:border-box;
+
     font-family:'Poppins',sans-serif;
+
     user-select:none;
+
 }
+
+
+html {
+
+    scroll-behavior:smooth;
+
+}
+
 
 body {
+
     background-color:var(--bg-color);
+
     background-image:
-        radial-gradient(circle at 20% 20%,rgba(168,85,247,.15) 0%,transparent 50%),
-        radial-gradient(circle at 80% 80%,rgba(126,34,206,.15) 0%,transparent 50%);
+
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(168,85,247,.20) 0%,
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(126,34,206,.16) 0%,
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(88,28,135,.18) 0%,
+            transparent 40%
+        );
+
+    background-attachment:fixed;
+
     color:var(--text-color);
+
     min-height:100vh;
+
     overflow-x:hidden;
+
 }
+
+
+/* =========================
+   PARTICLES
+========================= */
 
 #particle-canvas {
+
     position:fixed;
+
     inset:0;
+
     width:100%;
     height:100%;
-    z-index:-1;
+
+    z-index:-2;
+
     pointer-events:none;
+
 }
+
+
+/* =========================
+   BACKGROUND GLOW
+========================= */
+
+body::before {
+
+    content:"";
+
+    position:fixed;
+
+    width:450px;
+    height:450px;
+
+    left:-180px;
+    top:20%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(168,85,247,.10),
+            transparent 70%
+        );
+
+    pointer-events:none;
+
+    z-index:-1;
+
+}
+
+
+body::after {
+
+    content:"";
+
+    position:fixed;
+
+    width:500px;
+    height:500px;
+
+    right:-220px;
+    bottom:0;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(126,34,206,.10),
+            transparent 70%
+        );
+
+    pointer-events:none;
+
+    z-index:-1;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
 
 header {
+
     position:fixed;
+
     top:0;
     left:0;
+
     width:100%;
+
+    min-height:64px;
+
     padding:12px 4%;
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     background:rgba(11,7,20,.92);
-    backdrop-filter:blur(15px);
-    border-bottom:1px solid var(--border-color);
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    border-bottom:
+        1px solid var(--border-color);
+
     z-index:1000;
+
 }
+
 
 .logo {
+
     font-size:20px;
+
     font-weight:800;
+
     color:#fff;
+
     text-decoration:none;
+
     cursor:pointer;
+
     letter-spacing:1px;
+
+    white-space:nowrap;
+
 }
+
 
 .logo span {
+
     color:var(--primary-purple);
+
+    text-shadow:
+        0 0 15px rgba(168,85,247,.35);
+
 }
+
+
+/* =========================
+   MENU BUTTON
+========================= */
 
 .menu-toggle {
+
     display:none;
+
     color:var(--primary-purple);
+
     cursor:pointer;
-    padding:6px 12px;
-    border:1px solid var(--border-color);
-    border-radius:8px;
+
+    padding:7px 11px;
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius:9px;
+
+    font-size:18px;
+
+    transition:.3s;
+
+    margin-left:auto;
+
 }
+
+
+.menu-toggle:hover {
+
+    border-color:var(--primary-purple);
+
+    box-shadow:var(--accent-glow);
+
+}
+
+
+/* =========================
+   NAV
+========================= */
 
 nav ul {
+
     display:flex;
+
     list-style:none;
+
     gap:8px;
+
     align-items:center;
+
 }
 
+
 nav a {
+
     color:var(--text-muted);
+
     text-decoration:none;
+
     font-size:13px;
+
     padding:7px 10px;
+
     border-radius:7px;
+
     transition:.3s;
+
     cursor:pointer;
+
     display:flex;
+
     align-items:center;
+
     gap:6px;
+
     white-space:nowrap;
+
 }
+
 
 nav a:hover,
 nav a.active {
+
     color:#fff;
-    text-shadow:0 0 10px rgba(168,85,247,.6);
+
+    text-shadow:
+        0 0 10px rgba(168,85,247,.6);
+
 }
+
 
 .nav-pro-btn {
+
     color:var(--gold-color)!important;
+
 }
+
 
 .nav-control-btn {
+
     color:#3b82f6!important;
+
 }
+
 
 .nav-admin-btn {
+
     color:#ef4444!important;
+
     display:none;
+
 }
+
 
 .btn-destek {
+
     color:var(--primary-purple)!important;
+
 }
+
+
+/* =========================
+   HEADER USER
+========================= */
 
 #user-profile {
+
     display:none;
+
     align-items:center;
+
     gap:10px;
+
     background:rgba(30,41,59,.9);
+
     padding:5px 8px 5px 6px;
+
     border-radius:20px;
-    border:1px solid var(--border-color);
+
+    border:
+        1px solid var(--border-color);
+
     cursor:pointer;
+
 }
+
 
 .user-main-info {
+
     display:flex;
+
     align-items:center;
+
     gap:8px;
+
 }
+
 
 #user-avatar {
+
     width:28px;
     height:28px;
+
     border-radius:50%;
-    border:1.5px solid var(--primary-purple);
+
+    border:
+        1.5px solid var(--primary-purple);
+
     object-fit:cover;
+
 }
+
 
 .user-info-box {
+
     display:flex;
+
     flex-direction:column;
+
 }
+
 
 #user-name {
+
     font-size:11px;
+
     font-weight:600;
+
     color:#fff;
+
 }
+
 
 #user-badge-text {
+
     font-size:9px;
+
     color:var(--gold-color);
+
 }
+
 
 .logout-btn {
+
     color:#ef4444!important;
+
     font-size:10px;
+
     padding:4px 7px!important;
+
     background:rgba(239,68,68,.12);
-    border:1px solid rgba(239,68,68,.3);
+
+    border:
+        1px solid rgba(239,68,68,.3);
+
 }
+
+
+/* =========================
+   CONTAINER
+========================= */
 
 .container {
+
     max-width:1100px;
+
     width:100%;
+
     margin:auto;
+
     padding:105px 20px 60px;
+
     min-height:calc(100vh - 100px);
+
 }
+
+
+/* =========================
+   PAGE
+========================= */
 
 .page-section {
+
     display:none;
-    animation:fadeIn .4s ease forwards;
+
+    animation:
+        fadeIn .4s ease forwards;
+
 }
+
 
 .page-section.active {
+
     display:block;
+
 }
+
 
 @keyframes fadeIn {
+
     from {
+
         opacity:0;
+
         transform:translateY(10px);
+
     }
+
     to {
+
         opacity:1;
+
         transform:translateY(0);
+
     }
+
 }
+
+
+/* =========================
+   HERO
+========================= */
 
 .hero {
+
     text-align:center;
+
     padding:30px 10px;
+
 }
+
 
 .hero-badge {
+
     display:inline-block;
+
     padding:6px 16px;
+
     border-radius:20px;
+
     background:rgba(168,85,247,.12);
-    border:1px solid var(--border-color);
+
+    border:
+        1px solid var(--border-color);
+
     color:var(--primary-purple);
+
     font-size:13px;
+
     font-weight:600;
+
     margin-bottom:20px;
+
 }
+
 
 .hero h1 {
+
     font-size:42px;
+
     font-weight:800;
+
     color:#fff;
+
     line-height:1.2;
+
     margin-bottom:18px;
+
 }
+
 
 .hero h1 span {
+
     color:var(--primary-purple);
+
     text-shadow:var(--accent-glow);
+
 }
+
 
 .hero p {
+
     color:var(--text-muted);
+
     max-width:650px;
+
     margin:0 auto 25px;
+
     font-size:15px;
+
     line-height:1.6;
+
 }
+
+
+/* =========================
+   BUTTONS
+========================= */
 
 .btn-group {
+
     display:flex;
+
     justify-content:center;
+
     gap:12px;
+
     flex-wrap:wrap;
+
 }
+
 
 .btn {
+
     padding:10px 20px;
+
     border-radius:10px;
+
     font-weight:600;
+
     text-decoration:none;
+
     display:inline-flex;
+
     align-items:center;
+
     justify-content:center;
+
     gap:8px;
+
     font-size:13px;
+
     cursor:pointer;
+
     border:none;
+
     transition:.3s;
+
 }
+
 
 .btn:hover {
+
     transform:translateY(-2px);
+
 }
+
 
 .btn-primary {
+
     background:var(--primary-purple);
+
     color:#fff;
+
     box-shadow:var(--accent-glow);
+
 }
+
 
 .btn-discord {
+
     background:#5865F2;
+
     color:#fff;
+
 }
 
+
 .btn-gold-outline {
+
     background:rgba(255,215,0,.05);
+
     color:var(--gold-color);
-    border:1px solid var(--gold-border);
+
+    border:
+        1px solid var(--gold-border);
+
 }
+
+
+/* =========================
+   FORMS
+========================= */
 
 .form-control,
 .form-select {
+
     width:100%;
+
     padding:12px;
+
     background:rgba(15,23,42,.8);
-    border:1px solid var(--border-color);
+
+    border:
+        1px solid var(--border-color);
+
     border-radius:8px;
+
     color:#fff;
+
     margin-bottom:15px;
+
     font-size:13px;
+
     outline:none;
+
 }
+
 
 .form-control:focus,
 .form-select:focus {
+
     border-color:var(--primary-purple);
+
+    box-shadow:
+        0 0 12px rgba(168,85,247,.12);
+
 }
+
 
 textarea.form-control {
+
     min-height:90px;
+
     resize:vertical;
+
 }
+
+
+/* =========================
+   STATS
+========================= */
 
 .stats-bar {
+
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+
+    grid-template-columns:
+        repeat(3,1fr);
+
     gap:20px;
+
     background:var(--card-bg);
-    border:1px solid var(--border-color);
+
+    border:
+        1px solid var(--border-color);
+
     border-radius:16px;
+
     padding:20px;
+
     text-align:center;
+
     margin-bottom:35px;
+
 }
+
 
 .stat-item h3 {
+
     font-size:24px;
+
     color:var(--primary-purple);
+
 }
+
 
 .stat-item p {
+
     font-size:12px;
+
     color:var(--text-muted);
+
 }
+
+
+/* =========================
+   GRID
+========================= */
 
 .grid-3 {
+
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(250px,1fr));
+
     gap:15px;
+
 }
+
+
+/* =========================
+   CARD
+========================= */
 
 .card {
+
     background:var(--card-bg);
-    border:1px solid var(--border-color);
+
+    border:
+        1px solid var(--border-color);
+
     border-radius:16px;
+
     padding:20px;
+
     backdrop-filter:blur(12px);
+
+    -webkit-backdrop-filter:blur(12px);
+
     transition:.3s;
+
     margin-bottom:15px;
+
 }
+
 
 .card:hover {
+
     border-color:var(--primary-purple);
+
     box-shadow:var(--accent-glow);
+
     transform:translateY(-2px);
+
 }
+
 
 .card-icon {
+
     font-size:22px;
+
     color:var(--primary-purple);
+
     margin-bottom:12px;
+
 }
+
 
 .card h3 {
+
     font-size:16px;
+
     color:#fff;
+
     margin-bottom:8px;
+
 }
+
 
 .card p {
+
     font-size:13px;
+
     color:var(--text-muted);
+
     line-height:1.5;
+
 }
+
 
 .section-title {
+
     text-align:center;
+
     font-size:22px;
+
     font-weight:800;
+
     color:#fff;
+
     margin-bottom:20px;
+
 }
+
+
+/* =========================
+   STEPS
+========================= */
 
 .step-card {
+
     background:rgba(15,23,42,.6);
-    border:1px solid var(--border-color);
+
+    border:
+        1px solid var(--border-color);
+
     border-radius:14px;
+
     padding:18px;
+
     display:flex;
+
     align-items:flex-start;
+
     gap:15px;
+
 }
 
+
 .step-number {
+
     background:rgba(168,85,247,.2);
+
     color:var(--primary-purple);
-    border:1px solid var(--primary-purple);
+
+    border:
+        1px solid var(--primary-purple);
+
     width:36px;
+
     height:36px;
+
     border-radius:50%;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     font-weight:800;
+
     flex-shrink:0;
+
 }
+
+
+/* =========================
+   GUILDS / USERS
+========================= */
 
 .guild-card,
 .active-user-card,
 .badge-admin-row {
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     background:rgba(15,23,42,.7);
+
     padding:12px 16px;
+
     border-radius:12px;
-    border:1px solid var(--border-color);
+
+    border:
+        1px solid var(--border-color);
+
     margin-bottom:10px;
+
     gap:10px;
+
 }
+
 
 .guild-info,
 .active-user-info {
+
     display:flex;
+
     align-items:center;
+
     gap:12px;
+
 }
+
 
 .guild-info img,
 .guild-icon-placeholder,
 .active-user-info img {
+
     width:38px;
+
     height:38px;
+
     border-radius:50%;
-    border:2px solid var(--primary-purple);
+
+    border:
+        2px solid var(--primary-purple);
+
     object-fit:cover;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     background:#1e293b;
+
     color:#fff;
+
     flex-shrink:0;
+
 }
+
+
+/* =========================
+   PROFILE
+========================= */
 
 .profile-card {
+
     max-width:700px;
+
     margin:auto;
+
     overflow:hidden;
+
 }
+
 
 .profile-banner {
+
     height:110px;
+
     background:
-        radial-gradient(circle at 20% 30%,rgba(168,85,247,.8),transparent 40%),
-        radial-gradient(circle at 80% 70%,rgba(59,130,246,.5),transparent 40%),
+
+        radial-gradient(
+            circle at 20% 30%,
+            rgba(168,85,247,.8),
+            transparent 40%
+        ),
+
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(59,130,246,.5),
+            transparent 40%
+        ),
+
         #151021;
+
     border-radius:12px;
+
     margin:-5px -5px 0;
+
 }
+
 
 .profile-main {
+
     position:relative;
+
     margin-top:-42px;
+
     padding:0 15px;
+
 }
+
 
 .profile-avatar {
+
     width:90px;
+
     height:90px;
+
     border-radius:50%;
+
     object-fit:cover;
+
     border:4px solid #151021;
-    box-shadow:0 0 25px rgba(168,85,247,.5);
+
+    box-shadow:
+        0 0 25px rgba(168,85,247,.5);
+
 }
+
 
 .profile-name {
+
     font-size:23px;
+
     color:#fff;
+
     margin-top:10px;
+
 }
+
 
 .profile-id {
+
     color:var(--text-muted);
+
     font-size:11px;
+
 }
+
 
 .profile-bio {
+
     color:var(--text-muted);
+
     font-size:13px;
+
     margin:12px 0;
+
     line-height:1.6;
+
 }
+
 
 .badges-container {
+
     display:flex;
+
     flex-wrap:wrap;
+
     gap:7px;
+
     margin:12px 0;
+
 }
+
 
 .profile-badge {
+
     display:inline-flex;
+
     align-items:center;
+
     gap:5px;
+
     padding:5px 9px;
+
     border-radius:8px;
+
     font-size:10px;
+
     font-weight:700;
-    border:1px solid rgba(255,255,255,.15);
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
     background:rgba(255,255,255,.06);
+
     color:#fff;
+
 }
+
 
 .badge-founder {
+
     color:#ffd700;
+
     border-color:rgba(255,215,0,.45);
+
     background:rgba(255,215,0,.1);
+
 }
+
 
 .badge-admin {
+
     color:#ef4444;
+
     border-color:rgba(239,68,68,.4);
+
     background:rgba(239,68,68,.1);
+
 }
+
 
 .badge-developer {
+
     color:#3b82f6;
+
     border-color:rgba(59,130,246,.4);
+
     background:rgba(59,130,246,.1);
+
 }
+
 
 .badge-pro {
+
     color:#ffd700;
+
     border-color:rgba(255,215,0,.5);
+
     background:rgba(255,215,0,.1);
+
 }
+
 
 .badge-booster {
+
     color:#f472b6;
+
     border-color:rgba(244,114,182,.4);
+
     background:rgba(244,114,182,.1);
+
 }
+
 
 .badge-bug {
+
     color:#22c55e;
+
     border-color:rgba(34,197,94,.4);
+
     background:rgba(34,197,94,.1);
+
 }
+
 
 .badge-staff {
+
     color:#5865f2;
+
     border-color:rgba(88,101,242,.4);
+
     background:rgba(88,101,242,.1);
+
 }
+
 
 .profile-stats {
+
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+
+    grid-template-columns:
+        repeat(3,1fr);
+
     gap:10px;
+
     margin:20px 0;
+
 }
+
 
 .profile-stat {
+
     background:rgba(15,23,42,.65);
-    border:1px solid rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.05);
+
     border-radius:10px;
+
     padding:12px;
+
     text-align:center;
+
 }
+
 
 .profile-stat strong {
+
     display:block;
+
     color:#fff;
+
     font-size:17px;
+
 }
+
 
 .profile-stat span {
+
     color:var(--text-muted);
+
     font-size:10px;
+
 }
+
+
+/* =========================
+   ADMIN
+========================= */
 
 .admin-search {
+
     position:relative;
+
 }
+
 
 .admin-search i {
+
     position:absolute;
+
     left:12px;
+
     top:13px;
+
     color:var(--text-muted);
+
 }
+
 
 .admin-search input {
+
     padding-left:35px;
+
 }
+
 
 .badge-remove {
+
     background:#ef4444;
+
     color:#fff;
+
     border:none;
+
     border-radius:6px;
+
     padding:4px 8px;
+
     cursor:pointer;
+
     font-size:10px;
+
 }
+
+
+/* =========================
+   REGISTERED USERS
+========================= */
+
+.registered-user-card {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    background:rgba(15,23,42,.65);
+
+    border:
+        1px solid rgba(168,85,247,.18);
+
+    border-radius:12px;
+
+    padding:12px 14px;
+
+    margin-bottom:8px;
+
+    transition:.25s;
+
+}
+
+
+.registered-user-card:hover {
+
+    border-color:var(--primary-purple);
+
+    transform:translateX(2px);
+
+}
+
+
+.registered-user-left {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    min-width:0;
+
+}
+
+
+.registered-user-avatar {
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:
+        2px solid var(--primary-purple);
+
+    flex-shrink:0;
+
+}
+
+
+.registered-user-name {
+
+    color:#fff;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+}
+
+
+.registered-user-id {
+
+    color:var(--text-muted);
+
+    font-size:9px;
+
+    margin-top:2px;
+
+}
+
+
+.registered-user-status {
+
+    color:#22c55e;
+
+    font-size:9px;
+
+    white-space:nowrap;
+
+}
+
+
+/* =========================
+   FOOTER
+========================= */
 
 footer {
+
     text-align:center;
+
     padding:20px;
-    border-top:1px solid var(--border-color);
+
+    border-top:
+        1px solid var(--border-color);
+
     background:rgba(11,7,20,.95);
+
     color:var(--text-muted);
+
     font-size:12px;
+
 }
+
 
 footer span {
+
     color:var(--primary-purple);
+
 }
+
 
 .footer-links {
+
     margin-top:8px;
+
     display:flex;
+
     justify-content:center;
+
     gap:15px;
+
 }
 
+
 .footer-links a {
+
     color:var(--text-muted);
+
     text-decoration:none;
+
 }
+
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:990px) {
 
     header {
-        padding:12px 20px;
+
+        padding:12px 16px;
+
     }
+
+
+    /*
+       3 çizgi artık sağda
+    */
 
     .menu-toggle {
+
         display:block;
+
+        margin-left:auto;
+
     }
+
+
+    nav {
+
+        position:absolute;
+
+        top:100%;
+
+        left:0;
+
+        width:100%;
+
+    }
+
 
     nav ul {
+
         position:absolute;
-        top:100%;
+
+        top:0;
+
         left:0;
+
         width:100%;
+
         background:rgba(11,7,20,.98);
+
         backdrop-filter:blur(20px);
+
+        -webkit-backdrop-filter:blur(20px);
+
         flex-direction:column;
+
         padding:15px;
+
         display:none;
+
+        border-bottom:
+            1px solid var(--border-color);
+
     }
+
 
     nav ul.show {
+
         display:flex;
+
     }
+
 
     nav ul li {
+
         width:100%;
+
     }
+
 
     nav a {
+
         width:100%;
+
         justify-content:center;
+
         padding:10px;
+
     }
+
 
     #user-profile {
+
         width:100%;
+
         justify-content:space-between;
+
     }
+
 
     .container {
+
         padding-top:90px;
+
     }
+
 
     .hero h1 {
+
         font-size:27px;
+
     }
+
 
     .hero p {
+
         font-size:13px;
+
     }
+
 
     .btn-group {
+
         flex-direction:column;
+
     }
+
 
     .btn-group .btn {
+
         width:100%;
+
     }
 
+
     .stats-bar {
+
         grid-template-columns:1fr;
+
     }
+
 
     .guild-card,
     .active-user-card,
     .badge-admin-row {
+
         flex-direction:column;
+
         align-items:flex-start;
+
     }
+
 
     .guild-card .btn,
     .guild-card a {
+
         width:100%;
+
     }
 
+
     .profile-stats {
-        grid-template-columns:1fr 1fr 1fr;
+
+        grid-template-columns:
+            1fr 1fr 1fr;
+
     }
+
+
+    .registered-user-card {
+
+        align-items:flex-start;
+
+    }
+
 }
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media(max-width:500px) {
+
+    .logo {
+
+        font-size:18px;
+
+    }
+
+
+    .menu-toggle {
+
+        font-size:17px;
+
+    }
+
+
+    .container {
+
+        padding-left:12px;
+
+        padding-right:12px;
+
+    }
+
+
+    .card {
+
+        padding:16px;
+
+    }
+
+
+    .hero {
+
+        padding:20px 5px;
+
+    }
+
+
+    .hero h1 {
+
+        font-size:24px;
+
+    }
+
+}
+
 </style>
 </head>
 
+
 <body>
+
+
+<!-- PARTICLES -->
 
 <canvas id="particle-canvas"></canvas>
 
+
+<!-- HEADER -->
+
 <header>
 
-<a class="logo" onclick="switchTab('ana-sayfa')">
-    Funce<span>BOT</span>
+<a
+class="logo"
+onclick="switchTab('ana-sayfa')">
+
+Funce<span>BOT</span>
+
 </a>
 
-<div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
-    <i class="fa-solid fa-bars"></i>
+
+<!-- MOBILE MENU -->
+
+<div
+class="menu-toggle"
+id="menuToggle"
+onclick="toggleMenu()">
+
+<i class="fa-solid fa-bars"></i>
+
 </div>
 
+
 <nav>
+
 <ul id="navMenu">
 
-<li>
-<a class="nav-btn active" onclick="switchTab('ana-sayfa',this)">
-    Ana Sayfa
-</a>
-</li>
 
 <li>
-<a class="nav-btn" onclick="switchTab('ozellikler',this)">
-    Özellikler
+
+<a
+class="nav-btn active"
+onclick="switchTab('ana-sayfa',this)">
+
+Ana Sayfa
+
 </a>
+
 </li>
 
-<li>
-<a class="nav-btn nav-pro-btn" onclick="switchTab('funce-pro',this)">
-    <i class="fa-solid fa-crown"></i>
-    Funce Pro
-</a>
-</li>
 
 <li>
-<a class="nav-btn nav-control-btn" onclick="switchTab('kontrol-paneli',this)">
-    <i class="fa-solid fa-sliders"></i>
-    Kontrol Paneli
+
+<a
+class="nav-btn"
+onclick="switchTab('ozellikler',this)">
+
+Özellikler
+
 </a>
+
 </li>
 
-<li>
-<a class="nav-btn" onclick="switchTab('profilim',this)">
-    <i class="fa-solid fa-user"></i>
-    Profil
-</a>
-</li>
+
+<!-- PROFİL FUNCE PRO'DAN ÖNCE -->
 
 <li>
-<a class="nav-btn nav-admin-btn" id="adminNavLink" onclick="switchTab('admin-panel',this)">
-    <i class="fa-solid fa-shield-halved"></i>
-    Admin Panel
+
+<a
+class="nav-btn"
+onclick="switchTab('profilim',this)">
+
+<i class="fa-solid fa-user"></i>
+
+Profil
+
 </a>
+
 </li>
 
+
 <li>
-<a href="https://discord.gg/jSm2n5Jp2k" target="_blank" class="nav-btn btn-destek">
-    <i class="fa-brands fa-discord"></i>
-    Destek
+
+<a
+class="nav-btn nav-pro-btn"
+onclick="switchTab('funce-pro',this)">
+
+<i class="fa-solid fa-crown"></i>
+
+Funce Pro
+
 </a>
+
 </li>
+
+
+<li>
+
+<a
+class="nav-btn nav-control-btn"
+onclick="switchTab('kontrol-paneli',this)">
+
+<i class="fa-solid fa-sliders"></i>
+
+Kontrol Paneli
+
+</a>
+
+</li>
+
+
+<li>
+
+<a
+class="nav-btn nav-admin-btn"
+id="adminNavLink"
+onclick="switchTab('admin-panel',this)">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+Admin Panel
+
+</a>
+
+</li>
+
+
+<!-- DESTEK SUNUCUSU -->
+
+<li>
+
+<a
+href="https://discord.gg/jSm2n5Jp2k"
+target="_blank"
+class="nav-btn btn-destek">
+
+<i class="fa-brands fa-discord"></i>
+
+Destek Sunucusu
+
+</a>
+
+</li>
+
+
+<!-- USER -->
 
 <li id="user-profile-li">
 
-<div id="user-profile" onclick="openProfileTab()">
+<div
+id="user-profile"
+onclick="openProfileTab()">
+
 
 <div class="user-main-info">
 
-<img id="user-avatar"
+
+<img
+id="user-avatar"
 src="https://i.imgur.com/QjSrqWd.png">
+
 
 <div class="user-info-box">
 
 <span id="user-name">
+
 Kullanıcı
+
 </span>
+
 
 <span id="user-badge-text">
+
 Üye
+
 </span>
 
 </div>
 
 </div>
 
-<a href="#" class="logout-btn"
+
+<a
+href="#"
+class="logout-btn"
 onclick="event.stopPropagation();logout()">
 
 <i class="fa-solid fa-right-from-bracket"></i>
+
 Çıkış
 
 </a>
+
 
 </div>
 
 </li>
 
+
 </ul>
+
 </nav>
+
 </header>
+
+
 
 <div class="container">
 
-<section id="ana-sayfa" class="page-section active">
+
+<!-- =====================================================
+     ANA SAYFA
+===================================================== -->
+
+<section
+id="ana-sayfa"
+class="page-section active">
+
 
 <div class="hero">
 
+
 <div class="hero-badge">
+
 Discord Sunucu Yönetimi
+
 </div>
 
+
 <h1>
-Sunucunu <span>FunceBOT</span> ile Üst Seviyeye Taşı
+
+Sunucunu
+<span>FunceBOT</span>
+ile Üst Seviyeye Taşı
+
 </h1>
 
+
 <p>
-Gelişmiş moderasyon araçları, hızlı altyapı ve güçlü Pro seçenekleriyle topluluğunu eksiksiz yönet.
+
+Gelişmiş moderasyon araçları,
+hızlı altyapı ve güçlü Pro
+seçenekleriyle topluluğunu
+eksiksiz yönet.
+
 </p>
+
 
 <div class="btn-group">
 
-<a href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663"
+
+<a
+href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663"
 target="_blank"
 class="btn btn-primary">
 
 <i class="fa-solid fa-plus"></i>
+
 Botu Sunucuna Ekle
 
 </a>
 
-<a href="https://funce-linked-roles.onrender.com/api/auth/discord"
+
+<a
+href="https://funce-linked-roles.onrender.com/api/auth/discord"
 class="btn btn-discord"
 id="login-discord-btn">
 
 <i class="fa-brands fa-discord"></i>
+
 Discord ile Giriş Yap
 
 </a>
 
-<button class="btn btn-gold-outline"
+
+<button
+class="btn btn-gold-outline"
 onclick="switchTab('funce-pro')">
 
 <i class="fa-solid fa-crown"></i>
+
 Funce Pro'yu İncele
 
 </button>
 
+
 </div>
+
 </div>
+
+
+
+<!-- STATS -->
 
 <div class="stats-bar">
 
+
 <div class="stat-item">
+
 <h3>99.9%</h3>
-<p>Uptime Süresi</p>
+
+<p>
+Uptime Süresi
+</p>
+
 </div>
 
-<div class="stat-item">
-<h3 id="home-user-count">10</h3>
-<p>Aktif Kullanıcı</p>
-</div>
 
 <div class="stat-item">
+
+<h3 id="home-user-count">
+0
+</h3>
+
+<p>
+Kayıtlı Kullanıcı
+</p>
+
+</div>
+
+
+<div class="stat-item">
+
 <h3>&lt;10ms</h3>
-<p>Yanıt Süresi</p>
-</div>
+
+<p>
+Yanıt Süresi
+</p>
 
 </div>
+
+
+</div>
+
+
+
+<!-- SYSTEM -->
 
 <div class="card">
+
 
 <h3 style="margin-bottom:15px;">
-<i class="fa-solid fa-circle-dot" style="color:#22c55e"></i>
+
+<i
+class="fa-solid fa-circle-dot"
+style="color:#22c55e">
+
+</i>
+
 Canlı Sistem & Bot Durumu
+
 </h3>
+
 
 <div class="grid-3">
 
+
 <div class="card">
-<p>Gecikme</p>
-<h3 style="color:var(--primary-purple)">
+
+<p>
+Gecikme
+</p>
+
+<h3
+style="color:var(--primary-purple)">
+
 8 ms
+
 </h3>
+
 </div>
 
+
 <div class="card">
-<p>İşlenen Komutlar</p>
+
+<p>
+İşlenen Komutlar
+</p>
+
 <h3 style="color:#3b82f6">
+
 140+ Slash
+
 </h3>
+
 </div>
+
 
 <div class="card">
-<p>Bellek Kullanımı</p>
+
+<p>
+Bellek Kullanımı
+</p>
+
 <h3 style="color:var(--gold-color)">
+
 %18
+
 </h3>
+
+</div>
+
+
 </div>
 
 </div>
-</div>
+
+
+
+<!-- KAYITLI KULLANICILAR -->
 
 <h2 class="section-title">
-Öne Çıkan Modüller
+
+<i class="fa-solid fa-users"></i>
+
+Kayıtlı Kullanıcılar
+
 </h2>
+
+
+<div class="card">
+
+
+<p
+style="color:var(--text-muted);
+font-size:12px;
+margin-bottom:15px">
+
+Discord hesabıyla siteye kayıt olan kullanıcılar.
+
+</p>
+
+
+<div
+id="registered-users-list">
+
+Yükleniyor...
+
+</div>
+
+
+</div>
+
+
+
+<!-- ÖNE ÇIKAN -->
+
+<h2 class="section-title">
+
+Öne Çıkan Modüller
+
+</h2>
+
 
 <div class="grid-3">
 
+
 <div class="card">
+
 <div class="card-icon">
+
 <i class="fa-solid fa-shield-halved"></i>
-</div>
-<h3>Gelişmiş Koruma</h3>
-<p>Spam, küfür ve izinsiz reklamları otomatik olarak kontrol edin.</p>
+
 </div>
 
+<h3>
+Gelişmiş Koruma
+</h3>
+
+<p>
+Spam, küfür ve izinsiz reklamları
+otomatik olarak kontrol edin.
+</p>
+
+</div>
+
+
 <div class="card">
+
 <div class="card-icon">
+
 <i class="fa-solid fa-robot"></i>
-</div>
-<h3>Oto Rol & Kayıt</h3>
-<p>Yeni üyeler için otomatik rol ve gelişmiş kayıt sistemi.</p>
+
 </div>
 
+<h3>
+Oto Rol & Kayıt
+</h3>
+
+<p>
+Yeni üyeler için otomatik rol
+ve gelişmiş kayıt sistemi.
+</p>
+
+</div>
+
+
 <div class="card">
+
 <div class="card-icon">
+
 <i class="fa-solid fa-ticket"></i>
+
 </div>
-<h3>Ticket Sistemi</h3>
-<p>Tek tıkla özel destek kanalları oluşturun.</p>
+
+<h3>
+Ticket Sistemi
+</h3>
+
+<p>
+Tek tıkla özel destek kanalları oluşturun.
+</p>
+
 </div>
+
 
 <div class="card">
+
 <div class="card-icon">
+
 <i class="fa-solid fa-music"></i>
-</div>
-<h3>Müzik & Eğlence</h3>
-<p>Topluluğunuz için eğlence ve müzik sistemleri.</p>
-</div>
 
 </div>
+
+<h3>
+Müzik & Eğlence
+</h3>
+
+<p>
+Topluluğunuz için eğlence ve
+müzik sistemleri.
+</p>
+
+</div>
+
+
+</div>
+
+
 
 <h2 class="section-title">
+
 3 Adımda Başla
+
 </h2>
 
-<div style="display:flex;flex-direction:column;gap:12px">
+
+<div
+style="
+display:flex;
+flex-direction:column;
+gap:12px">
 
 <div class="step-card">
-<div class="step-number">1</div>
+
+<div class="step-number">
+1
+</div>
+
 <div>
-<h4>Botu Sunucuna Davet Et</h4>
-<p>Botu sunucuna ekle ve gerekli izinleri onayla.</p>
+
+<h4>
+Botu Sunucuna Davet Et
+</h4>
+
+<p>
+Botu sunucuna ekle ve gerekli
+izinleri onayla.
+</p>
+
 </div>
+
 </div>
+
 
 <div class="step-card">
-<div class="step-number">2</div>
+
+<div class="step-number">
+2
+</div>
+
 <div>
-<h4>Discord ile Giriş Yap</h4>
-<p>Discord hesabını FunceBOT ile bağla.</p>
+
+<h4>
+Discord ile Giriş Yap
+</h4>
+
+<p>
+Discord hesabını FunceBOT
+ile bağla.
+</p>
+
 </div>
+
 </div>
+
 
 <div class="step-card">
-<div class="step-number">3</div>
-<div>
-<h4>Kontrol Panelinden Yönet</h4>
-<p>Sunucularını ve bot ayarlarını yönet.</p>
+
+<div class="step-number">
+3
 </div>
+
+<div>
+
+<h4>
+Kontrol Panelinden Yönet
+</h4>
+
+<p>
+Sunucularını ve bot ayarlarını yönet.
+</p>
+
 </div>
 
 </div>
+
+</div>
+
 
 </section>
 
 
-<section id="profilim" class="page-section">
+
+<!-- =====================================================
+     PROFİL
+===================================================== -->
+
+<section
+id="profilim"
+class="page-section">
+
 
 <h2 class="section-title">
+
 <i class="fa-solid fa-id-card"></i>
+
 Profilim
+
 </h2>
 
-<div id="profile-page-locked"
-style="text-align:center;padding:50px 20px;display:none">
 
-<div style="font-size:45px;color:#ef4444">
+<div
+id="profile-page-locked"
+style="
+text-align:center;
+padding:50px 20px;
+display:none">
+
+<div
+style="font-size:45px;color:#ef4444">
+
 <i class="fa-solid fa-lock"></i>
+
 </div>
 
+
 <h3 style="margin:15px 0">
+
 Profil Alanı Kilitli
+
 </h3>
 
-<p style="color:var(--text-muted);margin-bottom:20px">
-Profilini görmek için Discord ile giriş yapmalısın.
+
+<p
+style="
+color:var(--text-muted);
+margin-bottom:20px">
+
+Profilini görmek için Discord
+ile giriş yapmalısın.
+
 </p>
 
-<a href="https://funce-linked-roles.onrender.com/api/auth/discord"
+
+<a
+href="https://funce-linked-roles.onrender.com/api/auth/discord"
 class="btn btn-discord">
 
 <i class="fa-brands fa-discord"></i>
+
 Discord ile Giriş Yap
 
 </a>
@@ -1028,114 +2410,196 @@ Discord ile Giriş Yap
 </div>
 
 
-<div id="profile-page-content" style="display:none">
+
+<div
+id="profile-page-content"
+style="display:none">
+
 
 <div class="card profile-card">
 
+
 <div class="profile-banner"></div>
+
 
 <div class="profile-main">
 
-<img id="page-user-avatar"
+
+<img
+id="page-user-avatar"
 class="profile-avatar"
 src="https://i.imgur.com/QjSrqWd.png">
 
-<h2 id="page-user-name" class="profile-name">
+
+<h2
+id="page-user-name"
+class="profile-name">
+
 Kullanıcı
+
 </h2>
 
-<div id="page-user-id" class="profile-id">
+
+<div
+id="page-user-id"
+class="profile-id">
+
 ID: -
+
 </div>
 
-<div id="profile-badges"
+
+<div
+id="profile-badges"
 class="badges-container">
+
 </div>
 
-<p id="page-user-bio" class="profile-bio">
+
+<p
+id="page-user-bio"
+class="profile-bio">
+
 Henüz biyografi eklenmemiş.
+
 </p>
+
 
 <div class="profile-stats">
 
-<div class="profile-stat">
-<strong id="profile-guild-count">0</strong>
-<span>Sunucu</span>
-</div>
 
 <div class="profile-stat">
-<strong id="profile-badge-count">0</strong>
-<span>Rozet</span>
+
+<strong id="profile-guild-count">
+0
+</strong>
+
+<span>
+Sunucu
+</span>
+
 </div>
 
+
 <div class="profile-stat">
+
+<strong id="profile-badge-count">
+0
+</strong>
+
+<span>
+Rozet
+</span>
+
+</div>
+
+
+<div class="profile-stat">
+
 <strong id="profile-status">
 Aktif
 </strong>
-<span>Durum</span>
+
+<span>
+Durum
+</span>
+
 </div>
+
+
+</div>
+
 
 </div>
 
 </div>
 
-</div>
 
 
 <div class="card">
 
+
 <h3>
+
 <i class="fa-solid fa-pen-to-square"></i>
+
 Profil Bilgilerini Düzenle
+
 </h3>
 
-<label>Görünen Ad</label>
+
+<label>
+Görünen Ad
+</label>
+
 
 <input
 id="manual-name-input"
 class="form-control"
 placeholder="Adın">
 
-<label>Biyografi</label>
+
+<label>
+Biyografi
+</label>
+
 
 <textarea
 id="manual-bio-input"
 class="form-control"
 maxlength="250"
-placeholder="Kendin hakkında bir şeyler yaz..."></textarea>
+placeholder="Kendin hakkında bir şeyler yaz...">
+</textarea>
 
-<label>Profil Fotoğrafı URL</label>
+
+<label>
+Profil Fotoğrafı URL
+</label>
+
 
 <input
 id="manual-avatar-input"
 class="form-control"
 placeholder="https://...">
 
-<label>Tema</label>
 
-<select id="edit-theme-select" class="form-select">
+<label>
+Tema
+</label>
+
+
+<select
+id="edit-theme-select"
+class="form-select">
+
 
 <option value="#a855f7">
 Mor
 </option>
 
+
 <option value="#ffd700">
 Altın - Pro
 </option>
+
 
 <option value="#ef4444">
 Kırmızı - Admin
 </option>
 
+
 <option value="#3b82f6">
 Mavi - Developer
 </option>
+
 
 <option value="#22c55e">
 Yeşil
 </option>
 
+
 </select>
+
 
 <button
 class="btn btn-primary"
@@ -1143,10 +2607,12 @@ style="width:100%"
 onclick="saveManualProfile()">
 
 <i class="fa-solid fa-floppy-disk"></i>
+
 Değişiklikleri Kaydet
 
 </button>
 
+
 </div>
 
 </div>
@@ -1154,127 +2620,280 @@ Değişiklikleri Kaydet
 </section>
 
 
-<section id="ozellikler" class="page-section">
+
+<!-- =====================================================
+     ÖZELLİKLER
+===================================================== -->
+
+<section
+id="ozellikler"
+class="page-section">
+
 
 <h2 class="section-title">
+
 Bot Özellikleri
+
 </h2>
+
 
 <div class="grid-3">
 
+
 <div class="card">
+
 <div class="card-icon">
 <i class="fa-solid fa-user-gear"></i>
 </div>
-<h3>Oto Moderasyon</h3>
-<p>Reklam, küfür ve kelime filtreleme sistemleri.</p>
+
+<h3>
+Oto Moderasyon
+</h3>
+
+<p>
+Reklam, küfür ve kelime filtreleme sistemleri.
+</p>
+
 </div>
 
+
 <div class="card">
+
 <div class="card-icon">
 <i class="fa-solid fa-ticket"></i>
 </div>
-<h3>Ticket</h3>
-<p>Gelişmiş destek kanalları oluşturun.</p>
+
+<h3>
+Ticket
+</h3>
+
+<p>
+Gelişmiş destek kanalları oluşturun.
+</p>
+
 </div>
 
+
 <div class="card">
+
 <div class="card-icon">
 <i class="fa-solid fa-chart-line"></i>
 </div>
-<h3>İstatistikler</h3>
-<p>Sunucu aktivitesini takip edin.</p>
+
+<h3>
+İstatistikler
+</h3>
+
+<p>
+Sunucu aktivitesini takip edin.
+</p>
+
 </div>
 
+
 <div class="card">
+
 <div class="card-icon">
 <i class="fa-solid fa-ranking-star"></i>
 </div>
-<h3>Level Sistemi</h3>
-<p>XP ve seviye sistemi ile üyeleri ödüllendirin.</p>
+
+<h3>
+Level Sistemi
+</h3>
+
+<p>
+XP ve seviye sistemi ile üyeleri ödüllendirin.
+</p>
+
 </div>
 
+
 <div class="card">
+
 <div class="card-icon">
 <i class="fa-solid fa-gift"></i>
 </div>
-<h3>Çekiliş</h3>
-<p>Kolay ve otomatik çekiliş sistemi.</p>
+
+<h3>
+Çekiliş
+</h3>
+
+<p>
+Kolay ve otomatik çekiliş sistemi.
+</p>
+
 </div>
 
+
 <div class="card">
+
 <div class="card-icon">
 <i class="fa-solid fa-gamepad"></i>
 </div>
-<h3>Eğlence</h3>
-<p>Sunucunuz için çeşitli eğlence komutları.</p>
+
+<h3>
+Eğlence
+</h3>
+
+<p>
+Sunucunuz için çeşitli eğlence komutları.
+</p>
+
 </div>
+
 
 </div>
 
 </section>
 
 
-<section id="funce-pro" class="page-section">
 
-<h2 class="section-title"
+<!-- =====================================================
+     PRO
+===================================================== -->
+
+<section
+id="funce-pro"
+class="page-section">
+
+
+<h2
+class="section-title"
 style="color:var(--gold-color)">
+
 <i class="fa-solid fa-crown"></i>
+
 Funce Pro
+
 </h2>
 
-<p style="text-align:center;color:var(--text-muted);margin-bottom:25px">
+
+<p
+style="
+text-align:center;
+color:var(--text-muted);
+margin-bottom:25px">
+
 Topluluğunuz için özel VIP özellikler.
+
 </p>
+
 
 <div class="grid-3">
 
+
 <div class="card">
-<div class="card-icon" style="color:var(--gold-color)">
+
+<div
+class="card-icon"
+style="color:var(--gold-color)">
+
 <i class="fa-solid fa-crown"></i>
-</div>
-<h3>Özel Bot Profili</h3>
-<p>Botun isim, avatar ve durumunu özelleştirin.</p>
+
 </div>
 
+<h3>
+Özel Bot Profili
+</h3>
+
+<p>
+Botun isim, avatar ve durumunu özelleştirin.
+</p>
+
+</div>
+
+
 <div class="card">
-<div class="card-icon" style="color:var(--gold-color)">
+
+<div
+class="card-icon"
+style="color:var(--gold-color)">
+
 <i class="fa-solid fa-server"></i>
-</div>
-<h3>Öncelikli Sunucu</h3>
-<p>Pro kullanıcılar için yüksek performanslı altyapı.</p>
+
 </div>
 
+<h3>
+Öncelikli Sunucu
+</h3>
+
+<p>
+Pro kullanıcılar için yüksek performanslı altyapı.
+</p>
+
+</div>
+
+
 <div class="card">
-<div class="card-icon" style="color:var(--gold-color)">
+
+<div
+class="card-icon"
+style="color:var(--gold-color)">
+
 <i class="fa-solid fa-headset"></i>
+
 </div>
-<h3>Öncelikli Destek</h3>
-<p>Pro kullanıcılar için öncelikli teknik destek.</p>
+
+<h3>
+Öncelikli Destek
+</h3>
+
+<p>
+Pro kullanıcılar için öncelikli teknik destek.
+</p>
+
 </div>
+
 
 </div>
 
 </section>
 
 
-<section id="kontrol-paneli" class="page-section">
 
-<div id="control-panel-locked"
-style="text-align:center;padding:50px">
+<!-- =====================================================
+     KONTROL PANELİ
+===================================================== -->
 
-<i class="fa-solid fa-lock"
-style="font-size:45px;color:#ef4444"></i>
+<section
+id="kontrol-paneli"
+class="page-section">
+
+
+<div
+id="control-panel-locked"
+style="
+text-align:center;
+padding:50px">
+
+<i
+class="fa-solid fa-lock"
+style="
+font-size:45px;
+color:#ef4444">
+
+</i>
+
 
 <h2 style="margin:15px 0">
+
 Erişim Engellendi
+
 </h2>
 
-<p style="color:var(--text-muted);margin-bottom:20px">
+
+<p
+style="
+color:var(--text-muted);
+margin-bottom:20px">
+
 Kontrol panelini kullanmak için giriş yapmalısın.
+
 </p>
 
-<a href="https://funce-linked-roles.onrender.com/api/auth/discord"
+
+<a
+href="https://funce-linked-roles.onrender.com/api/auth/discord"
 class="btn btn-discord">
 
 Discord ile Giriş Yap
@@ -1284,77 +2903,142 @@ Discord ile Giriş Yap
 </div>
 
 
-<div id="control-panel-unlocked"
+
+<div
+id="control-panel-unlocked"
 style="display:none">
 
-<h2 class="section-title"
+
+<h2
+class="section-title"
 style="color:#3b82f6">
 
 <i class="fa-solid fa-sliders"></i>
+
 FunceBOT Kontrol Paneli
 
 </h2>
 
+
 <div class="card">
 
+
 <h3>
+
 <i class="fa-solid fa-server"></i>
+
 Sunucularım
+
 </h3>
 
-<p style="color:var(--text-muted);font-size:12px;margin-bottom:15px">
+
+<p
+style="
+color:var(--text-muted);
+font-size:12px;
+margin-bottom:15px">
+
 Yönetici veya sahibi olduğun sunucular.
+
 </p>
+
 
 <div id="user-guilds-list">
+
 Yükleniyor...
-</div>
 
 </div>
+
+
+</div>
+
 
 <div class="card">
 
+
 <h3>
+
 <i class="fa-solid fa-lock"></i>
+
 Bot Komut & Modül Kontrolleri
+
 </h3>
 
-<p style="color:var(--primary-purple);font-size:18px;font-weight:700;margin-top:10px">
+
+<p
+style="
+color:var(--primary-purple);
+font-size:18px;
+font-weight:700;
+margin-top:10px">
+
 Yakında...
+
 </p>
 
+
 </div>
+
 
 </div>
 
 </section>
 
 
-<section id="admin-panel" class="page-section">
 
-<h2 class="section-title"
+<!-- =====================================================
+     ADMIN PANEL
+===================================================== -->
+
+<section
+id="admin-panel"
+class="page-section">
+
+
+<h2
+class="section-title"
 style="color:#ef4444">
 
 <i class="fa-solid fa-shield-halved"></i>
+
 Admin Panel
 
 </h2>
 
-<p style="text-align:center;color:var(--text-muted);margin-bottom:25px">
+
+<p
+style="
+text-align:center;
+color:var(--text-muted);
+margin-bottom:25px">
+
 FunceBOT yönetim merkezi
+
 </p>
+
+
+
+<!-- AKTİF / KAYITLI KULLANICILAR -->
 
 <div class="card">
 
+
 <h3>
+
 <i class="fa-solid fa-users"></i>
-Aktif Kullanıcılar
+
+Kayıtlı Kullanıcılar
+
 </h3>
 
-<div class="admin-search"
+
+<div
+class="admin-search"
 style="margin-top:15px">
 
+
 <i class="fa-solid fa-search"></i>
+
 
 <input
 id="active-user-search"
@@ -1362,57 +3046,135 @@ class="form-control"
 placeholder="Kullanıcı ara..."
 oninput="filterActiveUsers()">
 
+
 </div>
+
 
 <div id="active-users-list">
+
 Yükleniyor...
-</div>
 
 </div>
 
+
+</div>
+
+
+
+<!-- ROZET -->
 
 <div class="card">
 
+
 <h3 style="color:#a855f7">
+
 <i class="fa-solid fa-medal"></i>
+
 Çoklu Rozet Yönetimi
+
 </h3>
 
-<p style="color:var(--text-muted);font-size:12px;margin:8px 0 15px">
-Kullanıcının Discord ID'sini girerek birden fazla rozet atayabilirsin.
+
+<p
+style="
+color:var(--text-muted);
+font-size:12px;
+margin:8px 0 15px">
+
+Kullanıcının Discord ID'sini girerek
+birden fazla rozet atayabilirsin.
+
 </p>
 
-<label>Discord ID</label>
+
+<label>
+Discord ID
+</label>
+
 
 <input
 id="admin-target-id"
 class="form-control"
 placeholder="Örn: 1080897669431574609">
 
-<label>Rozet</label>
+
+<label>
+Rozet
+</label>
+
 
 <select
 id="admin-badge-select"
 class="form-select">
 
-<option value="👑 Founder">👑 Founder</option>
-<option value="🛡️ Bot Admin">🛡️ Bot Admin</option>
-<option value="🛡️ Senior Moderator">🛡️ Senior Moderator</option>
-<option value="🔨 Moderator">🔨 Moderator</option>
-<option value="💻 Developer">💻 Developer</option>
-<option value="🎨 Designer">🎨 Designer</option>
-<option value="⭐ Funce Pro">⭐ Funce Pro</option>
-<option value="💎 VIP Member">💎 VIP Member</option>
-<option value="🚀 Booster">🚀 Booster</option>
-<option value="🐛 Bug Hunter">🐛 Bug Hunter</option>
-<option value="💙 Discord Personeli">💙 Discord Personeli</option>
-<option value="🤖 Bot">🤖 Bot</option>
-<option value="🤝 Dost">🤝 Dost</option>
-<option value="⏳ Emektar Üye">⏳ Emektar Üye</option>
-<option value="💬 Chat Master">💬 Chat Master</option>
-<option value="👤 Standart Üye">👤 Standart Üye</option>
+
+<option value="👑 Founder">
+👑 Founder
+</option>
+
+<option value="🛡️ Bot Admin">
+🛡️ Bot Admin
+</option>
+
+<option value="🛡️ Senior Moderator">
+🛡️ Senior Moderator
+</option>
+
+<option value="🔨 Moderator">
+🔨 Moderator
+</option>
+
+<option value="💻 Developer">
+💻 Developer
+</option>
+
+<option value="🎨 Designer">
+🎨 Designer
+</option>
+
+<option value="⭐ Funce Pro">
+⭐ Funce Pro
+</option>
+
+<option value="💎 VIP Member">
+💎 VIP Member
+</option>
+
+<option value="🚀 Booster">
+🚀 Booster
+</option>
+
+<option value="🐛 Bug Hunter">
+🐛 Bug Hunter
+</option>
+
+<option value="💙 Discord Personeli">
+💙 Discord Personeli
+</option>
+
+<option value="🤖 Bot">
+🤖 Bot
+</option>
+
+<option value="🤝 Dost">
+🤝 Dost
+</option>
+
+<option value="⏳ Emektar Üye">
+⏳ Emektar Üye
+</option>
+
+<option value="💬 Chat Master">
+💬 Chat Master
+</option>
+
+<option value="👤 Standart Üye">
+👤 Standart Üye
+</option>
+
 
 </select>
+
 
 <button
 class="btn btn-primary"
@@ -1420,19 +3182,29 @@ style="width:100%"
 onclick="assignBadgeToUser()">
 
 <i class="fa-solid fa-plus"></i>
+
 Rozet Ekle
 
 </button>
 
+
 </div>
 
 
+
+<!-- ROZETLERİ GÖR -->
+
 <div class="card">
 
+
 <h3>
+
 <i class="fa-solid fa-list"></i>
+
 Kullanıcı Rozetlerini Gör
+
 </h3>
+
 
 <input
 id="badge-view-id"
@@ -1440,28 +3212,44 @@ class="form-control"
 style="margin-top:15px"
 placeholder="Discord ID">
 
+
 <button
 class="btn"
-style="width:100%;background:#3b82f6;color:white"
+style="
+width:100%;
+background:#3b82f6;
+color:white"
 onclick="loadUserBadges()">
 
 Rozetleri Getir
 
 </button>
 
-<div id="admin-user-badges"
+
+<div
+id="admin-user-badges"
 style="margin-top:15px">
-</div>
 
 </div>
 
+
+</div>
+
+
+
+<!-- BAN -->
 
 <div class="card">
 
+
 <h3 style="color:#ef4444">
+
 <i class="fa-solid fa-user-slash"></i>
+
 Kullanıcı Banla
+
 </h3>
+
 
 <input
 type="text"
@@ -1470,85 +3258,147 @@ class="form-control"
 placeholder="Discord ID"
 style="margin-top:12px">
 
+
 <button
 class="btn"
-style="background:#ef4444;color:#fff;width:100%"
+style="
+background:#ef4444;
+color:#fff;
+width:100%"
 onclick="banUser()">
 
 <i class="fa-solid fa-ban"></i>
+
 Banla
 
 </button>
 
+
 </div>
 
+
+
+<!-- BAN LIST -->
 
 <div class="card">
 
+
 <h3>
+
 <i class="fa-solid fa-list"></i>
+
 Banlı Kullanıcılar
+
 </h3>
+
 
 <ul
 id="banned-users-list"
-style="list-style:none;color:var(--text-muted);margin-top:12px">
+style="
+list-style:none;
+color:var(--text-muted);
+margin-top:12px">
 
-<li>Yükleniyor...</li>
+<li>
+Yükleniyor...
+</li>
 
 </ul>
 
+
 </div>
+
 
 </section>
 
 </div>
 
 
+
 <footer>
 
 <p>
-© 2026 <span>FunceBOT</span>. Tüm hakları saklıdır.
+
+© 2026
+<span>FunceBOT</span>.
+Tüm hakları saklıdır.
+
 </p>
 
+
 <div class="footer-links">
+
 
 <a href="terms.html">
 Kullanım Koşulları
 </a>
 
+
 <a href="privacy.html">
 Gizlilik Politikası
 </a>
+
 
 </div>
 
 </footer>
 
 
+
 <script>
+
+
+/* =====================================================
+   CONFIG
+===================================================== */
 
 const API_BASE_URL =
 'https://funce-linked-roles.onrender.com';
+
 
 const DEFAULT_AVATAR =
 'https://i.imgur.com/QjSrqWd.png';
 
 
-/* =========================
-   DISCORD LOGIN
-========================= */
+
+/* =====================================================
+   DISCORD LOGIN PARAMS
+===================================================== */
 
 const params =
-new URLSearchParams(window.location.search);
+new URLSearchParams(
+window.location.search
+);
 
-let username = params.get('username');
-let avatar = params.get('avatar');
-let id = params.get('id');
-let role = params.get('role');
-let badge = params.get('badge');
-let badgesParam = params.get('badges');
-let rawGuilds = params.get('guilds');
+
+let username =
+params.get('username');
+
+
+let avatar =
+params.get('avatar');
+
+
+let id =
+params.get('id');
+
+
+let role =
+params.get('role');
+
+
+let badge =
+params.get('badge');
+
+
+let badgesParam =
+params.get('badges');
+
+
+let rawGuilds =
+params.get('guilds');
+
+
 
 if(username && id){
 
@@ -1557,39 +3407,53 @@ if(username && id){
         username
     );
 
+
     localStorage.setItem(
         'discord_avatar',
         avatar || DEFAULT_AVATAR
     );
+
 
     localStorage.setItem(
         'discord_id',
         id
     );
 
+
     localStorage.setItem(
         'discord_role',
         role || 'Üye'
     );
+
 
     if(badgesParam){
 
         try{
 
             const parsed =
-            JSON.parse(decodeURIComponent(badgesParam));
+            JSON.parse(
+                decodeURIComponent(
+                    badgesParam
+                )
+            );
+
 
             localStorage.setItem(
                 'discord_badges',
-                JSON.stringify(parsed)
+                JSON.stringify(
+                    parsed
+                )
             );
+
 
         }catch{
 
             localStorage.setItem(
                 'discord_badges',
                 JSON.stringify(
-                    badge ? [badge] : ['👤 Standart Üye']
+                    badge
+                    ? [badge]
+                    : ['👤 Standart Üye']
                 )
             );
 
@@ -1600,10 +3464,14 @@ if(username && id){
         localStorage.setItem(
             'discord_badges',
             JSON.stringify(
-                badge ? [badge] : ['👤 Standart Üye']
+                badge
+                ? [badge]
+                : ['👤 Standart Üye']
             )
         );
+
     }
+
 
     if(rawGuilds){
 
@@ -1611,43 +3479,70 @@ if(username && id){
             'discord_guilds',
             rawGuilds
         );
+
     }
+
 
     window.history.replaceState(
         {},
         document.title,
         window.location.pathname
     );
+
 }
 
 
-/* =========================
+
+/* =====================================================
    CURRENT USER
-========================= */
+===================================================== */
 
 let currentUsername =
-localStorage.getItem('discord_username');
+localStorage.getItem(
+    'discord_username'
+);
+
 
 let currentAvatar =
-localStorage.getItem('discord_avatar') ||
-DEFAULT_AVATAR;
+localStorage.getItem(
+    'discord_avatar'
+) || DEFAULT_AVATAR;
+
 
 let currentId =
-localStorage.getItem('discord_id');
+localStorage.getItem(
+    'discord_id'
+);
+
 
 let currentRole =
-localStorage.getItem('discord_role');
+localStorage.getItem(
+    'discord_role'
+);
+
 
 let currentGuilds =
-localStorage.getItem('discord_guilds');
+localStorage.getItem(
+    'discord_guilds'
+);
+
 
 let currentBio =
-localStorage.getItem('discord_bio') || '';
+localStorage.getItem(
+    'discord_bio'
+) || '';
+
 
 let currentTheme =
-localStorage.getItem('discord_theme') ||
-'#a855f7';
+localStorage.getItem(
+    'discord_theme'
+) || '#a855f7';
 
+
+
+/* =====================================================
+   BADGES
+===================================================== */
 
 function getBadges(){
 
@@ -1655,27 +3550,157 @@ function getBadges(){
 
         const badges =
         JSON.parse(
-            localStorage.getItem('discord_badges') || '[]'
+            localStorage.getItem(
+                'discord_badges'
+            ) || '[]'
         );
 
-        if(Array.isArray(badges) && badges.length){
+
+        if(
+            Array.isArray(badges) &&
+            badges.length
+        ){
+
             return badges;
+
         }
 
     }catch(e){}
 
-    return ['👤 Standart Üye'];
+
+    return [
+        '👤 Standart Üye'
+    ];
+
 }
 
 
-/* =========================
+
+/* =====================================================
+   LOAD CURRENT USER BADGES FROM BACKEND
+===================================================== */
+
+async function loadCurrentUserBadges(){
+
+    if(!currentId)
+        return;
+
+
+    const endpoints = [
+
+        `${API_BASE_URL}/api/users/${currentId}/badges`,
+
+        `${API_BASE_URL}/api/users/${currentId}`,
+
+        `${API_BASE_URL}/api/admin/badges/${currentId}`
+
+    ];
+
+
+    for(
+        const endpoint of endpoints
+    ){
+
+        try{
+
+            const res =
+            await fetch(
+                endpoint,
+                {
+                    method:'GET',
+                    cache:'no-store'
+                }
+            );
+
+
+            if(!res.ok)
+                continue;
+
+
+            const data =
+            await res.json();
+
+
+            let badges =
+            null;
+
+
+            if(
+                Array.isArray(data)
+            ){
+
+                badges=data;
+
+            }else if(
+                Array.isArray(data.badges)
+            ){
+
+                badges=data.badges;
+
+            }else if(
+                Array.isArray(data.user?.badges)
+            ){
+
+                badges=data.user.badges;
+
+            }
+
+
+            if(
+                Array.isArray(badges) &&
+                badges.length
+            ){
+
+                localStorage.setItem(
+                    'discord_badges',
+                    JSON.stringify(
+                        badges
+                    )
+                );
+
+
+                /*
+                 * Global değişkenleri yenile
+                 */
+
+                renderHeader();
+
+                renderProfile();
+
+                return;
+
+            }
+
+        }catch(e){
+
+            console.warn(
+                'Rozet endpointi denenemedi:',
+                endpoint
+            );
+
+        }
+
+    }
+
+}
+
+
+
+/* =====================================================
    BADGE CLASS
-========================= */
+===================================================== */
 
 function badgeClass(badge){
 
-    if(badge.includes('Founder'))
+    badge =
+    String(badge || '');
+
+
+    if(
+        badge.includes('Founder')
+    )
         return 'badge-founder';
+
 
     if(
         badge.includes('Admin') ||
@@ -1683,74 +3708,137 @@ function badgeClass(badge){
     )
         return 'badge-admin';
 
-    if(badge.includes('Developer'))
+
+    if(
+        badge.includes('Developer')
+    )
         return 'badge-developer';
 
-    if(badge.includes('Pro'))
+
+    if(
+        badge.includes('Pro')
+    )
         return 'badge-pro';
 
-    if(badge.includes('Booster'))
+
+    if(
+        badge.includes('Booster')
+    )
         return 'badge-booster';
 
-    if(badge.includes('Bug Hunter'))
+
+    if(
+        badge.includes('Bug Hunter')
+    )
         return 'badge-bug';
 
-    if(badge.includes('Discord Personeli'))
+
+    if(
+        badge.includes('Discord Personeli')
+    )
         return 'badge-staff';
 
+
     return '';
+
 }
 
 
-/* =========================
+
+/* =====================================================
    RENDER BADGES
-========================= */
+===================================================== */
 
 function renderBadges(
     containerId,
-    badges = getBadges()
+    badges=getBadges()
 ){
 
     const container =
-    document.getElementById(containerId);
+    document.getElementById(
+        containerId
+    );
 
-    if(!container) return;
+
+    if(!container)
+        return;
+
+
+    if(
+        !Array.isArray(badges) ||
+        !badges.length
+    ){
+
+        container.innerHTML = `
+            <span class="profile-badge">
+                👤 Standart Üye
+            </span>
+        `;
+
+        return;
+
+    }
+
 
     container.innerHTML =
-    badges.map(badge => `
+    badges.map(
+        b => `
 
-        <span class="profile-badge ${badgeClass(badge)}">
-            ${escapeHTML(badge)}
+        <span
+        class="profile-badge ${badgeClass(b)}">
+
+            ${escapeHTML(b)}
+
         </span>
 
-    `).join('');
+        `
+    ).join('');
 
 }
 
 
-/* =========================
+
+/* =====================================================
    ESCAPE
-========================= */
+===================================================== */
 
 function escapeHTML(value){
 
-    return String(value || '')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
+    return String(
+        value ?? ''
+    )
+    .replace(
+        /&/g,
+        '&amp;'
+    )
+    .replace(
+        /</g,
+        '&lt;'
+    )
+    .replace(
+        />/g,
+        '&gt;'
+    )
+    .replace(
+        /"/g,
+        '&quot;'
+    )
+    .replace(
+        /'/g,
+        '&#039;'
+    );
 
 }
 
 
-/* =========================
+
+/* =====================================================
    DOM READY
-========================= */
+===================================================== */
 
 window.addEventListener(
 'DOMContentLoaded',
-()=>{
+async ()=>{
 
     applyTheme();
 
@@ -1760,11 +3848,28 @@ window.addEventListener(
 
     renderUserGuilds();
 
-    renderActiveUsers();
-
     renderProfile();
 
+    /*
+     * Önce kayıtlı kullanıcıları çek
+     */
+
+    loadRegisteredUsers();
+
+    /*
+     * Aktif kullanıcılar
+     */
+
+    renderActiveUsers();
+
+
+    /*
+     * Backend'den gerçek rozetleri çek
+     */
+
     if(currentId){
+
+        await loadCurrentUserBadges();
 
         sendHeartbeat();
 
@@ -1775,10 +3880,16 @@ window.addEventListener(
 
     }
 
+
+    /*
+     * Kullanıcı listesi
+     */
+
     setInterval(
-        renderActiveUsers,
-        10000
+        loadRegisteredUsers,
+        15000
     );
+
 
     if(isAdmin()){
 
@@ -1787,8 +3898,10 @@ window.addEventListener(
             'adminNavLink'
         );
 
+
         if(admin)
             admin.style.display='flex';
+
 
         loadAdminData();
 
@@ -1797,32 +3910,47 @@ window.addEventListener(
 });
 
 
-/* =========================
+
+/* =====================================================
    ADMIN CHECK
-========================= */
+===================================================== */
 
 function isAdmin(){
 
     const badges =
     getBadges();
 
+
     return (
-        currentId === '1080897669431574609' ||
-        currentRole === 'Founder' ||
-        currentRole === 'Admin' ||
+
+        currentId ===
+        '1080897669431574609'
+
+        ||
+
+        currentRole === 'Founder'
+
+        ||
+
+        currentRole === 'Admin'
+
+        ||
+
         badges.some(
             b =>
             b.includes('Founder') ||
             b.includes('Bot Admin')
         )
+
     );
 
 }
 
 
-/* =========================
+
+/* =====================================================
    PROFILE
-========================= */
+===================================================== */
 
 function renderProfile(){
 
@@ -1831,79 +3959,124 @@ function renderProfile(){
         'profile-page-locked'
     );
 
+
     const content =
     document.getElementById(
         'profile-page-content'
     );
+
 
     if(!currentId){
 
         if(locked)
             locked.style.display='block';
 
+
         if(content)
             content.style.display='none';
 
+
         return;
+
     }
+
 
     if(locked)
         locked.style.display='none';
 
+
     if(content)
         content.style.display='block';
+
+
 
     const avatarEl =
     document.getElementById(
         'page-user-avatar'
     );
 
+
     const nameEl =
     document.getElementById(
         'page-user-name'
     );
+
 
     const idEl =
     document.getElementById(
         'page-user-id'
     );
 
+
     const bioEl =
     document.getElementById(
         'page-user-bio'
     );
 
-    if(avatarEl)
-        avatarEl.src=getAvatarURL();
 
-    if(nameEl)
-        nameEl.innerText=
-        currentUsername || 'Kullanıcı';
+    if(avatarEl){
 
-    if(idEl)
-        idEl.innerText=
+        avatarEl.src =
+        getAvatarURL();
+
+    }
+
+
+    if(nameEl){
+
+        nameEl.innerText =
+        currentUsername ||
+        'Kullanıcı';
+
+    }
+
+
+    if(idEl){
+
+        idEl.innerText =
         `ID: ${currentId}`;
 
-    if(bioEl)
-        bioEl.innerText=
+    }
+
+
+    if(bioEl){
+
+        bioEl.innerText =
         currentBio ||
         'Henüz biyografi eklenmemiş.';
 
-    renderBadges('profile-badges');
+    }
+
+
+    /*
+     * ROZETLER BURADA DAIMA RENDER EDİLİYOR
+     */
+
+    renderBadges(
+        'profile-badges',
+        getBadges()
+    );
+
 
     const badgeCount =
     document.getElementById(
         'profile-badge-count'
     );
 
-    if(badgeCount)
-        badgeCount.innerText=
+
+    if(badgeCount){
+
+        badgeCount.innerText =
         getBadges().length;
+
+    }
+
 
     const guildCount =
     document.getElementById(
         'profile-guild-count'
     );
+
 
     if(guildCount){
 
@@ -1915,6 +4088,7 @@ function renderProfile(){
                     currentGuilds || '[]'
                 )
             );
+
 
             guildCount.innerText =
             Array.isArray(guilds)
@@ -1929,39 +4103,58 @@ function renderProfile(){
 
     }
 
+
     const nameInput =
     document.getElementById(
         'manual-name-input'
     );
+
 
     const avatarInput =
     document.getElementById(
         'manual-avatar-input'
     );
 
+
     const bioInput =
     document.getElementById(
         'manual-bio-input'
     );
 
+
+    const themeInput =
+    document.getElementById(
+        'edit-theme-select'
+    );
+
+
     if(nameInput)
-        nameInput.value=
+        nameInput.value =
         currentUsername || '';
 
+
     if(avatarInput)
-        avatarInput.value=
-        currentAvatar || DEFAULT_AVATAR;
+        avatarInput.value =
+        currentAvatar ||
+        DEFAULT_AVATAR;
+
 
     if(bioInput)
-        bioInput.value=
+        bioInput.value =
         currentBio || '';
+
+
+    if(themeInput)
+        themeInput.value =
+        currentTheme || '#a855f7';
 
 }
 
 
-/* =========================
+
+/* =====================================================
    HEADER
-========================= */
+===================================================== */
 
 function renderHeader(){
 
@@ -1970,65 +4163,105 @@ function renderHeader(){
         'user-profile'
     );
 
+
     const loginBtn =
     document.getElementById(
         'login-discord-btn'
     );
 
-    if(currentId && currentUsername){
+
+    if(
+        currentId &&
+        currentUsername
+    ){
 
         if(profile){
 
+            const avatar =
             document.getElementById(
                 'user-avatar'
-            ).src=getAvatarURL();
+            );
 
+
+            const name =
             document.getElementById(
                 'user-name'
-            ).innerText=
-            currentUsername;
+            );
 
+
+            const badgeText =
             document.getElementById(
                 'user-badge-text'
-            ).innerText=
-            getBadges()[0] || 'Üye';
+            );
+
+
+            if(avatar)
+                avatar.src =
+                getAvatarURL();
+
+
+            if(name)
+                name.innerText =
+                currentUsername;
+
+
+            if(badgeText)
+                badgeText.innerText =
+                getBadges()[0] ||
+                '👤 Standart Üye';
+
 
             profile.style.display='flex';
 
         }
 
+
         if(loginBtn)
             loginBtn.style.display='none';
+
 
     }else{
 
         if(profile)
             profile.style.display='none';
 
+
         if(loginBtn)
             loginBtn.style.display='inline-flex';
 
     }
+
 
     renderProfile();
 
 }
 
 
-/* =========================
+
+/* =====================================================
    AVATAR
-========================= */
+===================================================== */
 
 function getAvatarURL(){
 
     if(
+
         currentAvatar &&
+
         currentAvatar !== 'null' &&
+
         currentAvatar !== 'undefined'
+
     ){
 
-        if(currentAvatar.startsWith('http'))
+        if(
+            currentAvatar.startsWith('http')
+        ){
+
             return currentAvatar;
+
+        }
+
 
         if(currentId){
 
@@ -2038,13 +4271,16 @@ function getAvatarURL(){
 
     }
 
+
     return DEFAULT_AVATAR;
+
 }
 
 
-/* =========================
+
+/* =====================================================
    SAVE PROFILE
-========================= */
+===================================================== */
 
 function saveManualProfile(){
 
@@ -2055,70 +4291,95 @@ function saveManualProfile(){
         );
 
         return;
+
     }
+
 
     const name =
     document.getElementById(
         'manual-name-input'
     ).value.trim();
 
+
     const avatar =
     document.getElementById(
         'manual-avatar-input'
     ).value.trim();
+
 
     const bio =
     document.getElementById(
         'manual-bio-input'
     ).value.trim();
 
+
     const theme =
     document.getElementById(
         'edit-theme-select'
     ).value;
 
+
     const badges =
     getBadges();
 
-    if(theme === '#ffd700' &&
-       !badges.some(b=>b.includes('Funce Pro'))){
+
+    if(
+        theme === '#ffd700' &&
+        !badges.some(
+            b =>
+            b.includes('Funce Pro')
+        )
+    ){
 
         alert(
             'Altın tema için Funce Pro rozeti gerekli.'
         );
 
         return;
+
     }
 
-    if(theme === '#ef4444' &&
-       !badges.some(
-           b =>
-           b.includes('Founder') ||
-           b.includes('Admin')
-       )){
+
+    if(
+        theme === '#ef4444' &&
+        !badges.some(
+            b =>
+            b.includes('Founder') ||
+            b.includes('Admin')
+        )
+    ){
 
         alert(
             'Kırmızı tema için Admin veya Founder rozeti gerekli.'
         );
 
         return;
+
     }
 
-    if(theme === '#3b82f6' &&
-       !badges.some(
-           b=>b.includes('Developer')
-       )){
+
+    if(
+        theme === '#3b82f6' &&
+        !badges.some(
+            b =>
+            b.includes('Developer')
+        )
+    ){
 
         alert(
             'Mavi tema için Developer rozeti gerekli.'
         );
 
         return;
+
     }
+
 
     if(name){
 
-        currentUsername=name;
+        currentUsername =
+        name;
+
 
         localStorage.setItem(
             'discord_username',
@@ -2127,9 +4388,12 @@ function saveManualProfile(){
 
     }
 
+
     if(avatar){
 
-        currentAvatar=avatar;
+        currentAvatar =
+        avatar;
+
 
         localStorage.setItem(
             'discord_avatar',
@@ -2138,25 +4402,33 @@ function saveManualProfile(){
 
     }
 
-    currentBio=bio;
+
+    currentBio =
+    bio;
+
 
     localStorage.setItem(
         'discord_bio',
         bio
     );
 
-    currentTheme=theme;
+
+    currentTheme =
+    theme;
+
 
     localStorage.setItem(
         'discord_theme',
         theme
     );
 
+
     applyTheme();
 
     renderHeader();
 
     sendHeartbeat();
+
 
     alert(
         'Profil başarıyla güncellendi!'
@@ -2165,9 +4437,10 @@ function saveManualProfile(){
 }
 
 
-/* =========================
+
+/* =====================================================
    THEME
-========================= */
+===================================================== */
 
 function applyTheme(){
 
@@ -2180,39 +4453,49 @@ function applyTheme(){
 }
 
 
-/* =========================
+
+/* =====================================================
    HEARTBEAT
-========================= */
+===================================================== */
 
 function sendHeartbeat(){
 
     if(!currentId)
         return;
 
+
     fetch(
         `${API_BASE_URL}/api/users/ping`,
         {
+
             method:'POST',
+
             headers:{
                 'Content-Type':
                 'application/json'
             },
+
             body:JSON.stringify({
 
                 id:currentId,
 
-                username:currentUsername,
+                username:
+                currentUsername,
 
-                avatar:getAvatarURL(),
+                avatar:
+                getAvatarURL(),
 
-                badge:getBadges()[0] ||
+                badge:
+                getBadges()[0] ||
                 '👤 Standart Üye',
 
-                badges:getBadges()
+                badges:
+                getBadges()
 
             })
 
         }
+
     ).catch(
         e =>
         console.warn(
@@ -2224,11 +4507,344 @@ function sendHeartbeat(){
 }
 
 
-/* =========================
+
+/* =====================================================
+   REGISTERED USERS
+===================================================== */
+
+let registeredUsersCache=[];
+
+
+async function loadRegisteredUsers(){
+
+    const container =
+    document.getElementById(
+        'registered-users-list'
+    );
+
+
+    if(!container)
+        return;
+
+
+    let users=null;
+
+
+    /*
+     * 1 - Tüm kayıtlı kullanıcılar
+     */
+
+    try{
+
+        const res =
+        await fetch(
+            `${API_BASE_URL}/api/users/all`,
+            {
+                cache:'no-store'
+            }
+        );
+
+
+        if(res.ok){
+
+            const data =
+            await res.json();
+
+
+            if(
+                Array.isArray(data)
+            ){
+
+                users=data;
+
+            }else if(
+                Array.isArray(data.users)
+            ){
+
+                users=data.users;
+
+            }
+
+        }
+
+    }catch(e){
+
+        console.warn(
+            'Tüm kullanıcı endpointi yok:',
+            e
+        );
+
+    }
+
+
+    /*
+     * 2 - Fallback: aktif kullanıcılar
+     */
+
+    if(!Array.isArray(users)){
+
+        try{
+
+            const res =
+            await fetch(
+                `${API_BASE_URL}/api/users/active`,
+                {
+                    cache:'no-store'
+                }
+            );
+
+
+            if(res.ok){
+
+                const data =
+                await res.json();
+
+
+                users =
+                Array.isArray(data)
+                ? data
+                : [];
+
+            }
+
+        }catch(e){
+
+            users=[];
+
+        }
+
+    }
+
+
+    /*
+     * Mevcut giriş yapan kullanıcıyı
+     * listede kaybetme
+     */
+
+    if(
+        currentId &&
+        Array.isArray(users)
+    ){
+
+        const exists =
+        users.some(
+            u =>
+            String(
+                u.id ||
+                u.discordId
+            ) ===
+            String(currentId)
+        );
+
+
+        if(!exists){
+
+            users.unshift({
+
+                id:currentId,
+
+                username:
+                currentUsername,
+
+                avatar:
+                getAvatarURL(),
+
+                badges:
+                getBadges()
+
+            });
+
+        }
+
+    }
+
+
+    registeredUsersCache =
+    Array.isArray(users)
+    ? users
+    : [];
+
+
+    const count =
+    document.getElementById(
+        'home-user-count'
+    );
+
+
+    if(count){
+
+        count.innerText =
+        registeredUsersCache.length;
+
+    }
+
+
+    displayRegisteredUsers(
+        registeredUsersCache
+    );
+
+}
+
+
+
+function displayRegisteredUsers(users){
+
+    const container =
+    document.getElementById(
+        'registered-users-list'
+    );
+
+
+    if(!container)
+        return;
+
+
+    if(
+        !Array.isArray(users) ||
+        !users.length
+    ){
+
+        container.innerHTML = `
+
+            <p
+            style="
+            color:var(--text-muted);
+            font-size:12px;
+            text-align:center">
+
+                Henüz kayıtlı kullanıcı bulunamadı.
+
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+    users.map(
+        user => {
+
+            const userAvatar =
+            user.avatar ||
+            DEFAULT_AVATAR;
+
+
+            const userName =
+            user.username ||
+            user.name ||
+            'Kullanıcı';
+
+
+            const userId =
+            user.id ||
+            user.discordId ||
+            '-';
+
+
+            const badges =
+            Array.isArray(user.badges)
+            ? user.badges
+            : [
+                user.badge ||
+                '👤 Standart Üye'
+            ];
+
+
+            return `
+
+            <div
+            class="registered-user-card">
+
+
+                <div
+                class="registered-user-left">
+
+
+                    <img
+                    class="registered-user-avatar"
+                    src="${escapeHTML(userAvatar)}"
+                    onerror="this.src='${DEFAULT_AVATAR}'">
+
+
+                    <div>
+
+                        <div
+                        class="registered-user-name">
+
+                            ${escapeHTML(
+                                userName
+                            )}
+
+                        </div>
+
+
+                        <div
+                        class="registered-user-id">
+
+                            ID:
+                            ${escapeHTML(
+                                userId
+                            )}
+
+                        </div>
+
+
+                        <div
+                        class="badges-container"
+                        style="margin:4px 0 0">
+
+                            ${badges
+                            .slice(0,3)
+                            .map(
+                                b =>
+                                `
+                                <span
+                                class="profile-badge ${badgeClass(b)}">
+
+                                    ${escapeHTML(b)}
+
+                                </span>
+                                `
+                            )
+                            .join('')}
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <span
+                class="registered-user-status">
+
+                    ● Kayıtlı
+
+                </span>
+
+
+            </div>
+
+            `;
+
+        }
+    ).join('');
+
+}
+
+
+
+/* =====================================================
    ACTIVE USERS
-========================= */
+===================================================== */
 
 let activeUsersCache=[];
+
 
 async function renderActiveUsers(){
 
@@ -2237,39 +4853,40 @@ async function renderActiveUsers(){
         'active-users-list'
     );
 
+
     if(!container)
         return;
+
 
     try{
 
         const res =
         await fetch(
-            `${API_BASE_URL}/api/users/active`
+            `${API_BASE_URL}/api/users/active`,
+            {
+                cache:'no-store'
+            }
         );
+
 
         if(!res.ok)
             throw new Error();
 
+
         const users =
         await res.json();
+
 
         activeUsersCache =
         Array.isArray(users)
         ? users
         : [];
 
+
         displayActiveUsers(
             activeUsersCache
         );
 
-        const count =
-        document.getElementById(
-            'home-user-count'
-        );
-
-        if(count)
-            count.innerText=
-            activeUsersCache.length;
 
     }catch{
 
@@ -2278,12 +4895,21 @@ async function renderActiveUsers(){
             activeUsersCache=[{
 
                 id:currentId,
-                username:currentUsername,
-                avatar:getAvatarURL(),
-                badge:getBadges()[0],
-                badges:getBadges()
+
+                username:
+                currentUsername,
+
+                avatar:
+                getAvatarURL(),
+
+                badge:
+                getBadges()[0],
+
+                badges:
+                getBadges()
 
             }];
+
 
             displayActiveUsers(
                 activeUsersCache
@@ -2292,15 +4918,25 @@ async function renderActiveUsers(){
         }else{
 
             container.innerHTML=
-            `<p style="color:var(--text-muted);font-size:12px">
-            Şu an aktif kullanıcı bulunmuyor.
-            </p>`;
+            `
+
+            <p
+            style="
+            color:var(--text-muted);
+            font-size:12px">
+
+                Şu an aktif kullanıcı bulunmuyor.
+
+            </p>
+
+            `;
 
         }
 
     }
 
 }
+
 
 
 function displayActiveUsers(users){
@@ -2310,98 +4946,175 @@ function displayActiveUsers(users){
         'active-users-list'
     );
 
+
     if(!container)
         return;
+
 
     if(!users.length){
 
         container.innerHTML=
-        `<p style="color:var(--text-muted);font-size:12px">
-        Kullanıcı bulunamadı.
-        </p>`;
+        `
+
+        <p
+        style="
+        color:var(--text-muted);
+        font-size:12px">
+
+            Kullanıcı bulunamadı.
+
+        </p>
+
+        `;
 
         return;
 
     }
 
+
     container.innerHTML =
-    users.map(user=>{
+    users.map(
+        user => {
 
-        const badges =
-        Array.isArray(user.badges)
-        ? user.badges
-        : [user.badge || '👤 Standart Üye'];
+            const badges =
+            Array.isArray(user.badges)
+            ? user.badges
+            : [
+                user.badge ||
+                '👤 Standart Üye'
+            ];
 
-        return `
 
-        <div class="active-user-card"
-             data-username="${escapeHTML(user.username || '')}">
+            return `
 
-            <div class="active-user-info">
+            <div
+            class="active-user-card"
+            data-username="${escapeHTML(
+                user.username || ''
+            )}">
 
-                <img
-                src="${escapeHTML(user.avatar || DEFAULT_AVATAR)}">
 
-                <div>
+                <div
+                class="active-user-info">
 
-                    <h4 style="color:#fff;font-size:13px">
-                        ${escapeHTML(user.username || 'Kullanıcı')}
-                    </h4>
 
-                    <div class="badges-container"
-                         style="margin:4px 0">
+                    <img
+                    src="${escapeHTML(
+                        user.avatar ||
+                        DEFAULT_AVATAR
+                    )}"
+                    onerror="this.src='${DEFAULT_AVATAR}'">
 
-                        ${badges.slice(0,4).map(
-                            b =>
-                            `<span class="profile-badge ${badgeClass(b)}">
-                            ${escapeHTML(b)}
-                            </span>`
-                        ).join('')}
+
+                    <div>
+
+
+                        <h4
+                        style="
+                        color:#fff;
+                        font-size:13px">
+
+                            ${escapeHTML(
+                                user.username ||
+                                'Kullanıcı'
+                            )}
+
+                        </h4>
+
+
+                        <div
+                        class="badges-container"
+                        style="margin:4px 0">
+
+
+                            ${badges
+                            .slice(0,4)
+                            .map(
+                                b =>
+                                `
+
+                                <span
+                                class="profile-badge ${badgeClass(b)}">
+
+                                    ${escapeHTML(b)}
+
+                                </span>
+
+                                `
+                            )
+                            .join('')}
+
+
+                        </div>
+
+
+                        <p
+                        style="
+                        color:#22c55e;
+                        font-size:10px">
+
+                            ● Sitede Aktif
+
+                        </p>
+
 
                     </div>
 
-                    <p style="color:#22c55e;font-size:10px">
-                        ● Sitede Aktif
-                    </p>
 
                 </div>
 
+
             </div>
 
-        </div>
+            `;
 
-        `;
-
-    }).join('');
+        }
+    ).join('');
 
 }
+
 
 
 function filterActiveUsers(){
 
-    const query =
+    const input =
     document.getElementById(
         'active-user-search'
-    ).value
-    .toLowerCase()
-    .trim();
+    );
+
+
+    const query =
+    input
+    ? input.value
+        .toLowerCase()
+        .trim()
+    : '';
+
 
     const filtered =
     activeUsersCache.filter(
         user =>
-        (user.username || '')
+        (
+            user.username ||
+            user.name ||
+            ''
+        )
         .toLowerCase()
         .includes(query)
     );
 
-    displayActiveUsers(filtered);
+
+    displayActiveUsers(
+        filtered
+    );
 
 }
 
 
-/* =========================
+
+/* =====================================================
    GUILDS
-========================= */
+===================================================== */
 
 function renderUserGuilds(){
 
@@ -2410,18 +5123,32 @@ function renderUserGuilds(){
         'user-guilds-list'
     );
 
+
     if(!container)
         return;
+
 
     if(!currentGuilds){
 
         container.innerHTML=
-        `<p style="color:var(--text-muted);font-size:12px">
-        Sunucuları görmek için Discord ile tekrar giriş yap.
-        </p>`;
+        `
+
+        <p
+        style="
+        color:var(--text-muted);
+        font-size:12px">
+
+            Sunucuları görmek için
+            Discord ile tekrar giriş yap.
+
+        </p>
+
+        `;
 
         return;
+
     }
+
 
     try{
 
@@ -2432,119 +5159,198 @@ function renderUserGuilds(){
             )
         );
 
+
         const filtered =
-        guilds.filter(g=>{
+        guilds.filter(
+            g => {
 
-            if(g.owner)
-                return true;
+                if(g.owner)
+                    return true;
 
-            if(g.permissions){
 
-                const p =
-                BigInt(g.permissions);
+                if(g.permissions){
 
-                return (
-                    (p & 0x8n) === 0x8n
-                );
+                    const p =
+                    BigInt(
+                        g.permissions
+                    );
+
+
+                    return (
+                        (p & 0x8n) ===
+                        0x8n
+                    );
+
+                }
+
+
+                return false;
 
             }
+        );
 
-            return false;
-
-        });
 
         if(!filtered.length){
 
             container.innerHTML=
-            `<p style="color:var(--text-muted)">
-            Yönetici olduğun sunucu bulunamadı.
-            </p>`;
+            `
 
-            return;
-        }
+            <p
+            style="color:var(--text-muted)">
 
-        container.innerHTML =
-        filtered.map(guild=>{
+                Yönetici olduğun sunucu bulunamadı.
 
-            const icon =
-            guild.icon
-            ? `<img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png">`
-            : `<div class="guild-icon-placeholder">
-                ${escapeHTML(
-                    guild.name?.charAt(0) || '?'
-                )}
-               </div>`;
-
-            const bot =
-            guild.botInGuild === true;
-
-            return `
-
-            <div class="guild-card">
-
-                <div class="guild-info">
-
-                    ${icon}
-
-                    <div>
-
-                        <h4 style="color:#fff">
-                            ${escapeHTML(guild.name)}
-                        </h4>
-
-                        <p style="color:var(--text-muted);font-size:10px">
-                            ${bot
-                            ? '<span style="color:#22c55e">● Bot Aktif</span>'
-                            : '<span style="color:#ef4444">● Bot Ekli Değil</span>'}
-                        </p>
-
-                    </div>
-
-                </div>
-
-                ${
-                bot
-
-                ?
-
-                `<button
-                class="btn btn-primary"
-                onclick="alert('Yönetim paneli yakında aktif olacak.')">
-                Yönet
-                </button>`
-
-                :
-
-                `<a
-                class="btn btn-discord"
-                target="_blank"
-                href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663&guild_id=${guild.id}">
-                <i class="fa-solid fa-plus"></i>
-                Botu Ekle
-                </a>`
-                }
-
-            </div>
+            </p>
 
             `;
 
-        }).join('');
+            return;
+
+        }
+
+
+        container.innerHTML =
+        filtered.map(
+            guild => {
+
+                const icon =
+                guild.icon
+
+                ?
+
+                `<img
+                src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png">`
+
+                :
+
+                `<div
+                class="guild-icon-placeholder">
+
+                    ${escapeHTML(
+                        guild.name?.charAt(0) ||
+                        '?'
+                    )}
+
+                </div>`;
+
+
+                const bot =
+                guild.botInGuild === true;
+
+
+                return `
+
+                <div
+                class="guild-card">
+
+
+                    <div
+                    class="guild-info">
+
+
+                        ${icon}
+
+
+                        <div>
+
+
+                            <h4
+                            style="color:#fff">
+
+                                ${escapeHTML(
+                                    guild.name
+                                )}
+
+                            </h4>
+
+
+                            <p
+                            style="
+                            color:var(--text-muted);
+                            font-size:10px">
+
+
+                                ${
+                                    bot
+
+                                    ?
+
+                                    '<span style="color:#22c55e">● Bot Aktif</span>'
+
+                                    :
+
+                                    '<span style="color:#ef4444">● Bot Ekli Değil</span>'
+
+                                }
+
+
+                            </p>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    ${
+                    bot
+
+                    ?
+
+                    `<button
+                    class="btn btn-primary"
+                    onclick="alert('Yönetim paneli yakında aktif olacak.')">
+
+                        Yönet
+
+                    </button>`
+
+                    :
+
+                    `<a
+                    class="btn btn-discord"
+                    target="_blank"
+                    href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663&guild_id=${guild.id}">
+
+                        <i class="fa-solid fa-plus"></i>
+
+                        Botu Ekle
+
+                    </a>`
+                    }
+
+
+                </div>
+
+                `;
+
+            }
+        ).join('');
+
 
     }catch{
 
         container.innerHTML=
-        `<p style="color:#ef4444">
-        Sunucu verileri okunamadı.
-        </p>`;
+        `
+
+        <p style="color:#ef4444">
+
+            Sunucu verileri okunamadı.
+
+        </p>
+
+        `;
 
     }
 
 }
 
 
-/* =========================
+
+/* =====================================================
    CONTROL PANEL
-========================= */
+===================================================== */
 
 function checkControlPanelAccess(){
 
@@ -2553,19 +5359,27 @@ function checkControlPanelAccess(){
         'control-panel-locked'
     );
 
+
     const unlocked =
     document.getElementById(
         'control-panel-unlocked'
     );
 
+
+    if(!locked || !unlocked)
+        return;
+
+
     if(currentId){
 
         locked.style.display='none';
+
         unlocked.style.display='block';
 
     }else{
 
         locked.style.display='block';
+
         unlocked.style.display='none';
 
     }
@@ -2573,9 +5387,10 @@ function checkControlPanelAccess(){
 }
 
 
-/* =========================
+
+/* =====================================================
    ADMIN BADGE
-========================= */
+===================================================== */
 
 async function assignBadgeToUser(){
 
@@ -2586,17 +5401,21 @@ async function assignBadgeToUser(){
         );
 
         return;
+
     }
+
 
     const targetId =
     document.getElementById(
         'admin-target-id'
     ).value.trim();
 
-    const badge =
+
+    const selectedBadge =
     document.getElementById(
         'admin-badge-select'
     ).value;
+
 
     if(!targetId){
 
@@ -2605,16 +5424,24 @@ async function assignBadgeToUser(){
         );
 
         return;
+
     }
 
-    if(!/^\d{15,25}$/.test(targetId)){
+
+    if(
+        !/^\d{15,25}$/.test(
+            targetId
+        )
+    ){
 
         alert(
             'Geçerli bir Discord ID gir!'
         );
 
         return;
+
     }
+
 
     try{
 
@@ -2622,52 +5449,91 @@ async function assignBadgeToUser(){
         await fetch(
             `${API_BASE_URL}/api/admin/badge`,
             {
+
                 method:'POST',
+
                 headers:{
                     'Content-Type':
                     'application/json'
                 },
+
                 body:JSON.stringify({
 
-                    adminId:currentId,
+                    adminId:
+                    currentId,
 
-                    targetId:targetId,
+                    targetId:
+                    targetId,
 
-                    badge:badge
+                    badge:
+                    selectedBadge
 
                 })
+
             }
         );
+
 
         const data =
         await res.json();
 
+
         if(data.success){
 
             alert(
-                `${badge} rozeti kullanıcıya eklendi.`
+                `${selectedBadge} rozeti kullanıcıya eklendi.`
             );
+
 
             loadUserBadges(
                 targetId
             );
 
+
+            /*
+             * Eğer kendi hesabına rozet verdiysen
+             * profili anında yenile
+             */
+
+            if(
+                targetId ===
+                String(currentId)
+            ){
+
+                await loadCurrentUserBadges();
+
+                renderProfile();
+
+                renderHeader();
+
+            }
+
+
             document.getElementById(
                 'admin-target-id'
             ).value='';
 
-        }else{
 
-            throw new Error();
+            return;
 
         }
 
+
+        throw new Error();
+
     }catch{
+
+        /*
+         * Backend endpoint çalışmıyorsa
+         * mevcut local fallback korunuyor.
+         */
 
         const key =
         `user_badges_${targetId}`;
 
+
         let badges=[];
+
 
         try{
 
@@ -2679,18 +5545,58 @@ async function assignBadgeToUser(){
 
         }catch{}
 
-        if(!badges.includes(badge))
-            badges.push(badge);
+
+        if(
+            !badges.includes(
+                selectedBadge
+            )
+        ){
+
+            badges.push(
+                selectedBadge
+            );
+
+        }
+
 
         localStorage.setItem(
             key,
-            JSON.stringify(badges)
+            JSON.stringify(
+                badges
+            )
         );
 
+
+        /*
+         * Kendi hesabına rozet veriliyorsa
+         * profile local rozetini de güncelle
+         */
+
+        if(
+            targetId ===
+            String(currentId)
+        ){
+
+            localStorage.setItem(
+                'discord_badges',
+                JSON.stringify(
+                    badges
+                )
+            );
+
+
+            renderHeader();
+
+            renderProfile();
+
+        }
+
+
         alert(
-            `${badge} rozeti yerel olarak eklendi.\n\n` +
-            `Kalıcı sistem için /api/admin/badge endpointini backend'e ekle.`
+            `${selectedBadge} rozeti kullanıcıya yerel olarak eklendi.\n\n` +
+            `Kalıcı sistem için backend'de /api/admin/badge endpointinin çalışması gerekiyor.`
         );
+
 
         loadUserBadges(
             targetId
@@ -2701,9 +5607,10 @@ async function assignBadgeToUser(){
 }
 
 
-/* =========================
-   LOAD USER BADGES
-========================= */
+
+/* =====================================================
+   LOAD BADGES
+===================================================== */
 
 async function loadUserBadges(
     customId=null
@@ -2715,10 +5622,12 @@ async function loadUserBadges(
         'badge-view-id'
     ).value.trim();
 
+
     const container =
     document.getElementById(
         'admin-user-badges'
     );
+
 
     if(!targetId){
 
@@ -2727,30 +5636,64 @@ async function loadUserBadges(
         );
 
         return;
+
     }
+
 
     try{
 
         const res =
         await fetch(
-            `${API_BASE_URL}/api/admin/badges/${targetId}`
+            `${API_BASE_URL}/api/admin/badges/${targetId}`,
+            {
+                cache:'no-store'
+            }
         );
+
 
         if(!res.ok)
             throw new Error();
 
+
         const data =
         await res.json();
+
 
         const badges =
         Array.isArray(data.badges)
         ? data.badges
         : [];
 
+
+        /*
+         * Kendi kullanıcımsa localStorage'ı da güncelle
+         */
+
+        if(
+            String(targetId) ===
+            String(currentId)
+        ){
+
+            localStorage.setItem(
+                'discord_badges',
+                JSON.stringify(
+                    badges
+                )
+            );
+
+
+            renderHeader();
+
+            renderProfile();
+
+        }
+
+
         renderAdminBadges(
             targetId,
             badges
         );
+
 
     }catch{
 
@@ -2761,6 +5704,28 @@ async function loadUserBadges(
             ) || '[]'
         );
 
+
+        if(
+            String(targetId) ===
+            String(currentId) &&
+            badges.length
+        ){
+
+            localStorage.setItem(
+                'discord_badges',
+                JSON.stringify(
+                    badges
+                )
+            );
+
+
+            renderHeader();
+
+            renderProfile();
+
+        }
+
+
         renderAdminBadges(
             targetId,
             badges
@@ -2770,6 +5735,11 @@ async function loadUserBadges(
 
 }
 
+
+
+/* =====================================================
+   RENDER ADMIN BADGES
+===================================================== */
 
 function renderAdminBadges(
     targetId,
@@ -2781,34 +5751,58 @@ function renderAdminBadges(
         'admin-user-badges'
     );
 
+
+    if(!container)
+        return;
+
+
     if(!badges.length){
 
         container.innerHTML=
-        `<p style="color:var(--text-muted);font-size:12px">
-        Bu kullanıcının kayıtlı rozeti yok.
-        </p>`;
+        `
+
+        <p
+        style="
+        color:var(--text-muted);
+        font-size:12px">
+
+            Bu kullanıcının kayıtlı rozeti yok.
+
+        </p>
+
+        `;
 
         return;
+
     }
+
 
     container.innerHTML =
     badges.map(
-        (badge,index)=>`
+        (badge,index) => `
 
-        <div class="badge-admin-row">
+        <div
+        class="badge-admin-row">
 
-            <span class="profile-badge ${badgeClass(badge)}">
+
+            <span
+            class="profile-badge ${badgeClass(badge)}">
+
                 ${escapeHTML(badge)}
+
             </span>
+
 
             <button
             class="badge-remove"
             onclick="removeBadge('${escapeHTML(targetId)}',${index})">
 
-            <i class="fa-solid fa-xmark"></i>
-            Kaldır
+                <i class="fa-solid fa-xmark"></i>
+
+                Kaldır
 
             </button>
+
 
         </div>
 
@@ -2818,19 +5812,23 @@ function renderAdminBadges(
 }
 
 
-/* =========================
+
+/* =====================================================
    REMOVE BADGE
-========================= */
+===================================================== */
 
 async function removeBadge(
     targetId,
     index
 ){
 
-    if(!confirm(
-        'Bu rozeti kullanıcıdan kaldırmak istiyor musun?'
-    ))
+    if(
+        !confirm(
+            'Bu rozeti kullanıcıdan kaldırmak istiyor musun?'
+        )
+    )
         return;
+
 
     try{
 
@@ -2838,58 +5836,107 @@ async function removeBadge(
         await fetch(
             `${API_BASE_URL}/api/admin/badge`,
             {
+
                 method:'DELETE',
+
                 headers:{
                     'Content-Type':
                     'application/json'
                 },
+
                 body:JSON.stringify({
 
-                    adminId:currentId,
+                    adminId:
+                    currentId,
 
-                    targetId:targetId,
+                    targetId:
+                    targetId,
 
-                    badgeIndex:index
+                    badgeIndex:
+                    index
 
                 })
+
             }
         );
+
 
         const data =
         await res.json();
 
+
         if(data.success){
+
+            if(
+                String(targetId) ===
+                String(currentId)
+            ){
+
+                await loadCurrentUserBadges();
+
+            }
+
 
             loadUserBadges(
                 targetId
             );
 
+
             return;
 
         }
 
+
         throw new Error();
+
 
     }catch{
 
         const key =
         `user_badges_${targetId}`;
 
+
         let badges =
         JSON.parse(
-            localStorage.getItem(key) ||
-            '[]'
+            localStorage.getItem(
+                key
+            ) || '[]'
         );
+
 
         badges.splice(
             index,
             1
         );
 
+
         localStorage.setItem(
             key,
-            JSON.stringify(badges)
+            JSON.stringify(
+                badges
+            )
         );
+
+
+        if(
+            String(targetId) ===
+            String(currentId)
+        ){
+
+            localStorage.setItem(
+                'discord_badges',
+                JSON.stringify(
+                    badges
+                )
+            );
+
+
+            renderHeader();
+
+            renderProfile();
+
+        }
+
 
         loadUserBadges(
             targetId
@@ -2900,9 +5947,10 @@ async function removeBadge(
 }
 
 
-/* =========================
+
+/* =====================================================
    ADMIN DATA
-========================= */
+===================================================== */
 
 async function loadAdminData(){
 
@@ -2910,19 +5958,26 @@ async function loadAdminData(){
 
         const res =
         await fetch(
-            `${API_BASE_URL}/api/admin/data`
+            `${API_BASE_URL}/api/admin/data`,
+            {
+                cache:'no-store'
+            }
         );
+
 
         if(!res.ok)
             throw new Error();
 
+
         const data =
         await res.json();
+
 
         const list =
         document.getElementById(
             'banned-users-list'
         );
+
 
         if(
             data.bannedList &&
@@ -2931,18 +5986,25 @@ async function loadAdminData(){
 
             list.innerHTML =
             data.bannedList.map(
-                uid=>`
+                uid => `
 
-                <li style="
+                <li
+                style="
                 padding:8px 0;
-                border-bottom:1px solid rgba(255,255,255,.05);
+                border-bottom:
+                1px solid rgba(255,255,255,.05);
                 display:flex;
                 justify-content:space-between;
                 align-items:center">
 
+
                     <span>
-                        ID: ${escapeHTML(uid)}
+
+                        ID:
+                        ${escapeHTML(uid)}
+
                     </span>
+
 
                     <button
                     onclick="unbanUser('${escapeHTML(uid)}')"
@@ -2954,21 +6016,24 @@ async function loadAdminData(){
                     border-radius:6px;
                     cursor:pointer">
 
-                    Kaldır
+                        Kaldır
 
                     </button>
+
 
                 </li>
 
                 `
             ).join('');
 
+
         }else{
 
-            list.innerHTML=
+            list.innerHTML =
             '<li>Aktif banlı kullanıcı bulunmuyor.</li>';
 
         }
+
 
     }catch(e){
 
@@ -2982,9 +6047,10 @@ async function loadAdminData(){
 }
 
 
-/* =========================
+
+/* =====================================================
    BAN
-========================= */
+===================================================== */
 
 async function banUser(){
 
@@ -2993,6 +6059,7 @@ async function banUser(){
         'ban-id-input'
     ).value.trim();
 
+
     if(!targetId){
 
         alert(
@@ -3000,17 +6067,21 @@ async function banUser(){
         );
 
         return;
+
     }
+
 
     try{
 
         const res =
         await fetch(
-            `${API_BASE_URL}/api/admin/ban?adminId=${currentId}&targetId=${targetId}`
+            `${API_BASE_URL}/api/admin/ban?adminId=${encodeURIComponent(currentId)}&targetId=${encodeURIComponent(targetId)}`
         );
+
 
         const data =
         await res.json();
+
 
         if(data.success){
 
@@ -3018,11 +6089,14 @@ async function banUser(){
                 'Kullanıcı başarıyla banlandı!'
             );
 
+
             document.getElementById(
                 'ban-id-input'
             ).value='';
 
+
             loadAdminData();
+
 
         }else{
 
@@ -3031,6 +6105,7 @@ async function banUser(){
             );
 
         }
+
 
     }catch{
 
@@ -3043,9 +6118,10 @@ async function banUser(){
 }
 
 
-/* =========================
+
+/* =====================================================
    UNBAN
-========================= */
+===================================================== */
 
 async function unbanUser(
     targetId
@@ -3054,10 +6130,12 @@ async function unbanUser(
     try{
 
         await fetch(
-            `${API_BASE_URL}/api/admin/unban?adminId=${currentId}&targetId=${targetId}`
+            `${API_BASE_URL}/api/admin/unban?adminId=${encodeURIComponent(currentId)}&targetId=${encodeURIComponent(targetId)}`
         );
 
+
         loadAdminData();
+
 
     }catch(e){
 
@@ -3068,9 +6146,10 @@ async function unbanUser(
 }
 
 
-/* =========================
+
+/* =====================================================
    LOGOUT
-========================= */
+===================================================== */
 
 function logout(){
 
@@ -3078,46 +6157,56 @@ function logout(){
         'discord_username'
     );
 
+
     localStorage.removeItem(
         'discord_avatar'
     );
+
 
     localStorage.removeItem(
         'discord_id'
     );
 
+
     localStorage.removeItem(
         'discord_role'
     );
+
 
     localStorage.removeItem(
         'discord_badge'
     );
 
+
     localStorage.removeItem(
         'discord_badges'
     );
+
 
     localStorage.removeItem(
         'discord_guilds'
     );
 
+
     localStorage.removeItem(
         'discord_bio'
     );
 
+
     localStorage.removeItem(
         'discord_theme'
     );
+
 
     window.location.href='/';
 
 }
 
 
-/* =========================
+
+/* =====================================================
    MENU
-========================= */
+===================================================== */
 
 function toggleMenu(){
 
@@ -3126,28 +6215,54 @@ function toggleMenu(){
         'navMenu'
     );
 
+
     const toggle =
     document.getElementById(
         'menuToggle'
     );
 
+
+    if(!menu || !toggle)
+        return;
+
+
     menu.classList.toggle(
         'show'
     );
 
+
     toggle.innerHTML =
     menu.classList.contains('show')
-    ? '<i class="fa-solid fa-xmark"></i>'
-    : '<i class="fa-solid fa-bars"></i>';
+
+    ?
+
+    '<i class="fa-solid fa-xmark"></i>'
+
+    :
+
+    '<i class="fa-solid fa-bars"></i>';
 
 }
 
 
-/* =========================
-   PROFILE TAB
-========================= */
 
-function openProfileTab(){
+/* =====================================================
+   PROFILE TAB
+===================================================== */
+
+async function openProfileTab(){
+
+    /*
+     * Profil açılırken backend'den
+     * rozetleri tekrar kontrol et.
+     */
+
+    if(currentId){
+
+        await loadCurrentUserBadges();
+
+    }
+
 
     switchTab(
         'profilim'
@@ -3156,9 +6271,10 @@ function openProfileTab(){
 }
 
 
-/* =========================
+
+/* =====================================================
    SWITCH TAB
-========================= */
+===================================================== */
 
 function switchTab(
     tabId,
@@ -3166,7 +6282,9 @@ function switchTab(
 ){
 
     document
-    .querySelectorAll('.page-section')
+    .querySelectorAll(
+        '.page-section'
+    )
     .forEach(
         section =>
         section.classList.remove(
@@ -3174,24 +6292,33 @@ function switchTab(
         )
     );
 
+
     const target =
     document.getElementById(
         tabId
     );
 
-    if(target)
+
+    if(target){
+
         target.classList.add(
             'active'
         );
 
+    }
+
+
     document
-    .querySelectorAll('.nav-btn')
+    .querySelectorAll(
+        '.nav-btn'
+    )
     .forEach(
         btn =>
         btn.classList.remove(
             'active'
         )
     );
+
 
     if(
         element &&
@@ -3206,58 +6333,99 @@ function switchTab(
 
     }
 
+
+    /*
+     * Profil navbar'dan açıldıysa
+     * aktif profil butonunu bul.
+     */
+
+    if(
+        tabId === 'profilim' &&
+        !element
+    ){
+
+        const profileBtn =
+        document.querySelector(
+            'a[onclick*="profilim"]'
+        );
+
+
+        if(profileBtn)
+            profileBtn.classList.add(
+                'active'
+            );
+
+    }
+
+
     const menu =
     document.getElementById(
         'navMenu'
     );
 
+
     if(
         menu &&
-        menu.classList.contains('show')
+        menu.classList.contains(
+            'show'
+        )
     ){
 
         toggleMenu();
 
     }
 
+
     window.scrollTo({
+
         top:0,
+
         behavior:'smooth'
+
     });
 
 }
 
 
-/* =========================
+
+/* =====================================================
    PARTICLES
-========================= */
+===================================================== */
 
 const canvas =
 document.getElementById(
     'particle-canvas'
 );
 
+
 const ctx =
 canvas.getContext('2d');
 
+
 let particles=[];
+
+
 
 function resizeCanvas(){
 
     canvas.width =
     window.innerWidth;
 
+
     canvas.height =
     window.innerHeight;
 
 }
 
+
 resizeCanvas();
+
 
 window.addEventListener(
 'resize',
 resizeCanvas
 );
+
 
 
 class Particle{
@@ -3268,46 +6436,66 @@ class Particle{
         Math.random() *
         canvas.width;
 
+
         this.y =
         Math.random() *
         canvas.height;
 
+
         this.size =
         Math.random()*1.5+.5;
 
+
         this.speedX =
         (Math.random()-.5)*.4;
+
 
         this.speedY =
         (Math.random()-.5)*.4;
 
     }
 
+
     update(){
 
-        this.x+=this.speedX;
-        this.y+=this.speedY;
+        this.x +=
+        this.speedX;
+
+
+        this.y +=
+        this.speedY;
+
 
         if(
-            this.x<0 ||
-            this.x>canvas.width
-        )
-            this.speedX*=-1;
+            this.x < 0 ||
+            this.x > canvas.width
+        ){
+
+            this.speedX *= -1;
+
+        }
+
 
         if(
-            this.y<0 ||
-            this.y>canvas.height
-        )
-            this.speedY*=-1;
+            this.y < 0 ||
+            this.y > canvas.height
+        ){
+
+            this.speedY *= -1;
+
+        }
 
     }
+
 
     draw(){
 
         ctx.fillStyle =
         'rgba(168,85,247,.35)';
 
+
         ctx.beginPath();
+
 
         ctx.arc(
             this.x,
@@ -3317,6 +6505,7 @@ class Particle{
             Math.PI*2
         );
 
+
         ctx.fill();
 
     }
@@ -3324,9 +6513,10 @@ class Particle{
 }
 
 
+
 for(
     let i=0;
-    i<45;
+    i<60;
     i++
 ){
 
@@ -3335,6 +6525,7 @@ for(
     );
 
 }
+
 
 
 function animate(){
@@ -3346,12 +6537,17 @@ function animate(){
         canvas.height
     );
 
+
     particles.forEach(
-        particle=>{
+        particle => {
+
             particle.update();
+
             particle.draw();
+
         }
     );
+
 
     requestAnimationFrame(
         animate
@@ -3359,9 +6555,11 @@ function animate(){
 
 }
 
+
 animate();
+
 
 </script>
 
 </body>
-</html>
+    </html>
