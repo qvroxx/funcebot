@@ -108,7 +108,6 @@
             100% { width: 100%; }
         }
 
-        /* HEADER & NAVBAR DÜZENİ */
         header {
             position: fixed;
             top: 0;
@@ -168,7 +167,6 @@
             align-items: center;
         }
 
-        /* ÇERÇEVESİZ NAVBAR BUTONLARI */
         nav ul li a {
             color: var(--text-muted);
             text-decoration: none;
@@ -224,7 +222,6 @@
             color: var(--primary-purple) !important;
         }
 
-        /* HESAP / PROFİL KART (ÇERÇEVESİ KORUNDU) */
         #user-profile {
             display: none;
             align-items: center;
@@ -528,7 +525,6 @@
             margin-bottom: 20px;
         }
 
-        /* YENİ EKLENEN ANA SAYFA ADIM KARTLARI */
         .step-card {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--border-color);
@@ -614,7 +610,6 @@
             color: var(--primary-purple);
         }
 
-        /* MOBİL UYUMLULUK */
         @media (max-width: 990px) {
             header {
                 padding: 12px 20px;
@@ -708,7 +703,7 @@
     </div>
 
     <header>
-        <a class="logo" onclick="switchTab('ana-sayfa', getNavBtn(0))">
+        <a class="logo" onclick="switchTab('ana-sayfa')">
             Funce<span>BOT</span>
         </a>
 
@@ -725,7 +720,6 @@
                 <li><a class="nav-btn nav-admin-btn" id="adminNavLink" onclick="switchTab('admin-panel', this)"><i class="fa-solid fa-shield-halved"></i> Admin Panel</a></li>
                 <li><a href="https://discord.gg/jSm2n5Jp2k" target="_blank" class="nav-btn btn-destek"><i class="fa-brands fa-discord"></i> Destek Sunucusu</a></li>
                 
-                <!-- PROFİL / HESAP KART (Sadece Bunun Çerçevesi Korundu) -->
                 <li id="user-profile-li">
                     <div id="user-profile" onclick="openProfileTab()" title="Profiline Git">
                         <div class="user-main-info">
@@ -754,11 +748,10 @@
                 <div class="btn-group">
                     <a href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663" target="_blank" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Botu Sunucuna Ekle</a>
                     <a href="https://funce-linked-roles.onrender.com/api/auth/discord" class="btn btn-discord" id="login-discord-btn"><i class="fa-brands fa-discord"></i> Discord ile Giriş Yap</a>
-                    <button class="btn btn-gold-outline" onclick="switchTab('funce-pro', getNavBtn(2))"><i class="fa-solid fa-crown"></i> Funce Pro'yu İncele</button>
+                    <button class="btn btn-gold-outline" onclick="switchTab('funce-pro')"><i class="fa-solid fa-crown"></i> Funce Pro'yu İncele</button>
                 </div>
             </div>
 
-            <!-- AKTİF KULLANICI SAYISI 10 OLARAK AYARLANDI -->
             <div class="stats-bar">
                 <div class="stat-item">
                     <h3>99.9%</h3>
@@ -774,7 +767,6 @@
                 </div>
             </div>
 
-            <!-- DOLDURULAN YENİ İÇERİK: CANLI BOT DURUMU -->
             <div class="card" style="margin-bottom: 30px; border-color: rgba(168, 85, 247, 0.4); background: linear-gradient(135deg, rgba(22, 16, 38, 0.8), rgba(15, 23, 42, 0.8));">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
                     <h3 style="font-size: 16px; color: #fff; display: flex; align-items: center; gap: 8px;">
@@ -799,7 +791,6 @@
                 </div>
             </div>
 
-            <!-- ÖNE ÇIKAN ÖZELLİKLER -->
             <h2 class="section-title">Öne Çıkan Güçlü Modüller</h2>
             <div class="grid-3" style="margin-bottom: 35px;">
                 <div class="card">
@@ -824,7 +815,6 @@
                 </div>
             </div>
 
-            <!-- NASIL ÇALIŞIR? (3 ADIMDA KURULUM) -->
             <h2 class="section-title">3 Adımda Hemen Kullanmaya Başla</h2>
             <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
                 <div class="step-card">
@@ -877,7 +867,7 @@
                 <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Görünen Adın:</label>
                 <input type="text" id="manual-name-input" class="form-control" placeholder="Adını gir...">
 
-                <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Profil Fotoğrafı URL (Doğrundan Görsel Linki):</label>
+                <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Profil Fotoğrafı URL (Doğrudan Görsel Linki):</label>
                 <input type="text" id="manual-avatar-input" class="form-control" placeholder="https://i.imgur.com/QjSrqWd.png veya Discord Avatar Linki" value="https://i.imgur.com/QjSrqWd.png">
 
                 <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Tema / Vurgu Rengi (Rozetine Göre Kilidi Açılır):</label>
@@ -893,6 +883,7 @@
             </div>
         </section>
 
+        <!-- ÖZELLİKLER SAYFASI -->
         <section id="ozellikler" class="page-section">
             <h2 class="section-title">Bot Özellikleri</h2>
             <div class="grid-3">
@@ -914,6 +905,7 @@
             </div>
         </section>
 
+        <!-- FUNCĒ PRO SAYFASI -->
         <section id="funce-pro" class="page-section">
             <h2 class="section-title" style="color: var(--gold-color); text-shadow: var(--gold-glow);">Funce Pro</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 13px;">Topluluğunuz için özel tasarlanmış ayrıcalıklı VIP özellikler.</p>
@@ -960,7 +952,6 @@
                     <p style="color: var(--text-muted); font-size: 12px; margin-top: 6px;">Gelişmiş komut ve modül ayarları şu an geliştirilme aşamasındadır.</p>
                 </div>
 
-                <!-- SUNUCULAR BÖLÜMÜ -->
                 <div class="card" style="border-color: rgba(59, 130, 246, 0.4);">
                     <h3 style="color: #3b82f6; margin-bottom: 12px;"><i class="fa-solid fa-server"></i> Yönetici / Sahibi Olduğun Sunucular</h3>
                     <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 15px;">Sahip olduğun veya yönetici yetkine sahip olduğun tüm Discord sunucuları:</p>
@@ -972,12 +963,11 @@
             </div>
         </section>
 
-        <!-- ADMIN PANEL (AKTİF KULLANICILAR BURAYA TAŞINDI) -->
+        <!-- ADMIN PANEL -->
         <section id="admin-panel" class="page-section">
             <h2 class="section-title" style="color: #ef4444;"><i class="fa-solid fa-shield-halved"></i> Yönetim & Rozet Paneli</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 13px;">Sistem yöneticileri ve kurucu için özel kontrol alanı.</p>
             
-            <!-- TAŞINAN AKTİF KULLANICILAR KARTI -->
             <div class="card" style="margin-bottom: 25px; border-color: rgba(168, 85, 247, 0.4); max-width: 600px; margin-left: auto; margin-right: auto;">
                 <h3 style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-size: 15px;">
                     <i class="fa-solid fa-users" style="color: var(--primary-purple);"></i> Sitede Oturum Açmış Aktif Kullanıcılar
@@ -1205,7 +1195,7 @@
         }
 
         function openProfileTab() {
-            switchTab('profilim', null);
+            switchTab('profilim');
         }
 
         function renderUserGuilds() {
@@ -1275,14 +1265,15 @@
             const newName = document.getElementById('manual-name-input').value;
             const newAvatar = document.getElementById('manual-avatar-input').value;
             const selectedTheme = document.getElementById('edit-theme-select').value;
+            const badgeStr = currentBadge || '';
 
-            if (selectedTheme === '#ffd700' && !currentBadge.includes('Funce Pro')) {
+            if (selectedTheme === '#ffd700' && !badgeStr.includes('Funce Pro')) {
                 return alert('⚠️ Altın sarısı temayı kullanabilmek için hesabında "⭐ Funce Pro" rozeti bulunmalıdır!');
             }
-            if (selectedTheme === '#ef4444' && !currentBadge.includes('Founder') && !currentBadge.includes('Admin')) {
+            if (selectedTheme === '#ef4444' && !badgeStr.includes('Founder') && !badgeStr.includes('Admin')) {
                 return alert('⚠️ Kırmızı temayı kullanabilmek için hesabında Admin veya Founder yetkisi/rozeti bulunmalıdır!');
             }
-            if (selectedTheme === '#3b82f6' && !currentBadge.includes('Developer')) {
+            if (selectedTheme === '#3b82f6' && !badgeStr.includes('Developer')) {
                 return alert('⚠️ Mavi temayı kullanabilmek için hesabında "💻 Developer" rozeti bulunmalıdır!');
             }
 
@@ -1384,35 +1375,41 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const intro = document.getElementById('intro-screen');
-                intro.style.opacity = '0';
-                intro.style.visibility = 'hidden';
+                if (intro) {
+                    intro.style.opacity = '0';
+                    intro.style.visibility = 'hidden';
+                }
             }, 1800);
         });
 
         function toggleMenu() {
             const navMenu = document.getElementById('navMenu');
             const menuToggle = document.getElementById('menuToggle');
+            if (!navMenu || !menuToggle) return;
             navMenu.classList.toggle('show');
             menuToggle.innerHTML = navMenu.classList.contains('show') ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
         }
 
-        function switchTab(tabId, element) {
+        function switchTab(tabId, element = null) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            const targetSection = document.getElementById(tabId);
+            if (targetSection) targetSection.classList.add('active');
 
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
             if (element && element.classList.contains('nav-btn')) {
                 element.classList.add('active');
+            } else {
+                const matchedNav = document.querySelector(`.nav-btn[onclick*="${tabId}"]`);
+                if (matchedNav) matchedNav.classList.add('active');
             }
 
             const navMenu = document.getElementById('navMenu');
-            if (navMenu.classList.contains('show')) toggleMenu();
+            if (navMenu && navMenu.classList.contains('show')) {
+                toggleMenu();
+            }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function getNavBtn(index) {
-            return document.querySelectorAll('.nav-btn')[index];
         }
 
         const canvas = document.getElementById('particle-canvas');
