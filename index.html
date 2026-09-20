@@ -125,21 +125,24 @@
         }
 
         .logo {
-            font-size: 20px;
-            font-weight: 800;
-            color: #fff;
             text-decoration: none;
-            letter-spacing: 1px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
-            white-space: nowrap;
         }
 
-        .logo span {
-            color: var(--primary-purple);
-            text-shadow: var(--accent-glow);
+        /* NAVBAR LOGO GÖRSELİ STİLİ */
+        .logo-img {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.5));
+        }
+
+        .logo-img:hover {
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.8));
         }
 
         .menu-toggle {
@@ -528,7 +531,6 @@
             margin-bottom: 20px;
         }
 
-        /* YENİ EKLENEN ANA SAYFA ADIM KARTLARI */
         .step-card {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--border-color);
@@ -708,8 +710,9 @@
     </div>
 
     <header>
+        <!-- NAVBAR LOGO (YAZI KALDIRILDI, SADECE LOGO GÖRSELİ) -->
         <a class="logo" onclick="switchTab('ana-sayfa', getNavBtn(0))">
-            Funce<span>BOT</span>
+            <img src="https://cdn.discordapp.com/attachments/1535766890239103057/1551185103424589875/1000094785-removebg-preview.png?ex=6ab10d34&is=6aafbbb4&hm=babdd800983736bad263167dacea2b7b88cbd71933fbd35e74bda9aac03ea1b8&" alt="FunceBOT Logo" class="logo-img">
         </a>
 
         <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
@@ -725,7 +728,7 @@
                 <li><a class="nav-btn nav-admin-btn" id="adminNavLink" onclick="switchTab('admin-panel', this)"><i class="fa-solid fa-shield-halved"></i> Admin Panel</a></li>
                 <li><a href="https://discord.gg/jSm2n5Jp2k" target="_blank" class="nav-btn btn-destek"><i class="fa-brands fa-discord"></i> Destek Sunucusu</a></li>
                 
-                <!-- PROFİL / HESAP KART (Sadece Bunun Çerçevesi Korundu) -->
+                <!-- PROFİL / HESAP KART -->
                 <li id="user-profile-li">
                     <div id="user-profile" onclick="openProfileTab()" title="Profiline Git">
                         <div class="user-main-info">
@@ -758,7 +761,6 @@
                 </div>
             </div>
 
-            <!-- AKTİF KULLANICI SAYISI 10 OLARAK AYARLANDI -->
             <div class="stats-bar">
                 <div class="stat-item">
                     <h3>99.9%</h3>
@@ -774,7 +776,6 @@
                 </div>
             </div>
 
-            <!-- DOLDURULAN YENİ İÇERİK: CANLI BOT DURUMU -->
             <div class="card" style="margin-bottom: 30px; border-color: rgba(168, 85, 247, 0.4); background: linear-gradient(135deg, rgba(22, 16, 38, 0.8), rgba(15, 23, 42, 0.8));">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
                     <h3 style="font-size: 16px; color: #fff; display: flex; align-items: center; gap: 8px;">
@@ -799,7 +800,6 @@
                 </div>
             </div>
 
-            <!-- ÖNE ÇIKAN ÖZELLİKLER -->
             <h2 class="section-title">Öne Çıkan Güçlü Modüller</h2>
             <div class="grid-3" style="margin-bottom: 35px;">
                 <div class="card">
@@ -824,7 +824,6 @@
                 </div>
             </div>
 
-            <!-- NASIL ÇALIŞIR? (3 ADIMDA KURULUM) -->
             <h2 class="section-title">3 Adımda Hemen Kullanmaya Başla</h2>
             <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
                 <div class="step-card">
@@ -972,12 +971,11 @@
             </div>
         </section>
 
-        <!-- ADMIN PANEL (AKTİF KULLANICILAR BURAYA TAŞINDI) -->
+        <!-- ADMIN PANEL -->
         <section id="admin-panel" class="page-section">
             <h2 class="section-title" style="color: #ef4444;"><i class="fa-solid fa-shield-halved"></i> Yönetim & Rozet Paneli</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 13px;">Sistem yöneticileri ve kurucu için özel kontrol alanı.</p>
             
-            <!-- TAŞINAN AKTİF KULLANICILAR KARTI -->
             <div class="card" style="margin-bottom: 25px; border-color: rgba(168, 85, 247, 0.4); max-width: 600px; margin-left: auto; margin-right: auto;">
                 <h3 style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-size: 15px;">
                     <i class="fa-solid fa-users" style="color: var(--primary-purple);"></i> Sitede Oturum Açmış Aktif Kullanıcılar
