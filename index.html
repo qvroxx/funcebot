@@ -114,7 +114,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            padding: 10px 4%;
+            padding: 12px 4%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -153,7 +153,7 @@
             background: rgba(168, 85, 247, 0.1);
             box-shadow: var(--accent-glow);
             transition: all 0.3s ease;
-            margin-left: auto; /* Mobilde tam sağa yaslama */
+            margin-left: auto;
         }
 
         nav {
@@ -164,10 +164,11 @@
         nav ul {
             display: flex;
             list-style: none;
-            gap: 8px;
+            gap: 12px;
             align-items: center;
         }
 
+        /* ÇERÇEVESİZ NAVBAR BUTONLARI */
         nav ul li a {
             color: var(--text-muted);
             text-decoration: none;
@@ -175,64 +176,55 @@
             transition: all 0.3s ease;
             font-size: 13px;
             cursor: pointer;
-            padding: 6px 12px;
-            border-radius: 8px;
-            display: block;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            display: flex;
+            align-items: center;
+            gap: 6px;
             white-space: nowrap;
         }
 
         nav ul li a:hover, nav ul li a.active {
-            color: #fff;
-            background: rgba(168, 85, 247, 0.15);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--accent-glow);
+            color: #fff !important;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
         }
 
         .nav-pro-btn {
-            border: 1px solid var(--gold-border) !important;
             color: var(--gold-color) !important;
-            box-shadow: var(--gold-glow) !important;
         }
 
         .nav-pro-btn:hover, .nav-pro-btn.active {
-            background: rgba(255, 215, 0, 0.15) !important;
             color: #fff !important;
-            box-shadow: var(--gold-glow-strong) !important;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.8) !important;
         }
 
         .nav-control-btn {
-            border: 1px solid rgba(59, 130, 246, 0.6) !important;
             color: #3b82f6 !important;
-            background: rgba(59, 130, 246, 0.1);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
         }
 
         .nav-control-btn:hover {
-            background: rgba(59, 130, 246, 0.25) !important;
             color: #fff !important;
+            text-shadow: 0 0 12px rgba(59, 130, 246, 0.8) !important;
         }
 
         .nav-admin-btn {
-            border: 1px solid rgba(239, 68, 68, 0.6) !important;
             color: #ef4444 !important;
-            background: rgba(239, 68, 68, 0.1);
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
             display: none;
         }
 
         .nav-admin-btn:hover {
-            background: rgba(239, 68, 68, 0.25) !important;
             color: #fff !important;
+            text-shadow: 0 0 12px rgba(239, 68, 68, 0.8) !important;
         }
 
         .btn-destek {
-            background: rgba(168, 85, 247, 0.2);
-            border: 1px solid var(--primary-purple);
-            color: #fff !important;
-            box-shadow: var(--accent-glow);
+            color: var(--primary-purple) !important;
         }
 
-        /* EN SAĞDAKİ PROFİL KART TASARIMI */
+        /* HESAP / PROFİL KART (ÇERÇEVESİ KORUNDU) */
         #user-profile {
             display: none;
             align-items: center;
@@ -241,16 +233,16 @@
             background: rgba(30, 41, 59, 0.9);
             padding: 5px 12px 5px 6px;
             border-radius: 20px;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--accent-glow);
+            border: 1px solid var(--border-color) !important;
+            box-shadow: var(--accent-glow) !important;
             cursor: pointer;
             transition: 0.3s;
             margin-left: 6px;
         }
 
         #user-profile:hover {
-            border-color: var(--primary-purple);
-            box-shadow: var(--accent-glow-strong);
+            border-color: var(--primary-purple) !important;
+            box-shadow: var(--accent-glow-strong) !important;
         }
 
         .user-main-info {
@@ -285,27 +277,26 @@
             font-weight: 500;
         }
 
-        /* ÇIKIŞ BUTONU (MOBİLDE VE MASAÜSTÜNDE DÜZGÜN BOYUT) */
         .logout-btn {
-            color: #ef4444;
+            color: #ef4444 !important;
             text-decoration: none;
             font-size: 11px;
             font-weight: bold;
             padding: 4px 8px;
             border-radius: 6px;
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.15) !important;
+            border: 1px solid rgba(239, 68, 68, 0.3) !important;
             transition: 0.2s;
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            width: auto; /* Taşmayı engelleme */
+            width: auto;
             white-space: nowrap;
         }
 
         .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.3);
-            color: #fff;
+            background: rgba(239, 68, 68, 0.3) !important;
+            color: #fff !important;
         }
 
         .container {
@@ -537,6 +528,31 @@
             margin-bottom: 20px;
         }
 
+        /* YENİ EKLENEN ANA SAYFA ADIM KARTLARI */
+        .step-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .step-number {
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--primary-purple);
+            border: 1px solid var(--primary-purple);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
         .guild-card, .active-user-card {
             display: flex;
             justify-content: space-between;
@@ -633,6 +649,7 @@
                 width: 100%; 
                 padding: 10px;
                 font-size: 14px;
+                justify-content: center;
             }
             #user-profile-li {
                 width: 100%;
@@ -695,7 +712,6 @@
             Funce<span>BOT</span>
         </a>
 
-        <!-- 3 ÇİZGİ BUTONU EN SAĞA YASLANDI -->
         <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
             <i class="fa-solid fa-bars"></i>
         </div>
@@ -709,7 +725,7 @@
                 <li><a class="nav-btn nav-admin-btn" id="adminNavLink" onclick="switchTab('admin-panel', this)"><i class="fa-solid fa-shield-halved"></i> Admin Panel</a></li>
                 <li><a href="https://discord.gg/jSm2n5Jp2k" target="_blank" class="nav-btn btn-destek"><i class="fa-brands fa-discord"></i> Destek Sunucusu</a></li>
                 
-                <!-- PROFİL KART (SAĞ KÖŞE) -->
+                <!-- PROFİL / HESAP KART (Sadece Bunun Çerçevesi Korundu) -->
                 <li id="user-profile-li">
                     <div id="user-profile" onclick="openProfileTab()" title="Profiline Git">
                         <div class="user-main-info">
@@ -742,13 +758,14 @@
                 </div>
             </div>
 
+            <!-- AKTİF KULLANICI SAYISI 10 OLARAK AYARLANDI -->
             <div class="stats-bar">
                 <div class="stat-item">
                     <h3>99.9%</h3>
                     <p>Uptime Süresi</p>
                 </div>
                 <div class="stat-item">
-                    <h3>+50k</h3>
+                    <h3>10</h3>
                     <p>Aktif Kullanıcı</p>
                 </div>
                 <div class="stat-item">
@@ -757,31 +774,79 @@
                 </div>
             </div>
 
-            <div class="card" style="margin-bottom: 30px; border-color: rgba(168, 85, 247, 0.4);">
-                <h3 style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                    <i class="fa-solid fa-users" style="color: var(--primary-purple);"></i> Discord İle Giriş Yapan Aktif Kullanıcılar
-                </h3>
-                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 15px;">Siteye aktif oturum açmış canlı kullanıcılar otomatik olarak burada listelenir:</p>
-
-                <div id="active-users-list"></div>
+            <!-- DOLDURULAN YENİ İÇERİK: CANLI BOT DURUMU -->
+            <div class="card" style="margin-bottom: 30px; border-color: rgba(168, 85, 247, 0.4); background: linear-gradient(135deg, rgba(22, 16, 38, 0.8), rgba(15, 23, 42, 0.8));">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                    <h3 style="font-size: 16px; color: #fff; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-circle-dot" style="color: #22c55e;"></i> Canlı Sistem & Bot Durumu
+                    </h3>
+                    <span style="font-size: 10px; background: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.3);">● Tüm Servisler Operasyonel</span>
+                </div>
+                
+                <div class="grid-3" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div style="background: rgba(11, 7, 20, 0.5); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
+                        <p style="font-size: 11px; color: var(--text-muted);">Gecikme (Ping)</p>
+                        <h4 style="font-size: 18px; color: var(--primary-purple); font-weight: 700;">8 ms</h4>
+                    </div>
+                    <div style="background: rgba(11, 7, 20, 0.5); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
+                        <p style="font-size: 11px; color: var(--text-muted);">İşlenen Komutlar</p>
+                        <h4 style="font-size: 18px; color: #3b82f6; font-weight: 700;">140+ Slash Komutu</h4>
+                    </div>
+                    <div style="background: rgba(11, 7, 20, 0.5); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
+                        <p style="font-size: 11px; color: var(--text-muted);">Bellek Kullanımı</p>
+                        <h4 style="font-size: 18px; color: var(--gold-color); font-weight: 700;">%18 (Optime)</h4>
+                    </div>
+                </div>
             </div>
 
-            <h2 class="section-title">Neden FunceBOT?</h2>
-            <div class="grid-3">
+            <!-- ÖNE ÇIKAN ÖZELLİKLER -->
+            <h2 class="section-title">Öne Çıkan Güçlü Modüller</h2>
+            <div class="grid-3" style="margin-bottom: 35px;">
                 <div class="card">
                     <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
                     <h3>Gelişmiş Koruma</h3>
                     <p>Sunucunuzu spam, küfür ve izinsiz reklamlardan anında korur.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
-                    <h3>Işık Hızında</h3>
-                    <p>Sıfır gecikme ile komutları anında işler ve sunucunuzu yormaz.</p>
+                    <div class="card-icon"><i class="fa-solid fa-robot"></i></div>
+                    <h3>Oto Rol & Kayıt</h3>
+                    <p>Sunucunuza yeni katılan üyelere anında rol verir ve kolay kayıt imkanı sağlar.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon"><i class="fa-solid fa-sliders"></i></div>
-                    <h3>Kolay Özelleştirme</h3>
-                    <p>İhtiyacınıza uygun tüm ayarları birkaç komutla kolayca yapın.</p>
+                    <div class="card-icon"><i class="fa-solid fa-headset"></i></div>
+                    <h3>Bilet (Ticket) Sistemi</h3>
+                    <p>Kullanıcılarınız için tek tıkla özel destek kanalları oluşturup yönetin.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fa-solid fa-music"></i></div>
+                    <h3>Müzik & Eğlence</h3>
+                    <p>Kesintisiz ve yüksek kaliteli ses modülleri ile topluluğunuzu eğlendirin.</p>
+                </div>
+            </div>
+
+            <!-- NASIL ÇALIŞIR? (3 ADIMDA KURULUM) -->
+            <h2 class="section-title">3 Adımda Hemen Kullanmaya Başla</h2>
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h4 style="color: #fff; font-size: 14px; margin-bottom: 2px;">Botu Sunucuna Davet Et</h4>
+                        <p style="color: var(--text-muted); font-size: 12px;">"Botu Sunucuna Ekle" butonuna basarak yetkileri onaylayın ve sunucunuzu seçin.</p>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h4 style="color: #fff; font-size: 14px; margin-bottom: 2px;">Discord Hesabınla Giriş Yap</h4>
+                        <p style="color: var(--text-muted); font-size: 12px;">Web sitemiz üzerinden Discord hesabınızı tek tıkla güvenle bağlayın.</p>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h4 style="color: #fff; font-size: 14px; margin-bottom: 2px;">Kontrol Panelinden Özelleştir</h4>
+                        <p style="color: var(--text-muted); font-size: 12px;">Yönetici olduğunuz sunucuları kolayca seçip istediğiniz komutları aktifleştirin.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -907,11 +972,21 @@
             </div>
         </section>
 
-        <!-- ADMIN PANEL -->
+        <!-- ADMIN PANEL (AKTİF KULLANICILAR BURAYA TAŞINDI) -->
         <section id="admin-panel" class="page-section">
             <h2 class="section-title" style="color: #ef4444;"><i class="fa-solid fa-shield-halved"></i> Yönetim & Rozet Paneli</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 13px;">Sistem yöneticileri ve kurucu için özel kontrol alanı.</p>
             
+            <!-- TAŞINAN AKTİF KULLANICILAR KARTI -->
+            <div class="card" style="margin-bottom: 25px; border-color: rgba(168, 85, 247, 0.4); max-width: 600px; margin-left: auto; margin-right: auto;">
+                <h3 style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-size: 15px;">
+                    <i class="fa-solid fa-users" style="color: var(--primary-purple);"></i> Sitede Oturum Açmış Aktif Kullanıcılar
+                </h3>
+                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 15px;">Canlı olarak sitede aktif olan kullanıcıların listesi:</p>
+
+                <div id="active-users-list"></div>
+            </div>
+
             <div class="card" style="border-color: rgba(239, 68, 68, 0.4); max-width: 600px; margin: 0 auto 20px auto;">
                 <h3 style="color: #ef4444; margin-bottom: 12px;"><i class="fa-solid fa-medal"></i> Kullanıcıya Özel Rozet Ata / Değiştir</h3>
                 <label style="font-size: 12px; color: var(--text-muted);">Hedef Kullanıcı Discord ID:</label>
@@ -960,10 +1035,8 @@
     </footer>
 
     <script>
-        // API Base URL
         const API_BASE_URL = 'https://funce-linked-roles.onrender.com';
 
-        // --- KULLANICI & OTURUM YÖNETİMİ ---
         const params = new URLSearchParams(window.location.search);
         let username = params.get('username');
         let avatar = params.get('avatar');
@@ -997,7 +1070,6 @@
             renderUserGuilds();
             renderActiveUsers();
 
-            // Aktiflik döngüleri
             if (currentId) {
                 sendHeartbeat();
                 setInterval(sendHeartbeat, 30000);
@@ -1082,7 +1154,7 @@
                     if (currentId && currentUsername) {
                         renderLocalActiveUserFallback(listContainer);
                     } else {
-                        listContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Şu an aktif Discord oturumu açmış kullanıcı bulunmuyor.</p>';
+                        listContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Şu an aktif oturum açmış kullanıcı bulunmuyor.</p>';
                     }
                     return;
                 }
@@ -1108,7 +1180,7 @@
                 if (currentId && currentUsername) {
                     renderLocalActiveUserFallback(listContainer);
                 } else {
-                    listContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Şu an aktif Discord oturumu açmış kullanıcı bulunmuyor.</p>';
+                    listContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">Şu an aktif oturum açmış kullanıcı bulunmuyor.</p>';
                 }
             }
         }
