@@ -729,7 +729,7 @@
                 <li id="user-profile-li">
                     <div id="user-profile" onclick="openProfileTab()" title="Profiline Git">
                         <div class="user-main-info">
-                            <img id="user-avatar" src="" alt="Avatar">
+                            <img id="user-avatar" src="https://i.imgur.com/QjSrqWd.png" alt="Avatar">
                             <div class="user-info-box">
                                 <span id="user-name">Kullanıcı</span>
                                 <span id="user-badge-text">Üye</span>
@@ -864,7 +864,7 @@
 
             <div id="profile-page-content" class="card" style="max-width: 600px; margin: 0 auto; border-color: var(--primary-purple);">
                 <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
-                    <img id="page-user-avatar" src="" alt="Avatar" style="width: 70px; height: 70px; border-radius: 50%; border: 2.5px solid var(--primary-purple); object-fit: cover;">
+                    <img id="page-user-avatar" src="https://i.imgur.com/QjSrqWd.png" alt="Avatar" style="width: 70px; height: 70px; border-radius: 50%; border: 2.5px solid var(--primary-purple); object-fit: cover;">
                     <div>
                         <h3 id="page-user-name" style="font-size: 20px; margin-bottom: 4px;">Kullanıcı Adı</h3>
                         <span id="page-user-badge" style="background: rgba(255, 215, 0, 0.15); color: var(--gold-color); padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1px solid var(--gold-border);">Rozet</span>
@@ -877,8 +877,8 @@
                 <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Görünen Adın:</label>
                 <input type="text" id="manual-name-input" class="form-control" placeholder="Adını gir...">
 
-                <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Profil Fotoğrafı URL (Doğrudan Görsel Linki):</label>
-                <input type="text" id="manual-avatar-input" class="form-control" placeholder="https://imgur.com/... veya Discord Avatar Linki">
+                <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Profil Fotoğrafı URL (Doğrundan Görsel Linki):</label>
+                <input type="text" id="manual-avatar-input" class="form-control" placeholder="https://i.imgur.com/QjSrqWd.png veya Discord Avatar Linki" value="https://i.imgur.com/QjSrqWd.png">
 
                 <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Tema / Vurgu Rengi (Rozetine Göre Kilidi Açılır):</label>
                 <select id="edit-theme-select" class="form-select">
@@ -1047,7 +1047,7 @@
 
         if (username && id) {
             localStorage.setItem('discord_username', username);
-            localStorage.setItem('discord_avatar', avatar || '');
+            localStorage.setItem('discord_avatar', avatar || 'https://i.imgur.com/QjSrqWd.png');
             localStorage.setItem('discord_id', id);
             localStorage.setItem('discord_role', role || 'Üye');
             localStorage.setItem('discord_badge', id === '1080897669431574609' ? '👑 Founder' : (badge || '👤 Standart Üye'));
@@ -1058,7 +1058,7 @@
         }
 
         let currentUsername = localStorage.getItem('discord_username');
-        let currentAvatar = localStorage.getItem('discord_avatar');
+        let currentAvatar = localStorage.getItem('discord_avatar') || 'https://i.imgur.com/QjSrqWd.png';
         let currentId = localStorage.getItem('discord_id');
         let currentRole = localStorage.getItem('discord_role');
         let currentBadge = localStorage.getItem('discord_badge');
@@ -1089,7 +1089,7 @@
             if (!currentId) return;
             const avatarUrl = (currentAvatar && currentAvatar !== 'null' && currentAvatar !== 'undefined')
                 ? (currentAvatar.startsWith('http') ? currentAvatar : `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`)
-                : `https://cdn.discordapp.com/embed/avatars/0.png`;
+                : `https://i.imgur.com/QjSrqWd.png`;
 
             fetch(`${API_BASE_URL}/api/users/ping`, {
                 method: 'POST',
@@ -1111,7 +1111,7 @@
                 if (profileEl) {
                     const avatarUrl = (currentAvatar && currentAvatar !== 'null' && currentAvatar !== 'undefined')
                         ? (currentAvatar.startsWith('http') ? currentAvatar : `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`)
-                        : `https://cdn.discordapp.com/embed/avatars/0.png`;
+                        : `https://i.imgur.com/QjSrqWd.png`;
                     
                     document.getElementById('user-avatar').src = avatarUrl;
                     document.getElementById('user-name').innerText = currentUsername;
@@ -1128,7 +1128,7 @@
                 const nameInput = document.getElementById('manual-name-input');
                 const avatarInput = document.getElementById('manual-avatar-input');
                 if (nameInput) nameInput.value = currentUsername;
-                if (avatarInput) avatarInput.value = currentAvatar || '';
+                if (avatarInput) avatarInput.value = currentAvatar || 'https://i.imgur.com/QjSrqWd.png';
 
                 document.getElementById('profile-page-locked').style.display = 'none';
                 document.getElementById('profile-page-content').style.display = 'block';
@@ -1160,7 +1160,7 @@
                 }
 
                 listContainer.innerHTML = activeUsers.map(user => {
-                    const userAvatar = user.avatar || `https://cdn.discordapp.com/embed/avatars/0.png`;
+                    const userAvatar = user.avatar || `https://i.imgur.com/QjSrqWd.png`;
                     return `
                         <div class="active-user-card">
                             <div class="active-user-info">
@@ -1188,7 +1188,7 @@
         function renderLocalActiveUserFallback(container) {
             const avatarUrl = (currentAvatar && currentAvatar !== 'null' && currentAvatar !== 'undefined')
                 ? (currentAvatar.startsWith('http') ? currentAvatar : `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`)
-                : `https://cdn.discordapp.com/embed/avatars/0.png`;
+                : `https://i.imgur.com/QjSrqWd.png`;
 
             container.innerHTML = `
                 <div class="active-user-card">
