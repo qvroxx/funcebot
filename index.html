@@ -9,21 +9,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-:root{
+:root {
     --bg-color:#0b0714;
     --card-bg:rgba(22,16,38,.75);
     --border-color:rgba(168,85,247,.25);
     --primary-purple:#a855f7;
     --accent-glow:0 0 20px rgba(168,85,247,.4);
     --accent-glow-strong:0 0 30px rgba(168,85,247,.7);
+
     --gold-color:#ffd700;
     --gold-border:rgba(255,215,0,.6);
     --gold-glow:0 0 20px rgba(255,215,0,.4);
+
     --text-color:#f1f5f9;
     --text-muted:#94a3b8;
 }
 
-*{
+* {
     margin:0;
     padding:0;
     box-sizing:border-box;
@@ -31,17 +33,17 @@
     user-select:none;
 }
 
-body{
+body {
     background-color:var(--bg-color);
     background-image:
-    radial-gradient(circle at 20% 20%,rgba(168,85,247,.15),transparent 50%),
-    radial-gradient(circle at 80% 80%,rgba(126,34,206,.15),transparent 50%);
+        radial-gradient(circle at 20% 20%,rgba(168,85,247,.15) 0%,transparent 50%),
+        radial-gradient(circle at 80% 80%,rgba(126,34,206,.15) 0%,transparent 50%);
     color:var(--text-color);
     min-height:100vh;
     overflow-x:hidden;
 }
 
-#particle-canvas{
+#particle-canvas {
     position:fixed;
     inset:0;
     width:100%;
@@ -50,7 +52,7 @@ body{
     pointer-events:none;
 }
 
-#intro-screen{
+#intro-screen {
     position:fixed;
     inset:0;
     background:var(--bg-color);
@@ -62,7 +64,7 @@ body{
     transition:.6s;
 }
 
-.intro-title{
+.intro-title {
     font-size:2.2rem;
     font-weight:800;
     color:#fff;
@@ -70,11 +72,12 @@ body{
     letter-spacing:2px;
 }
 
-.intro-title span{
+.intro-title span {
     color:var(--primary-purple);
+    text-shadow:var(--accent-glow-strong);
 }
 
-.loader-bar{
+.loader-bar {
     width:220px;
     height:4px;
     background:rgba(255,255,255,.1);
@@ -82,18 +85,18 @@ body{
     overflow:hidden;
 }
 
-.loader-progress{
+.loader-progress {
     width:0;
     height:100%;
     background:var(--primary-purple);
-    animation:load 1.8s forwards;
+    animation:load 1.8s forwards ease-in-out;
 }
 
-@keyframes load{
-    to{width:100%}
+@keyframes load {
+    to {width:100%}
 }
 
-header{
+header {
     position:fixed;
     top:0;
     left:0;
@@ -108,83 +111,90 @@ header{
     z-index:1000;
 }
 
-.logo{
+.logo {
     font-size:20px;
     font-weight:800;
     color:#fff;
     text-decoration:none;
     cursor:pointer;
+    letter-spacing:1px;
 }
 
-.logo span{
+.logo span {
     color:var(--primary-purple);
 }
 
-.menu-toggle{
+.menu-toggle {
     display:none;
     color:var(--primary-purple);
     cursor:pointer;
-    padding:7px 12px;
+    padding:6px 12px;
     border:1px solid var(--border-color);
     border-radius:8px;
 }
 
-nav ul{
+nav ul {
     display:flex;
     list-style:none;
-    gap:10px;
+    gap:8px;
     align-items:center;
 }
 
-nav a{
+nav a {
     color:var(--text-muted);
     text-decoration:none;
     font-size:13px;
     padding:7px 10px;
-    cursor:pointer;
+    border-radius:7px;
     transition:.3s;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    white-space:nowrap;
 }
 
 nav a:hover,
-nav a.active{
+nav a.active {
     color:#fff;
+    text-shadow:0 0 10px rgba(168,85,247,.6);
 }
 
-.nav-pro-btn{
+.nav-pro-btn {
     color:var(--gold-color)!important;
 }
 
-.nav-control-btn{
+.nav-control-btn {
     color:#3b82f6!important;
 }
 
-.nav-admin-btn{
+.nav-admin-btn {
     color:#ef4444!important;
     display:none;
 }
 
-.btn-destek{
+.btn-destek {
     color:var(--primary-purple)!important;
 }
 
-#user-profile{
+#user-profile {
     display:none;
     align-items:center;
     gap:10px;
     background:rgba(30,41,59,.9);
-    padding:5px 10px 5px 6px;
+    padding:5px 8px 5px 6px;
     border-radius:20px;
     border:1px solid var(--border-color);
     cursor:pointer;
 }
 
-.user-main-info{
+.user-main-info {
     display:flex;
     align-items:center;
     gap:8px;
 }
 
-#user-avatar{
+#user-avatar {
     width:28px;
     height:28px;
     border-radius:50%;
@@ -192,58 +202,64 @@ nav a.active{
     object-fit:cover;
 }
 
-.user-info-box{
+.user-info-box {
     display:flex;
     flex-direction:column;
 }
 
-#user-name{
+#user-name {
     font-size:11px;
     font-weight:600;
     color:#fff;
 }
 
-#user-badge-text{
+#user-badge-text {
     font-size:9px;
     color:var(--gold-color);
 }
 
-.logout-btn{
+.logout-btn {
     color:#ef4444!important;
-    font-size:11px;
-    padding:4px 8px;
-    background:rgba(239,68,68,.15);
+    font-size:10px;
+    padding:4px 7px!important;
+    background:rgba(239,68,68,.12);
     border:1px solid rgba(239,68,68,.3);
-    border-radius:6px;
 }
 
-.container{
+.container {
     max-width:1100px;
     width:100%;
     margin:auto;
-    padding:110px 20px 60px;
+    padding:105px 20px 60px;
+    min-height:calc(100vh - 100px);
 }
 
-.page-section{
+.page-section {
     display:none;
-    animation:fadeIn .4s ease;
+    animation:fadeIn .4s ease forwards;
 }
 
-.page-section.active{
+.page-section.active {
     display:block;
 }
 
-@keyframes fadeIn{
-    from{opacity:0;transform:translateY(10px)}
-    to{opacity:1;transform:translateY(0)}
+@keyframes fadeIn {
+    from {
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to {
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
-.hero{
+.hero {
     text-align:center;
     padding:30px 10px;
 }
 
-.hero-badge{
+.hero-badge {
     display:inline-block;
     padding:6px 16px;
     border-radius:20px;
@@ -255,33 +271,35 @@ nav a.active{
     margin-bottom:20px;
 }
 
-.hero h1{
+.hero h1 {
     font-size:42px;
     font-weight:800;
+    color:#fff;
+    line-height:1.2;
     margin-bottom:18px;
 }
 
-.hero h1 span{
+.hero h1 span {
     color:var(--primary-purple);
     text-shadow:var(--accent-glow);
 }
 
-.hero p{
-    font-size:15px;
+.hero p {
     color:var(--text-muted);
     max-width:650px;
     margin:0 auto 25px;
+    font-size:15px;
     line-height:1.6;
 }
 
-.btn-group{
+.btn-group {
     display:flex;
     justify-content:center;
     gap:12px;
     flex-wrap:wrap;
 }
 
-.btn{
+.btn {
     padding:10px 20px;
     border-radius:10px;
     font-weight:600;
@@ -296,29 +314,29 @@ nav a.active{
     transition:.3s;
 }
 
-.btn:hover{
+.btn:hover {
     transform:translateY(-2px);
 }
 
-.btn-primary{
+.btn-primary {
     background:var(--primary-purple);
     color:#fff;
     box-shadow:var(--accent-glow);
 }
 
-.btn-discord{
-    background:#5865f2;
+.btn-discord {
+    background:#5865F2;
     color:#fff;
 }
 
-.btn-gold-outline{
+.btn-gold-outline {
     background:rgba(255,215,0,.05);
     color:var(--gold-color);
     border:1px solid var(--gold-border);
 }
 
 .form-control,
-.form-select{
+.form-select {
     width:100%;
     padding:12px;
     background:rgba(15,23,42,.8);
@@ -326,15 +344,21 @@ nav a.active{
     border-radius:8px;
     color:#fff;
     margin-bottom:15px;
+    font-size:13px;
     outline:none;
 }
 
 .form-control:focus,
-.form-select:focus{
+.form-select:focus {
     border-color:var(--primary-purple);
 }
 
-.stats-bar{
+textarea.form-control {
+    min-height:90px;
+    resize:vertical;
+}
+
+.stats-bar {
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:20px;
@@ -346,270 +370,91 @@ nav a.active{
     margin-bottom:35px;
 }
 
-.stat-item h3{
+.stat-item h3 {
     font-size:24px;
     color:var(--primary-purple);
 }
 
-.stat-item p{
+.stat-item p {
     font-size:12px;
     color:var(--text-muted);
 }
 
-.grid-3{
+.grid-3 {
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
     gap:15px;
 }
 
-.card{
+.card {
     background:var(--card-bg);
     border:1px solid var(--border-color);
     border-radius:16px;
     padding:20px;
     backdrop-filter:blur(12px);
-    margin-bottom:15px;
     transition:.3s;
+    margin-bottom:15px;
 }
 
-.card:hover{
+.card:hover {
     border-color:var(--primary-purple);
     box-shadow:var(--accent-glow);
     transform:translateY(-2px);
 }
 
-.card-icon{
+.card-icon {
     font-size:22px;
     color:var(--primary-purple);
     margin-bottom:12px;
 }
 
-.card h3{
+.card h3 {
     font-size:16px;
     color:#fff;
     margin-bottom:8px;
 }
 
-.card p{
+.card p {
     font-size:13px;
     color:var(--text-muted);
     line-height:1.5;
 }
 
-.card-gold{
-    border:2px solid var(--gold-border)!important;
-    box-shadow:var(--gold-glow)!important;
-}
-
-.gold-badge{
-    float:right;
-    background:var(--gold-color);
-    color:#000;
-    font-size:10px;
-    font-weight:800;
-    padding:2px 8px;
-    border-radius:8px;
-}
-
-.section-title{
+.section-title {
     text-align:center;
     font-size:22px;
     font-weight:800;
-    margin-bottom:20px;
-}
-
-/* PROFİL */
-
-.profile-main-card{
-    max-width:700px;
-    margin:auto;
-    border-color:var(--primary-purple);
-}
-
-.profile-header{
-    display:flex;
-    align-items:center;
-    gap:18px;
-    padding-bottom:18px;
-    margin-bottom:20px;
-    border-bottom:1px solid var(--border-color);
-}
-
-.profile-big-avatar{
-    width:90px;
-    height:90px;
-    border-radius:50%;
-    object-fit:cover;
-    border:3px solid var(--primary-purple);
-    box-shadow:var(--accent-glow);
-}
-
-.profile-name{
-    font-size:22px;
-    font-weight:800;
     color:#fff;
-}
-
-.profile-title{
-    color:var(--primary-purple);
-    font-size:12px;
-    margin-top:3px;
-}
-
-.profile-id{
-    color:var(--text-muted);
-    font-size:10px;
-    margin-top:4px;
-}
-
-.badges{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-    margin-top:8px;
-}
-
-.badge{
-    display:inline-flex;
-    align-items:center;
-    padding:4px 9px;
-    border-radius:12px;
-    font-size:10px;
-    font-weight:600;
-    background:rgba(168,85,247,.12);
-    border:1px solid rgba(168,85,247,.35);
-    color:#d8b4fe;
-}
-
-.badge.gold{
-    color:#ffd700;
-    border-color:rgba(255,215,0,.5);
-    background:rgba(255,215,0,.1);
-}
-
-.badge.red{
-    color:#f87171;
-    border-color:rgba(239,68,68,.5);
-    background:rgba(239,68,68,.1);
-}
-
-.badge.blue{
-    color:#60a5fa;
-    border-color:rgba(59,130,246,.5);
-    background:rgba(59,130,246,.1);
-}
-
-.badge.green{
-    color:#4ade80;
-    border-color:rgba(34,197,94,.5);
-    background:rgba(34,197,94,.1);
-}
-
-.level-box{
-    background:rgba(15,23,42,.7);
-    border:1px solid var(--border-color);
-    padding:16px;
-    border-radius:12px;
     margin-bottom:20px;
 }
 
-.level-top{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:8px;
-}
-
-.level-number{
-    color:var(--primary-purple);
-    font-weight:800;
-}
-
-.xp-text{
-    color:var(--text-muted);
-    font-size:11px;
-}
-
-.xp-bar{
-    width:100%;
-    height:9px;
-    background:rgba(255,255,255,.08);
-    border-radius:20px;
-    overflow:hidden;
-}
-
-.xp-progress{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,#7e22ce,#a855f7);
-    border-radius:20px;
-    box-shadow:0 0 12px rgba(168,85,247,.6);
-    transition:width .5s;
-}
-
-.profile-stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-bottom:20px;
-}
-
-.profile-stat{
+.step-card {
     background:rgba(15,23,42,.6);
-    border:1px solid rgba(255,255,255,.06);
-    border-radius:10px;
-    text-align:center;
-    padding:12px 5px;
+    border:1px solid var(--border-color);
+    border-radius:14px;
+    padding:18px;
+    display:flex;
+    align-items:flex-start;
+    gap:15px;
 }
 
-.profile-stat strong{
-    display:block;
-    color:#fff;
-    font-size:18px;
+.step-number {
+    background:rgba(168,85,247,.2);
+    color:var(--primary-purple);
+    border:1px solid var(--primary-purple);
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    flex-shrink:0;
 }
-
-.profile-stat span{
-    color:var(--text-muted);
-    font-size:10px;
-}
-
-.achievement-list{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:8px;
-    margin-bottom:20px;
-}
-
-.achievement{
-    padding:10px;
-    border-radius:10px;
-    background:rgba(255,255,255,.03);
-    border:1px solid rgba(255,255,255,.06);
-}
-
-.achievement.unlocked{
-    border-color:rgba(168,85,247,.4);
-}
-
-.achievement-icon{
-    font-size:18px;
-    margin-bottom:3px;
-}
-
-.achievement-title{
-    color:#fff;
-    font-size:11px;
-    font-weight:600;
-}
-
-.achievement-desc{
-    color:var(--text-muted);
-    font-size:9px;
-}
-
-/* SUNUCULAR */
 
 .guild-card,
-.active-user-card{
+.active-user-card,
+.badge-admin-row {
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -622,7 +467,7 @@ nav a.active{
 }
 
 .guild-info,
-.active-user-info{
+.active-user-info {
     display:flex;
     align-items:center;
     gap:12px;
@@ -630,7 +475,7 @@ nav a.active{
 
 .guild-info img,
 .guild-icon-placeholder,
-.active-user-info img{
+.active-user-info img {
     width:38px;
     height:38px;
     border-radius:50%;
@@ -641,34 +486,172 @@ nav a.active{
     justify-content:center;
     background:#1e293b;
     color:#fff;
+    flex-shrink:0;
 }
 
-/* ADMIN */
-
-.admin-badge-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:8px;
-    margin-bottom:15px;
+.profile-card {
+    max-width:700px;
+    margin:auto;
+    overflow:hidden;
 }
 
-.admin-badge-option{
-    padding:9px;
-    border:1px solid var(--border-color);
-    border-radius:8px;
-    background:rgba(15,23,42,.7);
+.profile-banner {
+    height:110px;
+    background:
+        radial-gradient(circle at 20% 30%,rgba(168,85,247,.8),transparent 40%),
+        radial-gradient(circle at 80% 70%,rgba(59,130,246,.5),transparent 40%),
+        #151021;
+    border-radius:12px;
+    margin:-5px -5px 0;
+}
+
+.profile-main {
+    position:relative;
+    margin-top:-42px;
+    padding:0 15px;
+}
+
+.profile-avatar {
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #151021;
+    box-shadow:0 0 25px rgba(168,85,247,.5);
+}
+
+.profile-name {
+    font-size:23px;
     color:#fff;
-    cursor:pointer;
+    margin-top:10px;
+}
+
+.profile-id {
+    color:var(--text-muted);
     font-size:11px;
-    transition:.2s;
 }
 
-.admin-badge-option.selected{
-    border-color:var(--primary-purple);
-    background:rgba(168,85,247,.15);
+.profile-bio {
+    color:var(--text-muted);
+    font-size:13px;
+    margin:12px 0;
+    line-height:1.6;
 }
 
-footer{
+.badges-container {
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin:12px 0;
+}
+
+.profile-badge {
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:5px 9px;
+    border-radius:8px;
+    font-size:10px;
+    font-weight:700;
+    border:1px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.06);
+    color:#fff;
+}
+
+.badge-founder {
+    color:#ffd700;
+    border-color:rgba(255,215,0,.45);
+    background:rgba(255,215,0,.1);
+}
+
+.badge-admin {
+    color:#ef4444;
+    border-color:rgba(239,68,68,.4);
+    background:rgba(239,68,68,.1);
+}
+
+.badge-developer {
+    color:#3b82f6;
+    border-color:rgba(59,130,246,.4);
+    background:rgba(59,130,246,.1);
+}
+
+.badge-pro {
+    color:#ffd700;
+    border-color:rgba(255,215,0,.5);
+    background:rgba(255,215,0,.1);
+}
+
+.badge-booster {
+    color:#f472b6;
+    border-color:rgba(244,114,182,.4);
+    background:rgba(244,114,182,.1);
+}
+
+.badge-bug {
+    color:#22c55e;
+    border-color:rgba(34,197,94,.4);
+    background:rgba(34,197,94,.1);
+}
+
+.badge-staff {
+    color:#5865f2;
+    border-color:rgba(88,101,242,.4);
+    background:rgba(88,101,242,.1);
+}
+
+.profile-stats {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin:20px 0;
+}
+
+.profile-stat {
+    background:rgba(15,23,42,.65);
+    border:1px solid rgba(255,255,255,.05);
+    border-radius:10px;
+    padding:12px;
+    text-align:center;
+}
+
+.profile-stat strong {
+    display:block;
+    color:#fff;
+    font-size:17px;
+}
+
+.profile-stat span {
+    color:var(--text-muted);
+    font-size:10px;
+}
+
+.admin-search {
+    position:relative;
+}
+
+.admin-search i {
+    position:absolute;
+    left:12px;
+    top:13px;
+    color:var(--text-muted);
+}
+
+.admin-search input {
+    padding-left:35px;
+}
+
+.badge-remove {
+    background:#ef4444;
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    padding:4px 8px;
+    cursor:pointer;
+    font-size:10px;
+}
+
+footer {
     text-align:center;
     padding:20px;
     border-top:1px solid var(--border-color);
@@ -677,101 +660,100 @@ footer{
     font-size:12px;
 }
 
-footer span{
+footer span {
     color:var(--primary-purple);
 }
 
-.footer-links{
+.footer-links {
     margin-top:8px;
     display:flex;
     justify-content:center;
     gap:15px;
 }
 
-.footer-links a{
+.footer-links a {
     color:var(--text-muted);
     text-decoration:none;
 }
 
-@media(max-width:990px){
+@media(max-width:990px) {
 
-    header{
+    header {
         padding:12px 20px;
     }
 
-    .menu-toggle{
+    .menu-toggle {
         display:block;
-        margin-left:auto;
     }
 
-    nav ul{
+    nav ul {
         position:absolute;
         top:100%;
         left:0;
         width:100%;
         background:rgba(11,7,20,.98);
+        backdrop-filter:blur(20px);
         flex-direction:column;
         padding:15px;
-        gap:8px;
         display:none;
     }
 
-    nav ul.show{
+    nav ul.show {
         display:flex;
     }
 
-    nav ul li{
+    nav ul li {
         width:100%;
     }
 
-    nav ul li a{
-        display:flex;
+    nav a {
+        width:100%;
         justify-content:center;
-        width:100%;
         padding:10px;
     }
 
-    #user-profile{
+    #user-profile {
         width:100%;
         justify-content:space-between;
     }
 
-    .container{
+    .container {
         padding-top:90px;
     }
 
-    .hero h1{
-        font-size:26px;
+    .hero h1 {
+        font-size:27px;
     }
 
-    .btn-group{
+    .hero p {
+        font-size:13px;
+    }
+
+    .btn-group {
         flex-direction:column;
     }
 
-    .btn-group .btn{
+    .btn-group .btn {
         width:100%;
     }
 
-    .stats-bar{
+    .stats-bar {
         grid-template-columns:1fr;
     }
 
     .guild-card,
-    .active-user-card{
+    .active-user-card,
+    .badge-admin-row {
         flex-direction:column;
         align-items:flex-start;
     }
 
     .guild-card .btn,
-    .guild-card a{
+    .guild-card a {
         width:100%;
     }
 
-    .profile-header{
-        align-items:flex-start;
-    }
-
-    .profile-stats{
+    .profile-stats {
         grid-template-columns:1fr 1fr 1fr;
     }
 }
@@ -783,7 +765,10 @@ footer span{
 <canvas id="particle-canvas"></canvas>
 
 <div id="intro-screen">
-    <div class="intro-title">Funce<span>BOT</span></div>
+    <div class="intro-title">
+        Funce<span>BOT</span>
+    </div>
+
     <div class="loader-bar">
         <div class="loader-progress"></div>
     </div>
@@ -816,25 +801,36 @@ footer span{
 
 <li>
 <a class="nav-btn nav-pro-btn" onclick="switchTab('funce-pro',this)">
-    <i class="fa-solid fa-crown"></i> Funce Pro
+    <i class="fa-solid fa-crown"></i>
+    Funce Pro
 </a>
 </li>
 
 <li>
 <a class="nav-btn nav-control-btn" onclick="switchTab('kontrol-paneli',this)">
-    <i class="fa-solid fa-sliders"></i> Kontrol Paneli
+    <i class="fa-solid fa-sliders"></i>
+    Kontrol Paneli
+</a>
+</li>
+
+<li>
+<a class="nav-btn" onclick="switchTab('profilim',this)">
+    <i class="fa-solid fa-user"></i>
+    Profil
 </a>
 </li>
 
 <li>
 <a class="nav-btn nav-admin-btn" id="adminNavLink" onclick="switchTab('admin-panel',this)">
-    <i class="fa-solid fa-shield-halved"></i> Admin Panel
+    <i class="fa-solid fa-shield-halved"></i>
+    Admin Panel
 </a>
 </li>
 
 <li>
 <a href="https://discord.gg/jSm2n5Jp2k" target="_blank" class="nav-btn btn-destek">
-    <i class="fa-brands fa-discord"></i> Destek Sunucusu
+    <i class="fa-brands fa-discord"></i>
+    Destek
 </a>
 </li>
 
@@ -843,17 +839,30 @@ footer span{
 <div id="user-profile" onclick="openProfileTab()">
 
 <div class="user-main-info">
-<img id="user-avatar" src="https://i.imgur.com/QjSrqWd.png">
+
+<img id="user-avatar"
+src="https://i.imgur.com/QjSrqWd.png">
+
 <div class="user-info-box">
-<span id="user-name">Kullanıcı</span>
-<span id="user-badge-text">Üye</span>
+
+<span id="user-name">
+Kullanıcı
+</span>
+
+<span id="user-badge-text">
+Üye
+</span>
+
 </div>
+
 </div>
 
 <a href="#" class="logout-btn"
 onclick="event.stopPropagation();logout()">
+
 <i class="fa-solid fa-right-from-bracket"></i>
 Çıkış
+
 </a>
 
 </div>
@@ -862,7 +871,6 @@ onclick="event.stopPropagation();logout()">
 
 </ul>
 </nav>
-
 </header>
 
 <div class="container">
@@ -882,8 +890,7 @@ Sunucunu <span>FunceBOT</span> ile Üst Seviyeye Taşı
 </h1>
 
 <p>
-Gelişmiş moderasyon araçları, XP/Level sistemi,
-profil sistemi ve güçlü Pro seçenekleriyle topluluğunu yönet.
+Gelişmiş moderasyon araçları, hızlı altyapı ve güçlü Pro seçenekleriyle topluluğunu eksiksiz yönet.
 </p>
 
 <div class="btn-group">
@@ -925,8 +932,8 @@ Funce Pro'yu İncele
 </div>
 
 <div class="stat-item">
-<h3>140+</h3>
-<p>Slash Komutu</p>
+<h3 id="home-user-count">10</h3>
+<p>Aktif Kullanıcı</p>
 </div>
 
 <div class="stat-item">
@@ -945,58 +952,98 @@ Canlı Sistem & Bot Durumu
 
 <div class="grid-3">
 
-<div>
+<div class="card">
 <p>Gecikme</p>
-<h4 style="color:var(--primary-purple);font-size:18px;">
+<h3 style="color:var(--primary-purple)">
 8 ms
-</h4>
+</h3>
 </div>
 
-<div>
+<div class="card">
 <p>İşlenen Komutlar</p>
-<h4 style="color:#3b82f6;font-size:18px;">
-140+
-</h4>
+<h3 style="color:#3b82f6">
+140+ Slash
+</h3>
 </div>
 
-<div>
+<div class="card">
 <p>Bellek Kullanımı</p>
-<h4 style="color:var(--gold-color);font-size:18px;">
+<h3 style="color:var(--gold-color)">
 %18
-</h4>
+</h3>
 </div>
 
 </div>
 </div>
 
 <h2 class="section-title">
-Öne Çıkan Güçlü Modüller
+Öne Çıkan Modüller
 </h2>
 
 <div class="grid-3">
 
 <div class="card">
-<div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+<div class="card-icon">
+<i class="fa-solid fa-shield-halved"></i>
+</div>
 <h3>Gelişmiş Koruma</h3>
-<p>Spam, küfür ve reklam koruması.</p>
+<p>Spam, küfür ve izinsiz reklamları otomatik olarak kontrol edin.</p>
 </div>
 
 <div class="card">
-<div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
-<h3>XP & Level</h3>
-<p>Mesajlara göre XP kazan, level atla ve profilini geliştir.</p>
+<div class="card-icon">
+<i class="fa-solid fa-robot"></i>
+</div>
+<h3>Oto Rol & Kayıt</h3>
+<p>Yeni üyeler için otomatik rol ve gelişmiş kayıt sistemi.</p>
 </div>
 
 <div class="card">
-<div class="card-icon"><i class="fa-solid fa-id-card"></i></div>
-<h3>Profil Sistemi</h3>
-<p>Ünvan, rozet, isim stili ve başarımlarını göster.</p>
+<div class="card-icon">
+<i class="fa-solid fa-ticket"></i>
 </div>
-
-<div class="card">
-<div class="card-icon"><i class="fa-solid fa-ticket"></i></div>
 <h3>Ticket Sistemi</h3>
-<p>Tek tıkla destek kanalları oluştur.</p>
+<p>Tek tıkla özel destek kanalları oluşturun.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">
+<i class="fa-solid fa-music"></i>
+</div>
+<h3>Müzik & Eğlence</h3>
+<p>Topluluğunuz için eğlence ve müzik sistemleri.</p>
+</div>
+
+</div>
+
+<h2 class="section-title">
+3 Adımda Başla
+</h2>
+
+<div style="display:flex;flex-direction:column;gap:12px">
+
+<div class="step-card">
+<div class="step-number">1</div>
+<div>
+<h4>Botu Sunucuna Davet Et</h4>
+<p>Botu sunucuna ekle ve gerekli izinleri onayla.</p>
+</div>
+</div>
+
+<div class="step-card">
+<div class="step-number">2</div>
+<div>
+<h4>Discord ile Giriş Yap</h4>
+<p>Discord hesabını FunceBOT ile bağla.</p>
+</div>
+</div>
+
+<div class="step-card">
+<div class="step-number">3</div>
+<div>
+<h4>Kontrol Panelinden Yönet</h4>
+<p>Sunucularını ve bot ayarlarını yönet.</p>
+</div>
 </div>
 
 </div>
@@ -1010,17 +1057,17 @@ Canlı Sistem & Bot Durumu
 
 <h2 class="section-title">
 <i class="fa-solid fa-id-card"></i>
-Kullanıcı Profilim
+Profilim
 </h2>
 
 <div id="profile-page-locked"
-style="text-align:center;padding:40px;display:none">
+style="text-align:center;padding:50px 20px;display:none">
 
-<div style="font-size:40px;color:#ef4444">
+<div style="font-size:45px;color:#ef4444">
 <i class="fa-solid fa-lock"></i>
 </div>
 
-<h3 style="margin:10px">
+<h3 style="margin:15px 0">
 Profil Alanı Kilitli
 </h3>
 
@@ -1031,6 +1078,7 @@ Profilini görmek için Discord ile giriş yapmalısın.
 <a href="https://funce-linked-roles.onrender.com/api/auth/discord"
 class="btn btn-discord">
 
+<i class="fa-brands fa-discord"></i>
 Discord ile Giriş Yap
 
 </a>
@@ -1038,145 +1086,92 @@ Discord ile Giriş Yap
 </div>
 
 
-<div id="profile-page-content"
-class="card profile-main-card">
+<div id="profile-page-content" style="display:none">
 
-<div class="profile-header">
+<div class="card profile-card">
+
+<div class="profile-banner"></div>
+
+<div class="profile-main">
 
 <img id="page-user-avatar"
-class="profile-big-avatar"
+class="profile-avatar"
 src="https://i.imgur.com/QjSrqWd.png">
 
-<div>
-
-<div id="page-user-name" class="profile-name">
+<h2 id="page-user-name" class="profile-name">
 Kullanıcı
-</div>
-
-<div id="page-user-title" class="profile-title">
-Yeni Üye
-</div>
-
-<div id="page-user-badge" class="badges">
-</div>
+</h2>
 
 <div id="page-user-id" class="profile-id">
 ID: -
 </div>
 
+<div id="profile-badges"
+class="badges-container">
 </div>
 
-</div>
-
-
-<!-- XP -->
-
-<div class="level-box">
-
-<div class="level-top">
-
-<span class="level-number">
-LEVEL <span id="profile-level">1</span>
-</span>
-
-<span class="xp-text">
-<span id="profile-xp">0</span> /
-<span id="profile-next-xp">100</span> XP
-</span>
-
-</div>
-
-<div class="xp-bar">
-
-<div id="profile-xp-progress"
-class="xp-progress">
-</div>
-
-</div>
-
-</div>
-
-
-<!-- İSTATİSTİK -->
+<p id="page-user-bio" class="profile-bio">
+Henüz biyografi eklenmemiş.
+</p>
 
 <div class="profile-stats">
 
 <div class="profile-stat">
-<strong id="profile-message-count">0</strong>
-<span>Mesaj</span>
+<strong id="profile-guild-count">0</strong>
+<span>Sunucu</span>
 </div>
 
 <div class="profile-stat">
-<strong id="profile-total-xp">0</strong>
-<span>Toplam XP</span>
+<strong id="profile-badge-count">0</strong>
+<span>Rozet</span>
 </div>
 
 <div class="profile-stat">
-<strong id="profile-level-stat">1</strong>
-<span>Level</span>
+<strong id="profile-status">
+Aktif
+</strong>
+<span>Durum</span>
+</div>
+
+</div>
+
 </div>
 
 </div>
 
 
-<h3 style="margin-bottom:10px">
-<i class="fa-solid fa-trophy"></i>
-Başarımlar
-</h3>
+<div class="card">
 
-<div id="achievement-list"
-class="achievement-list">
-</div>
-
-
-<h3 style="margin-bottom:10px">
+<h3>
 <i class="fa-solid fa-pen-to-square"></i>
-Profilini Düzenle
+Profil Bilgilerini Düzenle
 </h3>
 
-<label>Görünen Adın</label>
+<label>Görünen Ad</label>
 
 <input
 id="manual-name-input"
 class="form-control"
-placeholder="Görünen adın">
+placeholder="Adın">
 
+<label>Biyografi</label>
 
-<label>İsim Stili</label>
-
-<select id="name-style-select"
-class="form-select">
-
-<option value="normal">Normal</option>
-<option value="bold">Kalın</option>
-<option value="uppercase">BÜYÜK HARF</option>
-<option value="italic">İtalik</option>
-<option value="neon">Neon</option>
-
-</select>
-
-
-<label>Ünvan</label>
-
-<input
-id="title-input"
+<textarea
+id="manual-bio-input"
 class="form-control"
-placeholder="Örn: Sunucu Kralı">
+maxlength="250"
+placeholder="Kendin hakkında bir şeyler yaz..."></textarea>
 
-
-<label>Profil Fotoğrafı</label>
+<label>Profil Fotoğrafı URL</label>
 
 <input
-type="text"
 id="manual-avatar-input"
 class="form-control"
-placeholder="Avatar URL">
-
+placeholder="https://...">
 
 <label>Tema</label>
 
-<select id="edit-theme-select"
-class="form-select">
+<select id="edit-theme-select" class="form-select">
 
 <option value="#a855f7">
 Mor
@@ -1200,16 +1195,17 @@ Yeşil
 
 </select>
 
-
 <button
 class="btn btn-primary"
-style="width:100%;margin-top:5px"
+style="width:100%"
 onclick="saveManualProfile()">
 
 <i class="fa-solid fa-floppy-disk"></i>
 Değişiklikleri Kaydet
 
 </button>
+
+</div>
 
 </div>
 
@@ -1231,7 +1227,7 @@ Bot Özellikleri
 <i class="fa-solid fa-user-gear"></i>
 </div>
 <h3>Oto Moderasyon</h3>
-<p>Reklam, küfür ve kelime filtreleme.</p>
+<p>Reklam, küfür ve kelime filtreleme sistemleri.</p>
 </div>
 
 <div class="card">
@@ -1239,23 +1235,39 @@ Bot Özellikleri
 <i class="fa-solid fa-ticket"></i>
 </div>
 <h3>Ticket</h3>
-<p>Gelişmiş destek sistemi.</p>
+<p>Gelişmiş destek kanalları oluşturun.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">
+<i class="fa-solid fa-chart-line"></i>
+</div>
+<h3>İstatistikler</h3>
+<p>Sunucu aktivitesini takip edin.</p>
 </div>
 
 <div class="card">
 <div class="card-icon">
 <i class="fa-solid fa-ranking-star"></i>
 </div>
-<h3>XP & Level</h3>
-<p>Mesaj göndererek XP kazan ve level atla.</p>
+<h3>Level Sistemi</h3>
+<p>XP ve seviye sistemi ile üyeleri ödüllendirin.</p>
 </div>
 
 <div class="card">
 <div class="card-icon">
-<i class="fa-solid fa-trophy"></i>
+<i class="fa-solid fa-gift"></i>
 </div>
-<h3>Başarımlar</h3>
-<p>Özel görevleri tamamlayarak başarımlar kazan.</p>
+<h3>Çekiliş</h3>
+<p>Kolay ve otomatik çekiliş sistemi.</p>
+</div>
+
+<div class="card">
+<div class="card-icon">
+<i class="fa-solid fa-gamepad"></i>
+</div>
+<h3>Eğlence</h3>
+<p>Sunucunuz için çeşitli eğlence komutları.</p>
 </div>
 
 </div>
@@ -1269,6 +1281,7 @@ Bot Özellikleri
 
 <h2 class="section-title"
 style="color:var(--gold-color)">
+<i class="fa-solid fa-crown"></i>
 Funce Pro
 </h2>
 
@@ -1278,31 +1291,28 @@ Topluluğunuz için özel VIP özellikler.
 
 <div class="grid-3">
 
-<div class="card card-gold">
-<span class="gold-badge">PRO</span>
+<div class="card">
 <div class="card-icon" style="color:var(--gold-color)">
 <i class="fa-solid fa-crown"></i>
 </div>
 <h3>Özel Bot Profili</h3>
-<p>Bot ismi, avatar ve durum özelleştirme.</p>
+<p>Botun isim, avatar ve durumunu özelleştirin.</p>
 </div>
 
-<div class="card card-gold">
-<span class="gold-badge">PRO</span>
+<div class="card">
 <div class="card-icon" style="color:var(--gold-color)">
-<i class="fa-solid fa-star"></i>
+<i class="fa-solid fa-server"></i>
 </div>
-<h3>Özel Profil</h3>
-<p>Pro kullanıcılar özel profil seçeneklerine sahip olur.</p>
+<h3>Öncelikli Sunucu</h3>
+<p>Pro kullanıcılar için yüksek performanslı altyapı.</p>
 </div>
 
-<div class="card card-gold">
-<span class="gold-badge">PRO</span>
+<div class="card">
 <div class="card-icon" style="color:var(--gold-color)">
 <i class="fa-solid fa-headset"></i>
 </div>
 <h3>Öncelikli Destek</h3>
-<p>Pro kullanıcılar için öncelikli destek.</p>
+<p>Pro kullanıcılar için öncelikli teknik destek.</p>
 </div>
 
 </div>
@@ -1315,16 +1325,17 @@ Topluluğunuz için özel VIP özellikler.
 <section id="kontrol-paneli" class="page-section">
 
 <div id="control-panel-locked"
-style="text-align:center;padding:40px">
+style="text-align:center;padding:50px">
 
-<div style="font-size:40px;color:#ef4444">
-<i class="fa-solid fa-lock"></i>
-</div>
+<i class="fa-solid fa-lock"
+style="font-size:45px;color:#ef4444"></i>
 
-<h2>Erişim Engellendi</h2>
+<h2 style="margin:15px 0">
+Erişim Engellendi
+</h2>
 
-<p style="color:var(--text-muted);margin:15px">
-Kontrol paneli için Discord ile giriş yapmalısın.
+<p style="color:var(--text-muted);margin-bottom:20px">
+Kontrol panelini kullanmak için giriş yapmalısın.
 </p>
 
 <a href="https://funce-linked-roles.onrender.com/api/auth/discord"
@@ -1352,11 +1363,11 @@ FunceBOT Kontrol Paneli
 
 <h3>
 <i class="fa-solid fa-server"></i>
-Yönetici / Sahibi Olduğun Sunucular
+Sunucularım
 </h3>
 
-<p style="color:var(--text-muted);font-size:12px;margin:10px 0 15px">
-Yönetebildiğin Discord sunucuları:
+<p style="color:var(--text-muted);font-size:12px;margin-bottom:15px">
+Yönetici veya sahibi olduğun sunucular.
 </p>
 
 <div id="user-guilds-list">
@@ -1365,12 +1376,25 @@ Yükleniyor...
 
 </div>
 
+<div class="card">
+
+<h3>
+<i class="fa-solid fa-lock"></i>
+Bot Komut & Modül Kontrolleri
+</h3>
+
+<p style="color:var(--primary-purple);font-size:18px;font-weight:700;margin-top:10px">
+Yakında...
+</p>
+
+</div>
+
 </div>
 
 </section>
 
 
-<!-- ADMIN -->
+<!-- ADMIN PANEL -->
 
 <section id="admin-panel" class="page-section">
 
@@ -1378,10 +1402,16 @@ Yükleniyor...
 style="color:#ef4444">
 
 <i class="fa-solid fa-shield-halved"></i>
-Yönetim Paneli
+Admin Panel
 
 </h2>
 
+<p style="text-align:center;color:var(--text-muted);margin-bottom:25px">
+FunceBOT yönetim merkezi
+</p>
+
+
+<!-- AKTİF KULLANICILAR -->
 
 <div class="card">
 
@@ -1390,121 +1420,118 @@ Yönetim Paneli
 Aktif Kullanıcılar
 </h3>
 
-<div id="active-users-list"></div>
+<div class="admin-search"
+style="margin-top:15px">
+
+<i class="fa-solid fa-search"></i>
+
+<input
+id="active-user-search"
+class="form-control"
+placeholder="Kullanıcı ara..."
+oninput="filterActiveUsers()">
+
+</div>
+
+<div id="active-users-list">
+Yükleniyor...
+</div>
 
 </div>
 
 
-<div class="card"
-style="border-color:rgba(239,68,68,.4)">
+<!-- ROZET YÖNETİMİ -->
 
-<h3 style="color:#ef4444">
+<div class="card">
+
+<h3 style="color:#a855f7">
 <i class="fa-solid fa-medal"></i>
-Kullanıcıya Rozet Ata
+Çoklu Rozet Yönetimi
 </h3>
+
+<p style="color:var(--text-muted);font-size:12px;margin:8px 0 15px">
+Kullanıcının Discord ID'sini girerek birden fazla rozet atayabilirsin.
+</p>
+
+<label>Discord ID</label>
 
 <input
 id="admin-target-id"
 class="form-control"
-placeholder="Discord ID">
+placeholder="Örn: 1080897669431574609">
 
+<label>Rozet</label>
 
-<p style="font-size:12px;color:var(--text-muted);margin-bottom:8px">
-Rozetleri seç:
-</p>
+<select
+id="admin-badge-select"
+class="form-select">
 
-<div id="admin-badge-grid"
-class="admin-badge-grid">
+<option value="👑 Founder">👑 Founder</option>
+<option value="🛡️ Bot Admin">🛡️ Bot Admin</option>
+<option value="🛡️ Senior Moderator">🛡️ Senior Moderator</option>
+<option value="🔨 Moderator">🔨 Moderator</option>
+<option value="💻 Developer">💻 Developer</option>
+<option value="🎨 Designer">🎨 Designer</option>
+<option value="⭐ Funce Pro">⭐ Funce Pro</option>
+<option value="💎 VIP Member">💎 VIP Member</option>
+<option value="🚀 Booster">🚀 Booster</option>
+<option value="🐛 Bug Hunter">🐛 Bug Hunter</option>
+<option value="💙 Discord Personeli">💙 Discord Personeli</option>
+<option value="🤖 Bot">🤖 Bot</option>
+<option value="🤝 Dost">🤝 Dost</option>
+<option value="⏳ Emektar Üye">⏳ Emektar Üye</option>
+<option value="💬 Chat Master">💬 Chat Master</option>
+<option value="👤 Standart Üye">👤 Standart Üye</option>
 
-<button class="admin-badge-option"
-data-badge="👑 Founder"
-onclick="toggleAdminBadge(this)">
-👑 Founder
-</button>
-
-<button class="admin-badge-option"
-data-badge="🛡️ Bot Admin"
-onclick="toggleAdminBadge(this)">
-🛡️ Bot Admin
-</button>
-
-<button class="admin-badge-option"
-data-badge="🛡️ Senior Moderator"
-onclick="toggleAdminBadge(this)">
-🛡️ Senior Moderator
-</button>
-
-<button class="admin-badge-option"
-data-badge="💻 Developer"
-onclick="toggleAdminBadge(this)">
-💻 Developer
-</button>
-
-<button class="admin-badge-option"
-data-badge="🎨 Designer"
-onclick="toggleAdminBadge(this)">
-🎨 Designer
-</button>
-
-<button class="admin-badge-option"
-data-badge="⭐ Funce Pro"
-onclick="toggleAdminBadge(this)">
-⭐ Funce Pro
-</button>
-
-<button class="admin-badge-option"
-data-badge="💎 VIP Member"
-onclick="toggleAdminBadge(this)">
-💎 VIP Member
-</button>
-
-<button class="admin-badge-option"
-data-badge="🚀 Booster"
-onclick="toggleAdminBadge(this)">
-🚀 Booster
-</button>
-
-<button class="admin-badge-option"
-data-badge="🤝 Dost"
-onclick="toggleAdminBadge(this)">
-🤝 Dost
-</button>
-
-<button class="admin-badge-option"
-data-badge="⏳ Emektar Üye"
-onclick="toggleAdminBadge(this)">
-⏳ Emektar Üye
-</button>
-
-<button class="admin-badge-option"
-data-badge="💬 Chat Master"
-onclick="toggleAdminBadge(this)">
-💬 Chat Master
-</button>
-
-<button class="admin-badge-option"
-data-badge="👤 Standart Üye"
-onclick="toggleAdminBadge(this)">
-👤 Standart Üye
-</button>
-
-</div>
+</select>
 
 <button
 class="btn btn-primary"
 style="width:100%"
 onclick="assignBadgeToUser()">
 
-<i class="fa-solid fa-check"></i>
-Rozetleri Kaydet
+<i class="fa-solid fa-plus"></i>
+Rozet Ekle
 
 </button>
 
 </div>
 
 
-<div class="card"
-style="border-color:rgba(239,68,68,.4)">
+<!-- ROZETLERİ GÖR -->
+
+<div class="card">
+
+<h3>
+<i class="fa-solid fa-list"></i>
+Kullanıcı Rozetlerini Gör
+</h3>
+
+<input
+id="badge-view-id"
+class="form-control"
+style="margin-top:15px"
+placeholder="Discord ID">
+
+<button
+class="btn"
+style="width:100%;background:#3b82f6;color:white"
+onclick="loadUserBadges()">
+
+Rozetleri Getir
+
+</button>
+
+<div id="admin-user-badges"
+style="margin-top:15px">
+</div>
+
+</div>
+
+
+<!-- BAN -->
+
+<div class="card">
 
 <h3 style="color:#ef4444">
 <i class="fa-solid fa-user-slash"></i>
@@ -1512,22 +1539,26 @@ Kullanıcı Banla
 </h3>
 
 <input
+type="text"
 id="ban-id-input"
 class="form-control"
-placeholder="Discord ID">
+placeholder="Discord ID"
+style="margin-top:12px">
 
 <button
 class="btn"
-style="width:100%;background:#ef4444;color:#fff"
+style="background:#ef4444;color:#fff;width:100%"
 onclick="banUser()">
 
 <i class="fa-solid fa-ban"></i>
-Sistem Banı At
+Banla
 
 </button>
 
 </div>
 
+
+<!-- BAN LIST -->
 
 <div class="card">
 
@@ -1538,8 +1569,10 @@ Banlı Kullanıcılar
 
 <ul
 id="banned-users-list"
-style="list-style:none;color:var(--text-muted)">
+style="list-style:none;color:var(--text-muted);margin-top:12px">
+
 <li>Yükleniyor...</li>
+
 </ul>
 
 </div>
@@ -1552,13 +1585,19 @@ style="list-style:none;color:var(--text-muted)">
 <footer>
 
 <p>
-&copy; 2026 <span>FunceBOT</span>.
-Tüm hakları saklıdır.
+© 2026 <span>FunceBOT</span>. Tüm hakları saklıdır.
 </p>
 
 <div class="footer-links">
-<a href="terms.html">Kullanım Koşulları</a>
-<a href="privacy.html">Gizlilik Politikası</a>
+
+<a href="terms.html">
+Kullanım Koşulları
+</a>
+
+<a href="privacy.html">
+Gizlilik Politikası
+</a>
+
 </div>
 
 </footer>
@@ -1572,9 +1611,6 @@ const API_BASE_URL =
 const DEFAULT_AVATAR =
 'https://i.imgur.com/QjSrqWd.png';
 
-const FOUNDER_ID =
-'1080897669431574609';
-
 
 /* =========================
    DISCORD LOGIN
@@ -1583,55 +1619,95 @@ const FOUNDER_ID =
 const params =
 new URLSearchParams(window.location.search);
 
-let username=params.get('username');
-let avatar=params.get('avatar');
-let id=params.get('id');
-let role=params.get('role');
-let badge=params.get('badge');
-let rawGuilds=params.get('guilds');
+let username = params.get('username');
+let avatar = params.get('avatar');
+let id = params.get('id');
+let role = params.get('role');
+let badge = params.get('badge');
+let badgesParam = params.get('badges');
+let rawGuilds = params.get('guilds');
 
 if(username && id){
 
-localStorage.setItem('discord_username',username);
-localStorage.setItem('discord_avatar',avatar || DEFAULT_AVATAR);
-localStorage.setItem('discord_id',id);
-localStorage.setItem('discord_role',role || 'Üye');
+    localStorage.setItem(
+        'discord_username',
+        username
+    );
 
-localStorage.setItem(
-'discord_badges',
-JSON.stringify(
-id===FOUNDER_ID
-?['👑 Founder']
-:(badge?[badge] : ['👤 Standart Üye'])
-)
-);
+    localStorage.setItem(
+        'discord_avatar',
+        avatar || DEFAULT_AVATAR
+    );
 
-if(rawGuilds){
-localStorage.setItem(
-'discord_guilds',
-rawGuilds
-);
-}
+    localStorage.setItem(
+        'discord_id',
+        id
+    );
 
-window.history.replaceState(
-{},
-document.title,
-window.location.pathname
-);
+    localStorage.setItem(
+        'discord_role',
+        role || 'Üye'
+    );
 
+    if(badgesParam){
+
+        try{
+
+            const parsed =
+            JSON.parse(decodeURIComponent(badgesParam));
+
+            localStorage.setItem(
+                'discord_badges',
+                JSON.stringify(parsed)
+            );
+
+        }catch{
+
+            localStorage.setItem(
+                'discord_badges',
+                JSON.stringify(
+                    badge ? [badge] : ['👤 Standart Üye']
+                )
+            );
+
+        }
+
+    }else{
+
+        localStorage.setItem(
+            'discord_badges',
+            JSON.stringify(
+                badge ? [badge] : ['👤 Standart Üye']
+            )
+        );
+    }
+
+    if(rawGuilds){
+
+        localStorage.setItem(
+            'discord_guilds',
+            rawGuilds
+        );
+    }
+
+    window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+    );
 }
 
 
 /* =========================
-   USER DATA
+   CURRENT USER
 ========================= */
 
 let currentUsername =
 localStorage.getItem('discord_username');
 
 let currentAvatar =
-localStorage.getItem('discord_avatar')
-|| DEFAULT_AVATAR;
+localStorage.getItem('discord_avatar') ||
+DEFAULT_AVATAR;
 
 let currentId =
 localStorage.getItem('discord_id');
@@ -1639,560 +1715,544 @@ localStorage.getItem('discord_id');
 let currentRole =
 localStorage.getItem('discord_role');
 
-let currentBadges =
-JSON.parse(
-localStorage.getItem('discord_badges')
-|| '[]'
-);
-
 let currentGuilds =
 localStorage.getItem('discord_guilds');
 
+let currentBio =
+localStorage.getItem('discord_bio') || '';
 
-/*
-   XP verileri
-*/
+let currentTheme =
+localStorage.getItem('discord_theme') ||
+'#a855f7';
 
-let currentXP =
-parseInt(
-localStorage.getItem('profile_xp')
-|| '0'
-);
 
-let currentMessages =
-parseInt(
-localStorage.getItem('profile_messages')
-|| '0'
-);
+function getBadges(){
 
-let currentLevel =
-parseInt(
-localStorage.getItem('profile_level')
-|| '1'
-);
+    try{
 
-let currentTitle =
-localStorage.getItem('profile_title')
-|| 'Yeni Üye';
+        const badges =
+        JSON.parse(
+            localStorage.getItem('discord_badges') || '[]'
+        );
 
-let currentNameStyle =
-localStorage.getItem('profile_name_style')
-|| 'normal';
+        if(Array.isArray(badges) && badges.length){
+            return badges;
+        }
+
+    }catch(e){}
+
+    return ['👤 Standart Üye'];
+}
 
 
 /* =========================
-   XP
+   BADGE CLASS
 ========================= */
 
-function getRequiredXP(level){
+function badgeClass(badge){
 
-return 100 + ((level-1)*50);
+    if(badge.includes('Founder'))
+        return 'badge-founder';
 
+    if(
+        badge.includes('Admin') ||
+        badge.includes('Moderator')
+    )
+        return 'badge-admin';
+
+    if(badge.includes('Developer'))
+        return 'badge-developer';
+
+    if(badge.includes('Pro'))
+        return 'badge-pro';
+
+    if(badge.includes('Booster'))
+        return 'badge-booster';
+
+    if(badge.includes('Bug Hunter'))
+        return 'badge-bug';
+
+    if(badge.includes('Discord Personeli'))
+        return 'badge-staff';
+
+    return '';
 }
 
 
-function updateLevel(){
+/* =========================
+   RENDER BADGES
+========================= */
 
-let required=getRequiredXP(currentLevel);
+function renderBadges(
+    containerId,
+    badges = getBadges()
+){
 
-while(currentXP >= required){
+    const container =
+    document.getElementById(containerId);
 
-currentXP-=required;
-currentLevel++;
+    if(!container) return;
 
-required=getRequiredXP(currentLevel);
+    container.innerHTML =
+    badges.map(badge => `
 
-}
+        <span class="profile-badge ${badgeClass(badge)}">
+            ${escapeHTML(badge)}
+        </span>
 
-saveXP();
-
-}
-
-
-function saveXP(){
-
-localStorage.setItem(
-'profile_xp',
-currentXP
-);
-
-localStorage.setItem(
-'profile_messages',
-currentMessages
-);
-
-localStorage.setItem(
-'profile_level',
-currentLevel
-);
-
-}
-
-
-function renderXP(){
-
-updateLevel();
-
-const required=getRequiredXP(
-currentLevel
-);
-
-const percentage=Math.min(
-100,
-(currentXP/required)*100
-);
-
-document.getElementById(
-'profile-level'
-).innerText=currentLevel;
-
-document.getElementById(
-'profile-level-stat'
-).innerText=currentLevel;
-
-document.getElementById(
-'profile-xp'
-).innerText=currentXP;
-
-document.getElementById(
-'profile-next-xp'
-).innerText=required;
-
-document.getElementById(
-'profile-total-xp'
-).innerText=
-getTotalXP();
-
-document.getElementById(
-'profile-message-count'
-).innerText=
-currentMessages;
-
-document.getElementById(
-'profile-xp-progress'
-).style.width=
-percentage+'%';
-
-}
-
-
-function getTotalXP(){
-
-let total=0;
-
-for(let i=1;i<currentLevel;i++){
-total+=getRequiredXP(i);
-}
-
-return total+currentXP;
+    `).join('');
 
 }
 
 
 /* =========================
-   ACHIEVEMENTS
+   ESCAPE
 ========================= */
 
-function renderAchievements(){
+function escapeHTML(value){
 
-const container=
-document.getElementById(
-'achievement-list'
-);
-
-if(!container)return;
-
-const achievements=[
-
-{
-icon:'💬',
-title:'İlk Mesaj',
-desc:'İlk mesajını gönder.',
-unlocked:currentMessages>=1
-},
-
-{
-icon:'⭐',
-title:'10 Mesaj',
-desc:'10 mesaj gönder.',
-unlocked:currentMessages>=10
-},
-
-{
-icon:'🔥',
-title:'100 Mesaj',
-desc:'100 mesaj gönder.',
-unlocked:currentMessages>=100
-},
-
-{
-icon:'🏆',
-title:'Level 5',
-desc:'5. levele ulaş.',
-unlocked:currentLevel>=5
-},
-
-{
-icon:'💎',
-title:'Level 10',
-desc:'10. levele ulaş.',
-unlocked:currentLevel>=10
-},
-
-{
-icon:'👑',
-title:'Kurucu',
-desc:'Founder rozeti.',
-unlocked:currentBadges.includes('👑 Founder')
-}
-
-];
-
-container.innerHTML=
-achievements.map(a=>`
-
-<div class="achievement ${a.unlocked?'unlocked':''}">
-
-<div class="achievement-icon">
-${a.icon}
-</div>
-
-<div class="achievement-title">
-${a.title}
-</div>
-
-<div class="achievement-desc">
-${a.unlocked?'Başarım açıldı!':a.desc}
-</div>
-
-</div>
-
-`).join('');
+    return String(value || '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
 
 }
 
 
 /* =========================
-   PROFİL
+   DOM READY
 ========================= */
 
-function renderBadges(){
+window.addEventListener(
+'DOMContentLoaded',
+()=>{
 
-const el=
-document.getElementById(
-'page-user-badge'
-);
+    applyTheme();
 
-if(!el)return;
+    renderHeader();
 
-el.innerHTML=
-currentBadges.map(b=>{
+    checkControlPanelAccess();
 
-let cls='';
+    renderUserGuilds();
 
-if(b.includes('Founder') ||
-b.includes('Pro') ||
-b.includes('VIP'))
-cls='gold';
+    renderActiveUsers();
 
-if(b.includes('Admin') ||
-b.includes('Moderator'))
-cls='red';
+    renderProfile();
 
-if(b.includes('Developer'))
-cls='blue';
+    if(currentId){
 
-if(b.includes('Dost') ||
-b.includes('Booster'))
-cls='green';
+        sendHeartbeat();
 
-return `
-<span class="badge ${cls}">
-${b}
-</span>
-`;
+        setInterval(
+            sendHeartbeat,
+            30000
+        );
 
-}).join('');
+    }
+
+    setInterval(
+        renderActiveUsers,
+        10000
+    );
+
+    if(isAdmin()){
+
+        const admin =
+        document.getElementById(
+            'adminNavLink'
+        );
+
+        if(admin)
+            admin.style.display='flex';
+
+        loadAdminData();
+
+    }
+
+});
+
+
+/* =========================
+   ADMIN CHECK
+========================= */
+
+function isAdmin(){
+
+    const badges =
+    getBadges();
+
+    return (
+        currentId === '1080897669431574609' ||
+        currentRole === 'Founder' ||
+        currentRole === 'Admin' ||
+        badges.some(
+            b =>
+            b.includes('Founder') ||
+            b.includes('Bot Admin')
+        )
+    );
 
 }
 
 
-function applyNameStyle(){
+/* =========================
+   PROFILE
+========================= */
 
-const nameEl=
-document.getElementById(
-'page-user-name'
-);
+function renderProfile(){
 
-if(!nameEl)return;
+    const locked =
+    document.getElementById(
+        'profile-page-locked'
+    );
 
-nameEl.style.fontWeight=
-currentNameStyle==='bold'
-?'800'
-:'600';
+    const content =
+    document.getElementById(
+        'profile-page-content'
+    );
 
-nameEl.style.fontStyle=
-currentNameStyle==='italic'
-?'italic'
-:'normal';
+    if(!currentId){
 
-nameEl.style.textTransform=
-currentNameStyle==='uppercase'
-?'uppercase'
-:'none';
+        if(locked)
+            locked.style.display='block';
 
-nameEl.style.textShadow=
-currentNameStyle==='neon'
-?'0 0 10px var(--primary-purple),0 0 20px var(--primary-purple)'
-:'none';
+        if(content)
+            content.style.display='none';
+
+        return;
+    }
+
+    if(locked)
+        locked.style.display='none';
+
+    if(content)
+        content.style.display='block';
+
+    const avatarEl =
+    document.getElementById(
+        'page-user-avatar'
+    );
+
+    const nameEl =
+    document.getElementById(
+        'page-user-name'
+    );
+
+    const idEl =
+    document.getElementById(
+        'page-user-id'
+    );
+
+    const bioEl =
+    document.getElementById(
+        'page-user-bio'
+    );
+
+    if(avatarEl)
+        avatarEl.src=getAvatarURL();
+
+    if(nameEl)
+        nameEl.innerText=
+        currentUsername || 'Kullanıcı';
+
+    if(idEl)
+        idEl.innerText=
+        `ID: ${currentId}`;
+
+    if(bioEl)
+        bioEl.innerText=
+        currentBio ||
+        'Henüz biyografi eklenmemiş.';
+
+    renderBadges('profile-badges');
+
+    const badgeCount =
+    document.getElementById(
+        'profile-badge-count'
+    );
+
+    if(badgeCount)
+        badgeCount.innerText=
+        getBadges().length;
+
+    const guildCount =
+    document.getElementById(
+        'profile-guild-count'
+    );
+
+    if(guildCount){
+
+        try{
+
+            const guilds =
+            JSON.parse(
+                decodeURIComponent(
+                    currentGuilds || '[]'
+                )
+            );
+
+            guildCount.innerText =
+            Array.isArray(guilds)
+            ? guilds.length
+            : 0;
+
+        }catch{
+
+            guildCount.innerText='0';
+
+        }
+
+    }
+
+    const nameInput =
+    document.getElementById(
+        'manual-name-input'
+    );
+
+    const avatarInput =
+    document.getElementById(
+        'manual-avatar-input'
+    );
+
+    const bioInput =
+    document.getElementById(
+        'manual-bio-input'
+    );
+
+    if(nameInput)
+        nameInput.value=
+        currentUsername || '';
+
+    if(avatarInput)
+        avatarInput.value=
+        currentAvatar || DEFAULT_AVATAR;
+
+    if(bioInput)
+        bioInput.value=
+        currentBio || '';
 
 }
 
+
+/* =========================
+   HEADER
+========================= */
 
 function renderHeader(){
 
-const profile=
-document.getElementById(
-'user-profile'
-);
+    const profile =
+    document.getElementById(
+        'user-profile'
+    );
 
-const loginBtn=
-document.getElementById(
-'login-discord-btn'
-);
+    const loginBtn =
+    document.getElementById(
+        'login-discord-btn'
+    );
 
-if(currentId && currentUsername){
+    if(currentId && currentUsername){
 
-const avatarUrl=
-currentAvatar &&
-currentAvatar.startsWith('http')
-?currentAvatar
-:DEFAULT_AVATAR;
+        if(profile){
 
-document.getElementById(
-'user-avatar'
-).src=avatarUrl;
+            document.getElementById(
+                'user-avatar'
+            ).src=getAvatarURL();
 
-document.getElementById(
-'user-name'
-).innerText=currentUsername;
+            document.getElementById(
+                'user-name'
+            ).innerText=
+            currentUsername;
 
-document.getElementById(
-'user-badge-text'
-).innerText=
-currentBadges[0] || 'Üye';
+            document.getElementById(
+                'user-badge-text'
+            ).innerText=
+            getBadges()[0] || 'Üye';
 
-profile.style.display='flex';
+            profile.style.display='flex';
 
-if(loginBtn)
-loginBtn.style.display='none';
+        }
 
+        if(loginBtn)
+            loginBtn.style.display='none';
 
-document.getElementById(
-'page-user-avatar'
-).src=avatarUrl;
+    }else{
 
-document.getElementById(
-'page-user-name'
-).innerText=currentUsername;
+        if(profile)
+            profile.style.display='none';
 
-document.getElementById(
-'page-user-title'
-).innerText=currentTitle;
+        if(loginBtn)
+            loginBtn.style.display='inline-flex';
 
-document.getElementById(
-'page-user-id'
-).innerText=
-'ID: '+currentId;
+    }
 
-
-document.getElementById(
-'manual-name-input'
-).value=currentUsername;
-
-document.getElementById(
-'manual-avatar-input'
-).value=currentAvatar;
-
-document.getElementById(
-'title-input'
-).value=currentTitle;
-
-document.getElementById(
-'name-style-select'
-).value=currentNameStyle;
-
-document.getElementById(
-'profile-page-locked'
-).style.display='none';
-
-document.getElementById(
-'profile-page-content'
-).style.display='block';
-
-renderBadges();
-renderXP();
-renderAchievements();
-applyNameStyle();
-
-}else{
-
-profile.style.display='none';
-
-if(loginBtn)
-loginBtn.style.display='inline-flex';
-
-document.getElementById(
-'profile-page-locked'
-).style.display='block';
-
-document.getElementById(
-'profile-page-content'
-).style.display='none';
-
-}
+    renderProfile();
 
 }
 
 
 /* =========================
-   PROFİL KAYDET
+   AVATAR
+========================= */
+
+function getAvatarURL(){
+
+    if(
+        currentAvatar &&
+        currentAvatar !== 'null' &&
+        currentAvatar !== 'undefined'
+    ){
+
+        if(currentAvatar.startsWith('http'))
+            return currentAvatar;
+
+        if(currentId){
+
+            return `https://cdn.discordapp.com/avatars/${currentId}/${currentAvatar}.png`;
+
+        }
+
+    }
+
+    return DEFAULT_AVATAR;
+}
+
+
+/* =========================
+   SAVE PROFILE
 ========================= */
 
 function saveManualProfile(){
 
-if(!currentId){
+    if(!currentId){
 
-alert('Önce Discord ile giriş yapmalısın!');
-return;
+        alert(
+            'Önce Discord ile giriş yapmalısın!'
+        );
+
+        return;
+    }
+
+    const name =
+    document.getElementById(
+        'manual-name-input'
+    ).value.trim();
+
+    const avatar =
+    document.getElementById(
+        'manual-avatar-input'
+    ).value.trim();
+
+    const bio =
+    document.getElementById(
+        'manual-bio-input'
+    ).value.trim();
+
+    const theme =
+    document.getElementById(
+        'edit-theme-select'
+    ).value;
+
+    const badges =
+    getBadges();
+
+    if(theme === '#ffd700' &&
+       !badges.some(b=>b.includes('Funce Pro'))){
+
+        alert(
+            'Altın tema için Funce Pro rozeti gerekli.'
+        );
+
+        return;
+    }
+
+    if(theme === '#ef4444' &&
+       !badges.some(
+           b =>
+           b.includes('Founder') ||
+           b.includes('Admin')
+       )){
+
+        alert(
+            'Kırmızı tema için Admin veya Founder rozeti gerekli.'
+        );
+
+        return;
+    }
+
+    if(theme === '#3b82f6' &&
+       !badges.some(
+           b=>b.includes('Developer')
+       )){
+
+        alert(
+            'Mavi tema için Developer rozeti gerekli.'
+        );
+
+        return;
+    }
+
+    if(name){
+
+        currentUsername=name;
+
+        localStorage.setItem(
+            'discord_username',
+            name
+        );
+
+    }
+
+    if(avatar){
+
+        currentAvatar=avatar;
+
+        localStorage.setItem(
+            'discord_avatar',
+            avatar
+        );
+
+    }
+
+    currentBio=bio;
+
+    localStorage.setItem(
+        'discord_bio',
+        bio
+    );
+
+    currentTheme=theme;
+
+    localStorage.setItem(
+        'discord_theme',
+        theme
+    );
+
+    applyTheme();
+
+    renderHeader();
+
+    sendHeartbeat();
+
+    alert(
+        'Profil başarıyla güncellendi!'
+    );
 
 }
 
-const newName=
-document.getElementById(
-'manual-name-input'
-).value.trim();
 
-const newAvatar=
-document.getElementById(
-'manual-avatar-input'
-).value.trim();
+/* =========================
+   THEME
+========================= */
 
-const newTitle=
-document.getElementById(
-'title-input'
-).value.trim();
+function applyTheme(){
 
-const newStyle=
-document.getElementById(
-'name-style-select'
-).value;
-
-const selectedTheme=
-document.getElementById(
-'edit-theme-select'
-).value;
-
-
-/* Tema kontrolleri */
-
-if(
-selectedTheme==='#ffd700' &&
-!currentBadges.some(b=>b.includes('Funce Pro'))
-){
-
-alert(
-'⭐ Altın tema için Funce Pro rozeti gerekiyor!'
-);
-
-return;
-
-}
-
-if(
-selectedTheme==='#ef4444' &&
-!currentBadges.some(
-b=>b.includes('Founder') ||
-b.includes('Admin')
-)
-){
-
-alert(
-'🛡️ Kırmızı tema için Admin veya Founder gerekiyor!'
-);
-
-return;
-
-}
-
-if(
-selectedTheme==='#3b82f6' &&
-!currentBadges.some(
-b=>b.includes('Developer')
-)
-){
-
-alert(
-'💻 Mavi tema için Developer rozeti gerekiyor!'
-);
-
-return;
-
-}
-
-
-if(newName){
-
-currentUsername=newName;
-
-localStorage.setItem(
-'discord_username',
-newName
-);
-
-}
-
-if(newAvatar){
-
-currentAvatar=newAvatar;
-
-localStorage.setItem(
-'discord_avatar',
-newAvatar
-);
-
-}
-
-if(newTitle){
-
-currentTitle=newTitle;
-
-localStorage.setItem(
-'profile_title',
-newTitle
-);
-
-}
-
-currentNameStyle=newStyle;
-
-localStorage.setItem(
-'profile_name_style',
-newStyle
-);
-
-document.body.style.setProperty(
-'--primary-purple',
-selectedTheme
-);
-
-renderHeader();
-
-sendHeartbeat();
-
-alert(
-'Profil başarıyla güncellendi!'
-);
+    document.body.style
+    .setProperty(
+        '--primary-purple',
+        currentTheme
+    );
 
 }
 
@@ -2203,25 +2263,40 @@ alert(
 
 function sendHeartbeat(){
 
-if(!currentId)return;
+    if(!currentId)
+        return;
 
-fetch(
-`${API_BASE_URL}/api/users/ping`,
-{
-method:'POST',
-headers:{
-'Content-Type':'application/json'
-},
-body:JSON.stringify({
+    fetch(
+        `${API_BASE_URL}/api/users/ping`,
+        {
+            method:'POST',
+            headers:{
+                'Content-Type':
+                'application/json'
+            },
+            body:JSON.stringify({
 
-id:currentId,
-username:currentUsername,
-avatar:currentAvatar,
-badge:currentBadges.join(' ')
+                id:currentId,
 
-})
-}
-).catch(()=>{});
+                username:currentUsername,
+
+                avatar:getAvatarURL(),
+
+                badge:getBadges()[0] ||
+                '👤 Standart Üye',
+
+                badges:getBadges()
+
+            })
+
+        }
+    ).catch(
+        e =>
+        console.warn(
+            'Heartbeat ulaştırılamadı:',
+            e
+        )
+    );
 
 }
 
@@ -2230,105 +2305,173 @@ badge:currentBadges.join(' ')
    ACTIVE USERS
 ========================= */
 
+let activeUsersCache=[];
+
 async function renderActiveUsers(){
 
-const container=
-document.getElementById(
-'active-users-list'
-);
+    const container =
+    document.getElementById(
+        'active-users-list'
+    );
 
-if(!container)return;
+    if(!container)
+        return;
 
-try{
+    try{
 
-const res=
-await fetch(
-`${API_BASE_URL}/api/users/active`
-);
+        const res =
+        await fetch(
+            `${API_BASE_URL}/api/users/active`
+        );
 
-if(!res.ok)
-throw new Error();
+        if(!res.ok)
+            throw new Error();
 
-const users=
-await res.json();
+        const users =
+        await res.json();
 
-if(!users.length){
+        activeUsersCache =
+        Array.isArray(users)
+        ? users
+        : [];
 
-container.innerHTML=
-'<p style="color:var(--text-muted);font-size:12px">Aktif kullanıcı yok.</p>';
+        displayActiveUsers(
+            activeUsersCache
+        );
 
-return;
+        const count =
+        document.getElementById(
+            'home-user-count'
+        );
 
-}
+        if(count)
+            count.innerText=
+            activeUsersCache.length;
 
-container.innerHTML=
-users.map(user=>`
+    }catch{
 
-<div class="active-user-card">
+        if(currentId){
 
-<div class="active-user-info">
+            activeUsersCache=[{
 
-<img src="${user.avatar || DEFAULT_AVATAR}">
+                id:currentId,
+                username:currentUsername,
+                avatar:getAvatarURL(),
+                badge:getBadges()[0],
+                badges:getBadges()
 
-<div>
+            }];
 
-<h4 style="color:#fff;font-size:13px">
-${user.username || 'Kullanıcı'}
-</h4>
+            displayActiveUsers(
+                activeUsersCache
+            );
 
-<p style="color:var(--text-muted);font-size:10px">
-${user.badge || '👤 Standart Üye'}
-</p>
+        }else{
 
-</div>
+            container.innerHTML=
+            `<p style="color:var(--text-muted);font-size:12px">
+            Şu an aktif kullanıcı bulunmuyor.
+            </p>`;
 
-</div>
+        }
 
-<span style="color:#22c55e;font-size:10px">
-● Çevrimiçi
-</span>
-
-</div>
-
-`).join('');
-
-}catch{
-
-if(currentId){
-
-container.innerHTML=`
-
-<div class="active-user-card">
-
-<div class="active-user-info">
-
-<img src="${currentAvatar}">
-
-<div>
-
-<h4 style="color:#fff">
-${currentUsername}
-</h4>
-
-<p style="color:var(--text-muted);font-size:10px">
-${currentBadges.join(' ')}
-</p>
-
-</div>
-
-</div>
-
-<span style="color:#22c55e;font-size:10px">
-● Çevrimiçi
-</span>
-
-</div>
-
-`;
+    }
 
 }
 
+
+function displayActiveUsers(users){
+
+    const container =
+    document.getElementById(
+        'active-users-list'
+    );
+
+    if(!container)
+        return;
+
+    if(!users.length){
+
+        container.innerHTML=
+        `<p style="color:var(--text-muted);font-size:12px">
+        Kullanıcı bulunamadı.
+        </p>`;
+
+        return;
+
+    }
+
+    container.innerHTML =
+    users.map(user=>{
+
+        const badges =
+        Array.isArray(user.badges)
+        ? user.badges
+        : [user.badge || '👤 Standart Üye'];
+
+        return `
+
+        <div class="active-user-card"
+             data-username="${escapeHTML(user.username || '')}">
+
+            <div class="active-user-info">
+
+                <img
+                src="${escapeHTML(user.avatar || DEFAULT_AVATAR)}">
+
+                <div>
+
+                    <h4 style="color:#fff;font-size:13px">
+                        ${escapeHTML(user.username || 'Kullanıcı')}
+                    </h4>
+
+                    <div class="badges-container"
+                         style="margin:4px 0">
+
+                        ${badges.slice(0,4).map(
+                            b =>
+                            `<span class="profile-badge ${badgeClass(b)}">
+                            ${escapeHTML(b)}
+                            </span>`
+                        ).join('')}
+
+                    </div>
+
+                    <p style="color:#22c55e;font-size:10px">
+                        ● Sitede Aktif
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    }).join('');
+
 }
+
+
+function filterActiveUsers(){
+
+    const query =
+    document.getElementById(
+        'active-user-search'
+    ).value
+    .toLowerCase()
+    .trim();
+
+    const filtered =
+    activeUsersCache.filter(
+        user =>
+        (user.username || '')
+        .toLowerCase()
+        .includes(query)
+    );
+
+    displayActiveUsers(filtered);
 
 }
 
@@ -2339,218 +2482,139 @@ ${currentBadges.join(' ')}
 
 function renderUserGuilds(){
 
-const container=
-document.getElementById(
-'user-guilds-list'
-);
+    const container =
+    document.getElementById(
+        'user-guilds-list'
+    );
 
-if(!container)return;
+    if(!container)
+        return;
 
-if(!currentGuilds){
+    if(!currentGuilds){
 
-container.innerHTML=
-'<p style="color:var(--text-muted)">Sunucuları görmek için tekrar giriş yap.</p>';
+        container.innerHTML=
+        `<p style="color:var(--text-muted);font-size:12px">
+        Sunucuları görmek için Discord ile tekrar giriş yap.
+        </p>`;
 
-return;
+        return;
+    }
 
-}
+    try{
 
-try{
+        const guilds =
+        JSON.parse(
+            decodeURIComponent(
+                currentGuilds
+            )
+        );
 
-const guilds=
-JSON.parse(
-decodeURIComponent(currentGuilds)
-);
+        const filtered =
+        guilds.filter(g=>{
 
-const filtered=
-guilds.filter(g=>{
+            if(g.owner)
+                return true;
 
-if(g.owner)return true;
+            if(g.permissions){
 
-if(g.permissions){
+                const p =
+                BigInt(g.permissions);
 
-try{
+                return (
+                    (p & 0x8n) === 0x8n
+                );
 
-const p=BigInt(g.permissions);
+            }
 
-return (p & 0x8n)===0x8n;
+            return false;
 
-}catch{
+        });
 
-return false;
+        if(!filtered.length){
 
-}
+            container.innerHTML=
+            `<p style="color:var(--text-muted)">
+            Yönetici olduğun sunucu bulunamadı.
+            </p>`;
 
-}
+            return;
+        }
 
-return false;
+        container.innerHTML =
+        filtered.map(guild=>{
 
-});
+            const icon =
+            guild.icon
+            ? `<img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png">`
+            : `<div class="guild-icon-placeholder">
+                ${escapeHTML(
+                    guild.name?.charAt(0) || '?'
+                )}
+               </div>`;
 
-if(!filtered.length){
+            const bot =
+            guild.botInGuild === true;
 
-container.innerHTML=
-'<p style="color:var(--text-muted)">Yönetici olduğun sunucu bulunamadı.</p>';
+            return `
 
-return;
+            <div class="guild-card">
 
-}
+                <div class="guild-info">
 
-container.innerHTML=
-filtered.map(guild=>{
+                    ${icon}
 
-const icon=
-guild.icon
-?`<img src="https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png">`
-:`<div class="guild-icon-placeholder">${guild.name.charAt(0)}</div>`;
+                    <div>
 
-const botInGuild=
-guild.botInGuild===true;
+                        <h4 style="color:#fff">
+                            ${escapeHTML(guild.name)}
+                        </h4>
 
-return `
+                        <p style="color:var(--text-muted);font-size:10px">
+                            ${bot
+                            ? '<span style="color:#22c55e">● Bot Aktif</span>'
+                            : '<span style="color:#ef4444">● Bot Ekli Değil</span>'}
+                        </p>
 
-<div class="guild-card">
+                    </div>
 
-<div class="guild-info">
+                </div>
 
-${icon}
+                ${
+                bot
 
-<div>
+                ?
 
-<h4 style="color:#fff">
-${guild.name}
-</h4>
+                `<button
+                class="btn btn-primary"
+                onclick="alert('Yönetim paneli yakında aktif olacak.')">
+                Yönet
+                </button>`
 
-<p style="color:var(--text-muted);font-size:10px">
+                :
 
-Bot Durumu:
-${botInGuild
-?'<span style="color:#22c55e">Ekli</span>'
-:'<span style="color:#ef4444">Ekli Değil</span>'}
+                `<a
+                class="btn btn-discord"
+                target="_blank"
+                href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663&guild_id=${guild.id}">
+                <i class="fa-solid fa-plus"></i>
+                Botu Ekle
+                </a>`
+                }
 
-</p>
+            </div>
 
-</div>
+            `;
 
-</div>
+        }).join('');
 
-${
-botInGuild
-?`
-<button
-class="btn btn-primary"
-onclick="alert('Yönetim paneli yakında!')">
-Yönet
-</button>
-`
-:
-`
-<a
-class="btn btn-discord"
-target="_blank"
-href="https://discord.com/oauth2/authorize?client_id=1534831879918977145&scope=bot%20applications.commands&permissions=8866461766385663&guild_id=${guild.id}">
-Botu Ekle
-</a>
-`
-}
+    }catch{
 
-</div>
+        container.innerHTML=
+        `<p style="color:#ef4444">
+        Sunucu verileri okunamadı.
+        </p>`;
 
-`;
-
-}).join('');
-
-}catch(e){
-
-container.innerHTML=
-'<p style="color:#ef4444">Sunucu verileri okunamadı.</p>';
-
-}
-
-}
-
-
-/* =========================
-   ADMIN BADGES
-========================= */
-
-let selectedAdminBadges=[];
-
-
-function toggleAdminBadge(button){
-
-const badge=
-button.dataset.badge;
-
-if(selectedAdminBadges.includes(badge)){
-
-selectedAdminBadges=
-selectedAdminBadges.filter(
-b=>b!==badge
-);
-
-button.classList.remove('selected');
-
-}else{
-
-selectedAdminBadges.push(badge);
-
-button.classList.add('selected');
-
-}
-
-}
-
-
-function assignBadgeToUser(){
-
-const targetId=
-document.getElementById(
-'admin-target-id'
-).value.trim();
-
-if(!targetId){
-
-alert('Discord ID gir!');
-return;
-
-}
-
-if(!selectedAdminBadges.length){
-
-alert('En az bir rozet seç!');
-return;
-
-}
-
-
-/*
-   Admin tarafında kullanıcı rozetlerini
-   LocalStorage'a kaydediyoruz.
-*/
-
-localStorage.setItem(
-'badges_'+targetId,
-JSON.stringify(
-selectedAdminBadges
-)
-);
-
-alert(
-`${targetId} kullanıcısına ${selectedAdminBadges.join(' ')} tanımlandı.`
-);
-
-document.getElementById(
-'admin-target-id'
-).value='';
-
-selectedAdminBadges=[];
-
-document.querySelectorAll(
-'.admin-badge-option'
-).forEach(btn=>{
-btn.classList.remove('selected');
-});
+    }
 
 }
 
@@ -2561,27 +2625,359 @@ btn.classList.remove('selected');
 
 function checkControlPanelAccess(){
 
-const locked=
-document.getElementById(
-'control-panel-locked'
-);
+    const locked =
+    document.getElementById(
+        'control-panel-locked'
+    );
 
-const unlocked=
-document.getElementById(
-'control-panel-unlocked'
-);
+    const unlocked =
+    document.getElementById(
+        'control-panel-unlocked'
+    );
 
-if(currentId){
+    if(currentId){
 
-locked.style.display='none';
-unlocked.style.display='block';
+        locked.style.display='none';
+        unlocked.style.display='block';
 
-}else{
+    }else{
 
-locked.style.display='block';
-unlocked.style.display='none';
+        locked.style.display='block';
+        unlocked.style.display='none';
+
+    }
 
 }
+
+
+/* =========================
+   ADMIN BADGE
+========================= */
+
+async function assignBadgeToUser(){
+
+    if(!isAdmin()){
+
+        alert(
+            'Bu işlem için Admin/Founder yetkisi gerekiyor.'
+        );
+
+        return;
+    }
+
+    const targetId =
+    document.getElementById(
+        'admin-target-id'
+    ).value.trim();
+
+    const badge =
+    document.getElementById(
+        'admin-badge-select'
+    ).value;
+
+    if(!targetId){
+
+        alert(
+            'Discord ID gir!'
+        );
+
+        return;
+    }
+
+    if(!/^\d{15,25}$/.test(targetId)){
+
+        alert(
+            'Geçerli bir Discord ID gir!'
+        );
+
+        return;
+    }
+
+    try{
+
+        const res =
+        await fetch(
+            `${API_BASE_URL}/api/admin/badge`,
+            {
+                method:'POST',
+                headers:{
+                    'Content-Type':
+                    'application/json'
+                },
+                body:JSON.stringify({
+
+                    adminId:currentId,
+
+                    targetId:targetId,
+
+                    badge:badge
+
+                })
+            }
+        );
+
+        const data =
+        await res.json();
+
+        if(data.success){
+
+            alert(
+                `${badge} rozeti kullanıcıya eklendi.`
+            );
+
+            loadUserBadges(
+                targetId
+            );
+
+            document.getElementById(
+                'admin-target-id'
+            ).value='';
+
+        }else{
+
+            throw new Error();
+
+        }
+
+    }catch{
+
+        /*
+         * Backend endpoint henüz yoksa
+         * local fallback.
+         */
+
+        const key =
+        `user_badges_${targetId}`;
+
+        let badges=[];
+
+        try{
+
+            badges =
+            JSON.parse(
+                localStorage.getItem(key) ||
+                '[]'
+            );
+
+        }catch{}
+
+        if(!badges.includes(badge))
+            badges.push(badge);
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(badges)
+        );
+
+        alert(
+            `${badge} rozeti yerel olarak eklendi.\n\n` +
+            `Kalıcı sistem için /api/admin/badge endpointini backend'e ekle.`
+        );
+
+        loadUserBadges(
+            targetId
+        );
+
+    }
+
+}
+
+
+/* =========================
+   LOAD USER BADGES
+========================= */
+
+async function loadUserBadges(
+    customId=null
+){
+
+    const targetId =
+    customId ||
+    document.getElementById(
+        'badge-view-id'
+    ).value.trim();
+
+    const container =
+    document.getElementById(
+        'admin-user-badges'
+    );
+
+    if(!targetId){
+
+        alert(
+            'Discord ID gir!'
+        );
+
+        return;
+    }
+
+    try{
+
+        const res =
+        await fetch(
+            `${API_BASE_URL}/api/admin/badges/${targetId}`
+        );
+
+        if(!res.ok)
+            throw new Error();
+
+        const data =
+        await res.json();
+
+        const badges =
+        Array.isArray(data.badges)
+        ? data.badges
+        : [];
+
+        renderAdminBadges(
+            targetId,
+            badges
+        );
+
+    }catch{
+
+        const badges =
+        JSON.parse(
+            localStorage.getItem(
+                `user_badges_${targetId}`
+            ) || '[]'
+        );
+
+        renderAdminBadges(
+            targetId,
+            badges
+        );
+
+    }
+
+}
+
+
+function renderAdminBadges(
+    targetId,
+    badges
+){
+
+    const container =
+    document.getElementById(
+        'admin-user-badges'
+    );
+
+    if(!badges.length){
+
+        container.innerHTML=
+        `<p style="color:var(--text-muted);font-size:12px">
+        Bu kullanıcının kayıtlı rozeti yok.
+        </p>`;
+
+        return;
+    }
+
+    container.innerHTML =
+    badges.map(
+        (badge,index)=>`
+
+        <div class="badge-admin-row">
+
+            <span class="profile-badge ${badgeClass(badge)}">
+                ${escapeHTML(badge)}
+            </span>
+
+            <button
+            class="badge-remove"
+            onclick="removeBadge('${escapeHTML(targetId)}',${index})">
+
+            <i class="fa-solid fa-xmark"></i>
+            Kaldır
+
+            </button>
+
+        </div>
+
+        `
+    ).join('');
+
+}
+
+
+/* =========================
+   REMOVE BADGE
+========================= */
+
+async function removeBadge(
+    targetId,
+    index
+){
+
+    if(!confirm(
+        'Bu rozeti kullanıcıdan kaldırmak istiyor musun?'
+    ))
+        return;
+
+    try{
+
+        const res =
+        await fetch(
+            `${API_BASE_URL}/api/admin/badge`,
+            {
+                method:'DELETE',
+                headers:{
+                    'Content-Type':
+                    'application/json'
+                },
+                body:JSON.stringify({
+
+                    adminId:currentId,
+
+                    targetId:targetId,
+
+                    badgeIndex:index
+
+                })
+            }
+        );
+
+        const data =
+        await res.json();
+
+        if(data.success){
+
+            loadUserBadges(
+                targetId
+            );
+
+            return;
+
+        }
+
+        throw new Error();
+
+    }catch{
+
+        const key =
+        `user_badges_${targetId}`;
+
+        let badges =
+        JSON.parse(
+            localStorage.getItem(key) ||
+            '[]'
+        );
+
+        badges.splice(
+            index,
+            1
+        );
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(badges)
+        );
+
+        loadUserBadges(
+            targetId
+        );
+
+    }
 
 }
 
@@ -2592,64 +2988,78 @@ unlocked.style.display='none';
 
 async function loadAdminData(){
 
-try{
+    try{
 
-const res=
-await fetch(
-`${API_BASE_URL}/api/admin/data`
-);
+        const res =
+        await fetch(
+            `${API_BASE_URL}/api/admin/data`
+        );
 
-const data=
-await res.json();
+        if(!res.ok)
+            throw new Error();
 
-const list=
-document.getElementById(
-'banned-users-list'
-);
+        const data =
+        await res.json();
 
-if(data.bannedList &&
-data.bannedList.length){
+        const list =
+        document.getElementById(
+            'banned-users-list'
+        );
 
-list.innerHTML=
-data.bannedList.map(uid=>`
+        if(
+            data.bannedList &&
+            data.bannedList.length
+        ){
 
-<li style="
-padding:8px 0;
-border-bottom:1px solid rgba(255,255,255,.05);
-display:flex;
-justify-content:space-between">
+            list.innerHTML =
+            data.bannedList.map(
+                uid=>`
 
-<span>ID: ${uid}</span>
+                <li style="
+                padding:8px 0;
+                border-bottom:1px solid rgba(255,255,255,.05);
+                display:flex;
+                justify-content:space-between;
+                align-items:center">
 
-<button
-onclick="unbanUser('${uid}')"
-style="
-background:#22c55e;
-color:#fff;
-border:0;
-padding:4px 10px;
-border-radius:6px">
+                    <span>
+                        ID: ${escapeHTML(uid)}
+                    </span>
 
-Kaldır
+                    <button
+                    onclick="unbanUser('${escapeHTML(uid)}')"
+                    style="
+                    background:#22c55e;
+                    color:#fff;
+                    border:none;
+                    padding:4px 10px;
+                    border-radius:6px;
+                    cursor:pointer">
 
-</button>
+                    Kaldır
 
-</li>
+                    </button>
 
-`).join('');
+                </li>
 
-}else{
+                `
+            ).join('');
 
-list.innerHTML=
-'<li>Aktif banlı kullanıcı yok.</li>';
+        }else{
 
-}
+            list.innerHTML=
+            '<li>Aktif banlı kullanıcı bulunmuyor.</li>';
 
-}catch(e){
+        }
 
-console.error(e);
+    }catch(e){
 
-}
+        console.warn(
+            'Admin verisi alınamadı',
+            e
+        );
+
+    }
 
 }
 
@@ -2660,68 +3070,82 @@ console.error(e);
 
 async function banUser(){
 
-const targetId=
-document.getElementById(
-'ban-id-input'
-).value.trim();
+    const targetId =
+    document.getElementById(
+        'ban-id-input'
+    ).value.trim();
 
-if(!targetId){
+    if(!targetId){
 
-alert('ID gir!');
-return;
+        alert(
+            'Discord ID gir!'
+        );
 
-}
+        return;
+    }
 
-try{
+    try{
 
-const res=
-await fetch(
-`${API_BASE_URL}/api/admin/ban?adminId=${currentId}&targetId=${targetId}`
-);
+        const res =
+        await fetch(
+            `${API_BASE_URL}/api/admin/ban?adminId=${currentId}&targetId=${targetId}`
+        );
 
-const data=
-await res.json();
+        const data =
+        await res.json();
 
-if(data.success){
+        if(data.success){
 
-alert('Kullanıcı banlandı!');
+            alert(
+                'Kullanıcı başarıyla banlandı!'
+            );
 
-document.getElementById(
-'ban-id-input'
-).value='';
+            document.getElementById(
+                'ban-id-input'
+            ).value='';
 
-loadAdminData();
+            loadAdminData();
 
-}else{
+        }else{
 
-alert('Ban işlemi başarısız.');
+            alert(
+                'Ban işlemi başarısız!'
+            );
 
-}
+        }
 
-}catch{
+    }catch{
 
-alert('Sunucuya bağlanılamadı.');
+        alert(
+            'Sunucuyla bağlantı kurulamadı!'
+        );
 
-}
-
-}
-
-
-async function unbanUser(targetId){
-
-try{
-
-await fetch(
-`${API_BASE_URL}/api/admin/unban?adminId=${currentId}&targetId=${targetId}`
-);
-
-loadAdminData();
-
-}catch(e){
-
-console.error(e);
+    }
 
 }
+
+
+/* =========================
+   UNBAN
+========================= */
+
+async function unbanUser(
+    targetId
+){
+
+    try{
+
+        await fetch(
+            `${API_BASE_URL}/api/admin/unban?adminId=${currentId}&targetId=${targetId}`
+        );
+
+        loadAdminData();
+
+    }catch(e){
+
+        console.error(e);
+
+    }
 
 }
 
@@ -2732,156 +3156,158 @@ console.error(e);
 
 function logout(){
 
-[
-'discord_username',
-'discord_avatar',
-'discord_id',
-'discord_role',
-'discord_badges',
-'discord_guilds'
-].forEach(key=>
-localStorage.removeItem(key)
-);
+    localStorage.removeItem(
+        'discord_username'
+    );
 
-window.location.href='/';
+    localStorage.removeItem(
+        'discord_avatar'
+    );
+
+    localStorage.removeItem(
+        'discord_id'
+    );
+
+    localStorage.removeItem(
+        'discord_role'
+    );
+
+    localStorage.removeItem(
+        'discord_badge'
+    );
+
+    localStorage.removeItem(
+        'discord_badges'
+    );
+
+    localStorage.removeItem(
+        'discord_guilds'
+    );
+
+    localStorage.removeItem(
+        'discord_bio'
+    );
+
+    localStorage.removeItem(
+        'discord_theme'
+    );
+
+    window.location.href='/';
 
 }
 
 
 /* =========================
-   NAVIGATION
+   MENU
+========================= */
+
+function toggleMenu(){
+
+    const menu =
+    document.getElementById(
+        'navMenu'
+    );
+
+    const toggle =
+    document.getElementById(
+        'menuToggle'
+    );
+
+    menu.classList.toggle(
+        'show'
+    );
+
+    toggle.innerHTML =
+    menu.classList.contains('show')
+    ? '<i class="fa-solid fa-xmark"></i>'
+    : '<i class="fa-solid fa-bars"></i>';
+
+}
+
+
+/* =========================
+   PROFILE TAB
 ========================= */
 
 function openProfileTab(){
 
-switchTab('profilim');
-
-}
-
-
-function toggleMenu(){
-
-const menu=
-document.getElementById(
-'navMenu'
-);
-
-const toggle=
-document.getElementById(
-'menuToggle'
-);
-
-menu.classList.toggle('show');
-
-toggle.innerHTML=
-menu.classList.contains('show')
-?'<i class="fa-solid fa-xmark"></i>'
-:'<i class="fa-solid fa-bars"></i>';
-
-}
-
-
-function switchTab(tabId,element=null){
-
-document.querySelectorAll(
-'.page-section'
-).forEach(sec=>
-sec.classList.remove('active')
-);
-
-const target=
-document.getElementById(tabId);
-
-if(target)
-target.classList.add('active');
-
-document.querySelectorAll(
-'.nav-btn'
-).forEach(btn=>
-btn.classList.remove('active')
-);
-
-if(element)
-element.classList.add('active');
-
-const menu=
-document.getElementById(
-'navMenu'
-);
-
-if(menu.classList.contains('show'))
-toggleMenu();
-
-window.scrollTo({
-top:0,
-behavior:'smooth'
-});
+    switchTab(
+        'profilim'
+    );
 
 }
 
 
 /* =========================
-   INIT
+   SWITCH TAB
 ========================= */
 
-window.addEventListener(
-'DOMContentLoaded',
-()=>{
-
-renderHeader();
-
-renderXP();
-
-renderAchievements();
-
-renderUserGuilds();
-
-checkControlPanelAccess();
-
-renderActiveUsers();
-
-if(currentId){
-
-sendHeartbeat();
-
-setInterval(
-sendHeartbeat,
-30000
-);
-
-}
-
-setInterval(
-renderActiveUsers,
-10000
-);
-
-
-/* ADMIN */
-
-if(
-currentId===FOUNDER_ID ||
-currentRole==='Founder' ||
-currentRole==='Admin' ||
-currentBadges.some(
-b=>b.includes('Founder') ||
-b.includes('Admin')
-)
+function switchTab(
+    tabId,
+    element=null
 ){
 
-const adminNav=
-document.getElementById(
-'adminNavLink'
-);
+    document
+    .querySelectorAll('.page-section')
+    .forEach(
+        section =>
+        section.classList.remove(
+            'active'
+        )
+    );
 
-if(adminNav)
-adminNav.style.display='block';
+    const target =
+    document.getElementById(
+        tabId
+    );
 
-loadAdminData();
+    if(target)
+        target.classList.add(
+            'active'
+        );
+
+    document
+    .querySelectorAll('.nav-btn')
+    .forEach(
+        btn =>
+        btn.classList.remove(
+            'active'
+        )
+    );
+
+    if(
+        element &&
+        element.classList.contains(
+            'nav-btn'
+        )
+    ){
+
+        element.classList.add(
+            'active'
+        );
+
+    }
+
+    const menu =
+    document.getElementById(
+        'navMenu'
+    );
+
+    if(
+        menu &&
+        menu.classList.contains('show')
+    ){
+
+        toggleMenu();
+
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:'smooth'
+    });
 
 }
-
-});
 
 
 /* =========================
@@ -2892,21 +3318,25 @@ window.addEventListener(
 'load',
 ()=>{
 
-setTimeout(()=>{
+    setTimeout(
+        ()=>{
 
-const intro=
-document.getElementById(
-'intro-screen'
-);
+            const intro =
+            document.getElementById(
+                'intro-screen'
+            );
 
-if(intro){
+            if(intro){
 
-intro.style.opacity='0';
-intro.style.visibility='hidden';
+                intro.style.opacity='0';
 
-}
+                intro.style.visibility='hidden';
 
-},1800);
+            }
+
+        },
+        1800
+    );
 
 });
 
@@ -2915,24 +3345,23 @@ intro.style.visibility='hidden';
    PARTICLES
 ========================= */
 
-const canvas=
+const canvas =
 document.getElementById(
-'particle-canvas'
+    'particle-canvas'
 );
 
-const ctx=
+const ctx =
 canvas.getContext('2d');
 
 let particles=[];
 
-
 function resizeCanvas(){
 
-canvas.width=
-window.innerWidth;
+    canvas.width =
+    window.innerWidth;
 
-canvas.height=
-window.innerHeight;
+    canvas.height =
+    window.innerHeight;
 
 }
 
@@ -2946,91 +3375,100 @@ resizeCanvas
 
 class Particle{
 
-constructor(){
+    constructor(){
 
-this.x=
-Math.random()*canvas.width;
+        this.x =
+        Math.random() *
+        canvas.width;
 
-this.y=
-Math.random()*canvas.height;
+        this.y =
+        Math.random() *
+        canvas.height;
 
-this.size=
-Math.random()*1.5+.5;
+        this.size =
+        Math.random()*1.5+.5;
 
-this.speedX=
-(Math.random()-.5)*.4;
+        this.speedX =
+        (Math.random()-.5)*.4;
 
-this.speedY=
-(Math.random()-.5)*.4;
+        this.speedY =
+        (Math.random()-.5)*.4;
+
+    }
+
+    update(){
+
+        this.x+=this.speedX;
+        this.y+=this.speedY;
+
+        if(
+            this.x<0 ||
+            this.x>canvas.width
+        )
+            this.speedX*=-1;
+
+        if(
+            this.y<0 ||
+            this.y>canvas.height
+        )
+            this.speedY*=-1;
+
+    }
+
+    draw(){
+
+        ctx.fillStyle =
+        'rgba(168,85,247,.35)';
+
+        ctx.beginPath();
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.size,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+    }
 
 }
 
-update(){
 
-this.x+=this.speedX;
-this.y+=this.speedY;
+for(
+    let i=0;
+    i<45;
+    i++
+){
 
-if(
-this.x<0 ||
-this.x>canvas.width
-)
-this.speedX*=-1;
-
-if(
-this.y<0 ||
-this.y>canvas.height
-)
-this.speedY*=-1;
+    particles.push(
+        new Particle()
+    );
 
 }
-
-draw(){
-
-ctx.fillStyle=
-'rgba(168,85,247,.35)';
-
-ctx.beginPath();
-
-ctx.arc(
-this.x,
-this.y,
-this.size,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-}
-
-}
-
-
-for(let i=0;i<45;i++)
-particles.push(
-new Particle()
-);
 
 
 function animate(){
 
-ctx.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
-particles.forEach(p=>{
+    particles.forEach(
+        particle=>{
+            particle.update();
+            particle.draw();
+        }
+    );
 
-p.update();
-p.draw();
-
-});
-
-requestAnimationFrame(
-animate
-);
+    requestAnimationFrame(
+        animate
+    );
 
 }
 
@@ -3039,4 +3477,4 @@ animate();
 </script>
 
 </body>
-</html>
+    </html>
