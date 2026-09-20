@@ -3,627 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolyo</title>
+    <!-- FontAwesome İkonları -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0d0f12;
+            --card-bg: #16191e;
+            --card-hover: #1f232b;
+            --text-color: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent-color: #3b82f6;
+            --border-color: #262a33;
+        }
 
-    <title>FunceBOT — Discord Moderasyon</title>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+        .container {
+            width: 100%;
+            max-width: 680px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
 
-    <link rel="stylesheet" href="style.css">
+        /* Profil Kartı */
+        .profile-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+        }
+
+        .profile-info h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .profile-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* Bölüm Başlığı */
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        /* Bağlantılar Grid Yapısı */
+        .links-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .link-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+        }
+
+        .link-card:hover {
+            background-color: var(--card-hover);
+            border-color: #374151;
+            transform: translateY(-2px);
+        }
+
+        .link-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .link-icon {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            width: 24px;
+            text-align: center;
+        }
+
+        .link-text .title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .link-text .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .arrow-icon {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: transform 0.2s ease;
+        }
+
+        .link-card:hover .arrow-icon {
+            transform: translateX(4px);
+            color: var(--text-color);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 12px;
+        }
+    </style>
 </head>
-
 <body>
 
-    <!-- ANNOUNCEMENT -->
-    <div class="announcement">
-        🎉 QvroxBOT'a hoş geldin — sunucunu tek panelden yönet!
-        <a href="#features">Özellikleri keşfet →</a>
+    <div class="container">
+        
+        <!-- Üst Profil Alanı -->
+        <div class="profile-card">
+            <img src="https://via.placeholder.com/150" alt="Profil Fotoğrafı" class="profile-avatar">
+            <div class="profile-info">
+                <h1>Kullanıcı Adı</h1>
+                <p>Geliştirici & Tasarımcı. Web projeleri ve topluluk sistemleri üzerine çalışıyorum.</p>
+            </div>
+        </div>
+
+        <!-- Bağlantılar Bölümü -->
+        <div>
+            <div class="section-title">Bağlantılar & Projeler</div>
+            <div class="links-grid">
+                
+                <a href="https://github.com" target="_blank" class="link-card">
+                    <div class="link-content">
+                        <i class="fa-brands fa-github link-icon"></i>
+                        <div class="link-text">
+                            <div class="title">GitHub</div>
+                            <div class="subtitle">Açık kaynak projelerim ve repolarım</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right arrow-icon"></i>
+                </a>
+
+                <a href="https://discord.com" target="_blank" class="link-card">
+                    <div class="link-content">
+                        <i class="fa-brands fa-discord link-icon"></i>
+                        <div class="link-text">
+                            <div class="title">Discord</div>
+                            <div class="subtitle">Topluluk sunucuma katılın</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right arrow-icon"></i>
+                </a>
+
+                <a href="#" target="_blank" class="link-card">
+                    <div class="link-content">
+                        <i class="fa-solid fa-globe link-icon"></i>
+                        <div class="link-text">
+                            <div class="title">Örnek Proje</div>
+                            <div class="subtitle">Canlı yayınlanan web projem</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right arrow-icon"></i>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- Alt Bilgi -->
+        <footer>
+            <p>&copy; 2026 Tum haklari saklidir.</p>
+        </footer>
+
     </div>
-
-
-    <!-- HEADER -->
-    <header>
-
-        <a class="brand" href="#">
-            <b>Q</b>
-            Qvrox<span>BOT</span>
-        </a>
-
-        <nav id="nav">
-            <a href="#features">Özellikler</a>
-            <a href="#stats">İstatistikler</a>
-            <a href="#guides">Rehberler</a>
-        </nav>
-
-        <div class="actions">
-            <a class="dashboard" href="#">
-                Kontrol Paneli
-            </a>
-
-            <a class="invite" href="#">
-                Discord'a Ekle
-            </a>
-        </div>
-
-        <button class="menu">
-            ☰
-        </button>
-
-    </header>
-
-
-    <main>
-
-        <!-- HERO -->
-        <section class="hero">
-
-            <div class="hero-copy">
-
-                <small>
-                    ● DISCORD SUNUCUN İÇİN HEPSİ BİR ARADA BOT
-                </small>
-
-                <h1>
-                    Sunucunu
-                    <em>koru, yönet</em>
-                    ve büyüt.
-                </h1>
-
-                <p>
-                    Gelişmiş moderasyon, güvenlik, seviye sistemi,
-                    otomasyon ve daha fazlasını modern bir kontrol
-                    panelinden yönet.
-                </p>
-
-                <div class="buttons">
-
-                    <a class="primary" href="#">
-                        Discord'a Ekle ↗
-                    </a>
-
-                    <a class="secondary" href="#features">
-                        Özellikleri İncele
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <!-- PANEL PREVIEW -->
-            <div class="preview">
-
-                <div class="bar">
-                    ● ● ●
-                    <span>panel.qvroxbot.com</span>
-                </div>
-
-                <div class="panel">
-
-                    <aside>
-
-                        <b>Q</b>
-
-                        <i>⌂ Genel Bakış</i>
-                        <i>🛡 Güvenlik</i>
-                        <i>⚙ Moderasyon</i>
-                        <i>✦ Seviye</i>
-                        <i>🔔 Karşılama</i>
-
-                    </aside>
-
-
-                    <article>
-
-                        <small>
-                            GENEL BAKIŞ
-                        </small>
-
-                        <h3>
-                            Sunucu kontrol paneli
-                        </h3>
-
-
-                        <div class="cards">
-
-                            <div>
-                                Üye
-                                <strong>2,847</strong>
-                                <green>+12.4%</green>
-                            </div>
-
-                            <div>
-                                Mesaj
-                                <strong>18.2K</strong>
-                                <green>+8.7%</green>
-                            </div>
-
-                            <div>
-                                Koruma
-                                <strong>Aktif</strong>
-                                <green>✓</green>
-                            </div>
-
-                        </div>
-
-
-                        <div class="activity">
-
-                            <b>
-                                Son aktiviteler
-                            </b>
-
-                            <p>
-                                🛡️
-                                <strong>
-                                    Otomatik moderasyon
-                                </strong>
-
-                                <small>
-                                    12 spam mesajı engellendi
-                                </small>
-                            </p>
-
-                            <p>
-                                ⚡
-                                <strong>
-                                    Seviye sistemi
-                                </strong>
-
-                                <small>
-                                    8 üye yeni seviyeye ulaştı
-                                </small>
-                            </p>
-
-                            <p>
-                                👋
-                                <strong>
-                                    Karşılama
-                                </strong>
-
-                                <small>
-                                    Yeni üyeler için mesaj gönderildi
-                                </small>
-                            </p>
-
-                        </div>
-
-                    </article>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- STATS -->
-        <section class="stats" id="stats">
-
-            <div>
-                <b>700K+</b>
-                <small>Toplam kullanıcı</small>
-            </div>
-
-            <div>
-                <b>8K+</b>
-                <small>Sunucu</small>
-            </div>
-
-            <div>
-                <b>99.9%</b>
-                <small>Uptime</small>
-            </div>
-
-            <div>
-                <b>24/7</b>
-                <small>Koruma</small>
-            </div>
-
-        </section>
-
-
-        <!-- FEATURES -->
-        <section class="section" id="features">
-
-            <div class="head">
-
-                <small>
-                    GÜÇLÜ ARAÇLAR
-                </small>
-
-                <h2>
-                    Sunucunun ihtiyacı olan
-                    <em>her şey tek yerde.</em>
-                </h2>
-
-                <p>
-                    Günlük yönetim işlerini otomatikleştir,
-                    topluluğunu düzenli tut ve güvenliği artır.
-                </p>
-
-            </div>
-
-
-            <div class="grid">
-
-                <div class="feature wide">
-
-                    <strong>🛡️</strong>
-
-                    <h3>
-                        Moderasyon & Güvenlik
-                    </h3>
-
-                    <p>
-                        Spam, reklam ve istenmeyen davranışları
-                        otomatik yakala. Yetki hareketlerini takip et.
-                    </p>
-
-                    <a href="#">
-                        Detayları gör →
-                    </a>
-
-                </div>
-
-
-                <div class="feature">
-
-                    <strong>⚡</strong>
-
-                    <h3>
-                        Seviye Sistemi
-                    </h3>
-
-                    <p>
-                        XP, ödüller, rank kartları ve liderlik tablosu.
-                    </p>
-
-                    <a href="#">
-                        Detayları gör →
-                    </a>
-
-                </div>
-
-
-                <div class="feature">
-
-                    <strong>👋</strong>
-
-                    <h3>
-                        Karşılama
-                    </h3>
-
-                    <p>
-                        Yeni üyeler için otomatik mesaj ve roller.
-                    </p>
-
-                    <a href="#">
-                        Detayları gör →
-                    </a>
-
-                </div>
-
-
-                <div class="feature">
-
-                    <strong>💬</strong>
-
-                    <h3>
-                        Oto Cevap
-                    </h3>
-
-                    <p>
-                        Belirlediğin ifadelere otomatik cevaplar.
-                    </p>
-
-                    <a href="#">
-                        Detayları gör →
-                    </a>
-
-                </div>
-
-
-                <div class="feature">
-
-                    <strong>📋</strong>
-
-                    <h3>
-                        Denetim Kayıtları
-                    </h3>
-
-                    <p>
-                        Mesaj, üye, rol ve kanal olaylarını kayıt altına al.
-                    </p>
-
-                    <a href="#">
-                        Detayları gör →
-                    </a>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- SECURITY -->
-        <section class="split">
-
-            <div>
-
-                <small>
-                    GÜVENLİK
-                </small>
-
-                <h2>
-                    Sunucun için
-                    <em>akıllı koruma.</em>
-                </h2>
-
-                <p>
-                    Şüpheli hareketleri takip eden ve kritik
-                    işlemlerde limit uygulayan güvenlik araçları.
-                </p>
-
-
-                <ul>
-
-                    <li>
-                        ✓ Özelleştirilebilir güvenlik limitleri
-                    </li>
-
-                    <li>
-                        ✓ Rol ve kanal hareketleri takibi
-                    </li>
-
-                    <li>
-                        ✓ Otomatik spam / reklam filtreleme
-                    </li>
-
-                    <li>
-                        ✓ Ayrıntılı denetim kayıtları
-                    </li>
-
-                </ul>
-
-
-                <a class="primary" href="#">
-                    Kontrol Paneline Git ↗
-                </a>
-
-            </div>
-
-
-            <div class="security">
-
-                <h3>
-                    🛡️ Sunucu Güvenliği
-
-                    <green>
-                        AKTİF
-                    </green>
-                </h3>
-
-
-                <p>
-                    Anti-Spam
-                    <green>Aktif</green>
-                </p>
-
-                <p>
-                    Anti-Raid
-                    <green>Aktif</green>
-                </p>
-
-                <p>
-                    Rol koruması
-                    <green>Aktif</green>
-                </p>
-
-                <p>
-                    Kanal koruması
-                    <green>Aktif</green>
-                </p>
-
-
-                <footer>
-                    ● Son olay: şüpheli bağlantı engellendi
-                </footer>
-
-            </div>
-
-        </section>
-
-
-        <!-- GUIDES -->
-        <section class="guides" id="guides">
-
-            <div class="head">
-
-                <small>
-                    REHBERLER
-                </small>
-
-                <h2>
-                    QvroxBOT'u öğren.
-                </h2>
-
-                <p>
-                    Botun özelliklerini birkaç dakikada kur.
-                </p>
-
-            </div>
-
-
-            <div class="guidegrid">
-
-                <a href="#">
-
-                    🛡️
-
-                    <b>
-                        Moderasyon Rehberi
-                    </b>
-
-                    <small>
-                        Filtreler, komutlar ve kayıtlar
-                    </small>
-
-                    →
-
-                </a>
-
-
-                <a href="#">
-
-                    🔐
-
-                    <b>
-                        Güvenlik Rehberi
-                    </b>
-
-                    <small>
-                        Sunucu koruma ayarları
-                    </small>
-
-                    →
-
-                </a>
-
-
-                <a href="#">
-
-                    ⚡
-
-                    <b>
-                        Seviye Rehberi
-                    </b>
-
-                    <small>
-                        XP ve ödül sistemi
-                    </small>
-
-                    →
-
-                </a>
-
-            </div>
-
-        </section>
-
-
-        <!-- CTA -->
-        <section class="cta">
-
-            <small>
-                HAZIR MISIN?
-            </small>
-
-            <h2>
-                Sunucunu bir sonraki seviyeye taşı.
-            </h2>
-
-            <p>
-                QvroxBOT'u birkaç tıklamayla sunucuna ekle.
-            </p>
-
-            <a class="primary" href="#">
-                Discord'a Ekle ↗
-            </a>
-
-        </section>
-
-    </main>
-
-
-    <!-- FOOTER -->
-    <footer>
-
-        <div>
-
-            <a class="brand" href="#">
-                <b>Q</b>
-                Qvrox<span>BOT</span>
-            </a>
-
-            <p>
-                Discord sunucularını daha güvenli,
-                düzenli ve eğlenceli hale getir.
-            </p>
-
-        </div>
-
-
-        <div>
-
-            <b>
-                Ürün
-            </b>
-
-            <a href="#features">
-                Özellikler
-            </a>
-
-            <a href="#">
-                Kontrol Paneli
-            </a>
-
-        </div>
-
-
-        <div>
-
-            <b>
-                Destek
-            </b>
-
-            <a href="#guides">
-                Rehberler
-            </a>
-
-            <a href="#">
-                İletişim
-            </a>
-
-        </div>
-
-
-        <div>
-
-            <b>
-                Yasal
-            </b>
-
-            <a href="#">
-                Gizlilik
-            </a>
-
-            <a href="#">
-                Hizmet Şartları
-            </a>
-
-        </div>
-
-    </footer>
-
-
-    <!-- MOBILE MENU -->
-    <script>
-
-        const menu = document.querySelector(".menu");
-        const nav = document.querySelector("#nav");
-
-        menu.onclick = () => {
-            nav.classList.toggle("open");
-        };
-
-    </script>
 
 </body>
 </html>
