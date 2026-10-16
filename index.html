@@ -1,136 +1,102 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soon...</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sürpriz 😈</title>
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #090514;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        /* Arka plandaki canvas */
-        #particles-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #171717, #451010);
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+    }
 
-        /* Ortadaki 'Soon...' yazısı */
-        .coming-soon {
-            position: relative;
-            z-index: 2;
-            color: #a855f7;
-            font-size: 3.5rem;
-            font-weight: 800;
-            letter-spacing: 4px;
-            text-shadow: 0 0 20px rgba(168, 85, 247, 0.6),
-                         0 0 40px rgba(168, 85, 247, 0.3);
-            user-select: none;
-            animation: pulse 3s ease-in-out infinite alternate;
-        }
+    .container {
+      padding: 30px;
+    }
 
-        /* Hafif nefes alma/parlama efekti */
-        @keyframes pulse {
-            0% {
-                opacity: 0.8;
-                transform: scale(0.98);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1.02);
-                text-shadow: 0 0 25px rgba(168, 85, 247, 0.8),
-                             0 0 50px rgba(168, 85, 247, 0.5);
-            }
-        }
-    </style>
+    h1 {
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+
+    button {
+      padding: 16px 35px;
+      border: none;
+      border-radius: 12px;
+      background: #ff3030;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    button:hover {
+      background: #ff5050;
+      transform: scale(1.05);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #result {
+      font-size: clamp(35px, 9vw, 65px);
+      color: #ff4545;
+      font-weight: 900;
+      animation: pop 0.5s ease;
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="container">
+    <div id="game">
+      <h1 id="message">Butona tıkla 1/3</h1>
+      <button onclick="tikla()">TIKLA 😈</button>
+    </div>
 
-    <canvas id="particles-canvas"></canvas>
-    <div class="coming-soon">Soon...</div>
+    <div id="result" class="hidden">
+      ENAYİ AZRA 😂
+    </div>
+  </div>
 
-    <script>
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
+  <script>
+    let sayac = 0;
 
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
+    function tikla() {
+      sayac++;
 
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            initParticles();
-        });
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.radius = Math.random() * 2.5 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.6;
-                this.speedY = (Math.random() - 0.5) * 0.6;
-                this.alpha = Math.random() * 0.7 + 0.3;
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x < 0) this.x = width;
-                if (this.x > width) this.x = 0;
-                if (this.y < 0) this.y = height;
-                if (this.y > height) this.y = 0;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(168, 85, 247, ${this.alpha})`;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = '#a855f7';
-                ctx.fill();
-            }
-        }
-
-        let particles = [];
-        function initParticles() {
-            particles = [];
-            const particleCount = Math.floor((width * height) / 9000);
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        initParticles();
-        animate();
-    </script>
+      if (sayac >= 3) {
+        document.getElementById("game").classList.add("hidden");
+        document.getElementById("result").classList.remove("hidden");
+      } else {
+        document.getElementById("message").textContent =
+          `Butona tıkla ${sayac + 1}/3`;
+      }
+    }
+  </script>
 </body>
 </html>
